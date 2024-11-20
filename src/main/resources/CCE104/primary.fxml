@@ -9,7 +9,7 @@
    <children>
       <ImageView fitHeight="672.0" fitWidth="450.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@Adopt%20a%20Furry%20Friend%20Today!.png" />
+            <Image url="@loginIMG.png" />
          </image>
       </ImageView>
    </children>
