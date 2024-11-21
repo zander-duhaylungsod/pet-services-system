@@ -1,0 +1,17 @@
+@font-face {
+    font-family: "Inter"; /* Name of the font */
+    src: url("fonts/Inter-VariableFont.ttf"); /* Path to your font file */
+}
+
+/* Apply the custom font to specific controls */
+.text {
+    -fx-font-family: "Inter";
+}
+
+.welcome {
+    -fx-border-color: #86ccce;       /* Border color */
+    -fx-border-width: 2px;           /* Border width */
+    -fx-border-radius: 30px;         /* Rounded corners */
+    -fx-background-color: #ffffff;   /* Background color */
+    -fx-font-weight: bold;
+}
