@@ -1,12 +1,3 @@
-@font-face {
-    font-family: "Inter"; /* Name of the font */
-    src: url("fonts/Inter-VariableFont.ttf"); /* Path to your font file */
-}
-
-/* Apply the custom font to specific controls */
-.text {
-    -fx-font-family: "Inter";
-}
 
 .welcome {
     -fx-border-color: #86ccce;       /* Border color */

@@ -1,12 +1,17 @@
 package CCE104;
 
-import java.io.IOException;
 import javafx.fxml.FXML;
+import java.io.IOException;
 
 public class PrimaryController {
 
     @FXML
-    private void switchToSecondary() throws IOException {
-        Main.setRoot("secondary");
+    private void switchToSignin() throws IOException {
+        Main.switchSceneWithFade("scenes/signin");
+    }
+
+    @FXML
+    private void switchToSignup() throws IOException {
+        Main.switchSceneWithFade("scenes/signUp");
     }
 }
