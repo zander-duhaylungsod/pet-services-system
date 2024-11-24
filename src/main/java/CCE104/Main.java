@@ -9,6 +9,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Main extends Application {
 
@@ -16,7 +19,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("scenes/signUp"));
+        scene = new Scene(loadFXML("scenes/signIn"));
         stage.setScene(scene);
         stage.show();
     }
@@ -60,6 +63,22 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        // Database credentials
+        String url = "jdbc:mysql://localhost:3307/pawfectCareDB"; // Update with your database name
+        String user = "root"; // Default username for XAMPP
+        String password = ""; // Default password (leave empty if not set)
+
+        try {
+            // Establishing the connection
+            Connection connection = DriverManager.getConnection(url, user, password);
+            System.out.println("Connection to the database established successfully!");
+
+            // Close the connection
+            connection.close();
+        } catch (SQLException e) {
+            System.err.println("Connection failed: " + e.getMessage());
+        }
+
         launch();
     }
 }
