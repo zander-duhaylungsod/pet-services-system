@@ -45,6 +45,11 @@ public class Main extends Application {
         fadeOut.play();
     }
 
+    static void switchScene(String fxml) throws IOException {
+        Parent newRoot = loadFXML(fxml);
+        scene.setRoot(newRoot);
+    }
+
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
