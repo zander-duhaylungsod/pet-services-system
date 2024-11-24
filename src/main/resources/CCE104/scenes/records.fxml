@@ -2,9 +2,10 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
@@ -130,53 +131,249 @@
             <Circle fill="#b2f0ff" layoutX="697.0" layoutY="62.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
             <TabPane layoutX="38.0" layoutY="190.0" prefHeight="457.0" prefWidth="783.0" style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE">
                <tabs>
-                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 100px; -fx-pref-height: 40px; -fx-background-color: WHITE;" text="Pets">
+                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 120[xpx; -fx-pref-height: 40px; -fx-background-color: #A1DBDD;" text="Pets &amp; Owners">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;">
                            <children>
-                              <ListView layoutX="15.0" layoutY="15.0" prefHeight="343.0" prefWidth="755.0">
+                              <TableView layoutX="18.0" layoutY="9.0" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
+                                 <columns>
+                                    <TableColumn editable="false" prefWidth="119.0" style="-fx-background-color: #A1DBDD;" text="PET" />
+                                    <TableColumn editable="false" prefWidth="130.66668701171875" style="-fx-background-color: #A1DBDD;" text="OWNER" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
                                  <effect>
-                                    <DropShadow>
+                                    <DropShadow blurType="GAUSSIAN" radius="16.595" width="47.38">
                                        <color>
-                                          <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285" />
+                                          <Color red="0.7894737124443054" green="0.7894737124443054" blue="0.7894737124443054" />
                                        </color>
                                     </DropShadow>
                                  </effect>
-                              </ListView>
+                              </TableView>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="150.0" layoutY="354.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Add">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="349.0" layoutY="354.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Edit">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="530.0" layoutY="354.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Delete">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
                            </children>
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 100px; -fx-pref-height: 40px; -fx-background-color: WHITE;" text="Owners">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="178.0" prefWidth="343.0">
-                           <children>
-                              <ListView layoutX="14.0" layoutY="15.0" prefHeight="343.0" prefWidth="755.0">
-                                 <effect>
-                                    <DropShadow>
-                                       <color>
-                                          <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285" />
-                                       </color>
-                                    </DropShadow>
-                                 </effect>
-                              </ListView>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </Tab>
-                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 100px; -fx-pref-height: 40px; -fx-background-color: WHITE;" text="Services">
+                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 100px; -fx-pref-height: 40px; -fx-background-color: #A1DBDD;" text="Services">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ListView layoutX="14.0" layoutY="15.0" prefHeight="343.0" prefWidth="755.0">
+                              <TableView layoutX="18.0" layoutY="11.0" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
+                                 <columns>
+                                    <TableColumn editable="false" prefWidth="119.0" style="-fx-background-color: #A1DBDD;" text="SERVICES" />
+                                    <TableColumn editable="false" prefWidth="130.66668701171875" style="-fx-background-color: #A1DBDD;" text="PRICE" />
+                                    <TableColumn editable="false" prefWidth="173.33331298828125" style="-fx-background-color: #A1DBDD;" text="DESCRIPTION" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
                                  <effect>
-                                    <DropShadow>
+                                    <DropShadow blurType="GAUSSIAN" radius="16.595" width="47.38">
                                        <color>
-                                          <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285" />
+                                          <Color red="0.7894737124443054" green="0.7894737124443054" blue="0.7894737124443054" />
                                        </color>
                                     </DropShadow>
                                  </effect>
-                              </ListView>
+                              </TableView>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="149.0" layoutY="355.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Add">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="348.0" layoutY="355.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Edit">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="529.0" layoutY="355.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Delete">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 150px; -fx-pref-height: 40px; -fx-background-color: #A1DBDD;" text="Appointments">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView layoutX="18.0" layoutY="11.0" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
+                                 <columns>
+                                    <TableColumn editable="false" prefWidth="119.0" style="-fx-background-color: #A1DBDD;" text="PET" />
+                                    <TableColumn editable="false" prefWidth="130.66668701171875" style="-fx-background-color: #A1DBDD;" text="OWNER" />
+                                    <TableColumn editable="false" prefWidth="173.33331298828125" style="-fx-background-color: #A1DBDD;" text="DATE" />
+                                    <TableColumn editable="false" prefWidth="173.33331298828125" style="-fx-background-color: #A1DBDD;" text="SERVICE" />
+                                    <TableColumn editable="false" prefWidth="173.33331298828125" style="-fx-background-color: #A1DBDD;" text="STATUS" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" radius="16.595" width="47.38">
+                                       <color>
+                                          <Color red="0.7894737124443054" green="0.7894737124443054" blue="0.7894737124443054" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </TableView>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="149.0" layoutY="355.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Add">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="348.0" layoutY="355.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Edit">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="529.0" layoutY="355.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Delete">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 135px; -fx-pref-height: 40px; -fx-background-color: #A1DBDD;" text="Reservations">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView layoutX="18.0" layoutY="11.0" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
+                                 <columns>
+                                    <TableColumn editable="false" prefWidth="119.0" style="-fx-background-color: #A1DBDD;" text="PET" />
+                                    <TableColumn editable="false" prefWidth="130.66668701171875" style="-fx-background-color: #A1DBDD;" text="OWNER" />
+                                    <TableColumn editable="false" prefWidth="173.33331298828125" style="-fx-background-color: #A1DBDD;" text="CHECK-IN DATE" />
+                                    <TableColumn editable="false" prefWidth="173.33331298828125" style="-fx-background-color: #A1DBDD;" text="CHECK-OUT DATE" />
+                                    <TableColumn editable="false" prefWidth="173.33331298828125" style="-fx-background-color: #A1DBDD;" text="STATUS" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" radius="16.595" width="47.38">
+                                       <color>
+                                          <Color red="0.7894737124443054" green="0.7894737124443054" blue="0.7894737124443054" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </TableView>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="149.0" layoutY="355.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Add">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="348.0" layoutY="355.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Edit">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="529.0" layoutY="355.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Delete">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
                            </children>
                         </AnchorPane>
                      </content>
@@ -190,42 +387,6 @@
                   </DropShadow>
                </effect>
             </TabPane>
-            <Button alignment="CENTER" graphicTextGap="0.0" layoutX="538.0" layoutY="631.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Delete">
-               <font>
-                  <Font name="Segoe UI Bold" size="18.0" />
-               </font>
-               <effect>
-                  <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
-                     <color>
-                        <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </Button>
-            <Button alignment="CENTER" graphicTextGap="0.0" layoutX="221.0" layoutY="628.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Add">
-               <font>
-                  <Font name="Segoe UI Bold" size="18.0" />
-               </font>
-               <effect>
-                  <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
-                     <color>
-                        <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </Button>
-            <Button alignment="CENTER" graphicTextGap="0.0" layoutX="384.0" layoutY="629.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Edit">
-               <font>
-                  <Font name="Segoe UI Bold" size="18.0" />
-               </font>
-               <effect>
-                  <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
-                     <color>
-                        <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </Button>
          </children>
       </AnchorPane>
    </children>

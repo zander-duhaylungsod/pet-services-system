@@ -24,7 +24,7 @@
                   <Image url="@../images/paw.png" />
                </image>
             </ImageView>
-            <Button layoutY="142.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="201.0" style="-fx-background-color: #66B1B4;" text="Dashboard" textFill="WHITE">
+            <Button layoutY="142.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="201.0" style="-fx-background-color: #66B1B4; -fx-opacity: 50%;" text="Dashboard" textFill="WHITE">
                <font>
                   <Font name="Segoe UI" size="17.0" />
                </font>
@@ -36,7 +36,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutY="226.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="201.0" style="-fx-background-color: #66B1B4;" text="Records" textFill="WHITE">
+            <Button layoutY="226.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="201.0" style="-fx-background-color: #66B1B4; -fx-opacity: 50%;" text="Records" textFill="WHITE">
                <font>
                   <Font name="Segoe UI" size="17.0" />
                </font>
@@ -130,7 +130,7 @@
             <Circle fill="#b2f0ff" layoutX="697.0" layoutY="62.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
             <TabPane layoutX="38.0" layoutY="190.0" prefHeight="457.0" prefWidth="783.0" style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE">
                <tabs>
-                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 100px; -fx-pref-height: 40px; -fx-background-color: WHITE;" text="Pets">
+                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 100px; -fx-pref-height: 40px; -fx-background-color: WHITE;" text="Reports">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;">
                            <children>
@@ -147,26 +147,9 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 100px; -fx-pref-height: 40px; -fx-background-color: WHITE;" text="Owners">
+                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 115px; -fx-pref-height: 40px; -fx-background-color: WHITE;" text="Payments">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="178.0" prefWidth="343.0">
-                           <children>
-                              <ListView layoutX="14.0" layoutY="15.0" prefHeight="343.0" prefWidth="755.0">
-                                 <effect>
-                                    <DropShadow>
-                                       <color>
-                                          <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285" />
-                                       </color>
-                                    </DropShadow>
-                                 </effect>
-                              </ListView>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </Tab>
-                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 100px; -fx-pref-height: 40px; -fx-background-color: WHITE;" text="Services">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <ListView layoutX="14.0" layoutY="15.0" prefHeight="343.0" prefWidth="755.0">
                                  <effect>
