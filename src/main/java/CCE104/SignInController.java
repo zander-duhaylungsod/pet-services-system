@@ -30,7 +30,7 @@ public class SignInController {
     @FXML
     private Button signInBtn;
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3307/pawfectCareDB";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/pawfectCareDB";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = ""; // Replace with your MySQL root password
 
@@ -60,7 +60,7 @@ public class SignInController {
             // Authenticate user with either email or employee ID
             if (authenticateUser(connection, identifier, password)) {
                 showAlert(AlertType.INFORMATION, "Success", "Sign-in successful!");
-                Main.switchSceneWithFade("scenes/dashboard");
+                Main.switchSceneWithFade("scenes/dashboardAdmin");
             } else {
                 showAlert(AlertType.ERROR, "Error", "Invalid Employee ID/Email or password!");
             }

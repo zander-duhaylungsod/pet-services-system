@@ -1,3 +1,32 @@
-.autoTextfield {
-   fx-text
+.button {
+   cursor: hand;
+   -fx-cursor: hand;
+}
+
+.buttonA{
+   -fx-background-color:  #66B1B4;
+}
+
+.buttonA:hover {
+   -fx-background-color: #2c989a;
+}
+
+.buttonA:pressed {
+   -fx-background-color: #378083;
+}
+
+.addBtn {
+   -fx-background-color: #A1DBDD;
+}
+
+.addBtn:hover {
+   -fx-background-color: #48d1dd;
+}
+
+.loginBtn{
+   -fx-background-color: BLACK;
+}
+
+.loginBtn:hover {
+   -fx-background-color: #66B1B4;
 }

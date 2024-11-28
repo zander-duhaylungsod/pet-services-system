@@ -19,7 +19,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("scenes/signIn"));
+        scene = new Scene(loadFXML("scenes/dashboardAdmin"));
         stage.setScene(scene);
         stage.show();
     }
@@ -64,7 +64,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         // Database credentials
-        String url = "jdbc:mysql://localhost:3307/pawfectCareDB"; // Update with your database name
+        String url = "jdbc:mysql://localhost:3306/pawfectCareDB"; // Update with your database name
         String user = "root"; // Default username for XAMPP
         String password = ""; // Default password (leave empty if not set)
 

@@ -1,14 +1,15 @@
 mysql -h localhost -u root
+CREATE DATABASE pawfectCareDB;
 USE pawfectCareDB;
 
-CREATE DATABASE pawfectCareDB;
+mysql -h localhost -u root
 USE pawfectCareDB;
 
 CREATE TABLE Branch (
     BranchID INT AUTO_INCREMENT PRIMARY KEY,
     BranchName VARCHAR(100) NOT NULL,
     Location VARCHAR(255) NOT NULL,
-    Phone VARCHAR(15),
+    Phone VARCHAR(15)
 );
 
 INSERT INTO Branch (BranchName,Location,Phone)
@@ -100,8 +101,19 @@ CREATE TABLE BoardingReservations (
 );
 
 ALTER TABLE Payments
-ADD ReservationID INT,
-FOREIGN KEY (ReservationID) REFERENCES BoardingReservations(ReservationID);
+ADD ReservationID INT;
+
+ALTER TABLE Payments
+ADD FOREIGN KEY (ReservationID) REFERENCES BoardingReservations(ReservationID);
+
+CREATE TABLE Reports (
+    ReportID INT AUTO_INCREMENT PRIMARY KEY,
+    ReportType VARCHAR(50) NOT NULL,
+    GeneratedDate DATETIME NOT NULL,
+    Content TEXT,
+    CreatedBy INT,
+    FOREIGN KEY (CreatedBy) REFERENCES Employees(EmployeeID) ON DELETE SET NULL
+);
 
 CREATE TABLE Refunds (
     RefundID INT AUTO_INCREMENT PRIMARY KEY,
@@ -112,12 +124,5 @@ CREATE TABLE Refunds (
     FOREIGN KEY (PaymentID) REFERENCES Payments(PaymentID)
 );
 
-CREATE TABLE Reports (
-    ReportID INT AUTO_INCREMENT PRIMARY KEY,
-    ReportType VARCHAR(50) NOT NULL,
-    GeneratedDate DATETIME NOT NULL,
-    Content TEXT,
-    CreatedBy INT,
-    FOREIGN KEY (CreatedBy) REFERENCES Employees(EmployeeID) ON DELETE SET NULL
-);
+
 

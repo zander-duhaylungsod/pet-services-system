@@ -44,10 +44,14 @@
             <Font name="Segoe UI Emoji" size="19.0" />
          </font>
       </Label>
-      <Button fx:id="signInBtn" layoutX="751.0" layoutY="505.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="139.0" style="-fx-background-radius: 20px; -fx-background-color: BLACK;" text="Sign In" textFill="WHITE">
+      <Button fx:id="signInBtn" layoutX="751.0" layoutY="505.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="139.0" style="-fx-background-radius: 20px;" stylesheets="@../styles/general.css" text="Sign In" textFill="WHITE">
          <font>
             <Font name="Segoe UI Semibold" size="19.0" />
          </font>
+         <styleClass>
+            <String fx:value="loginBtn" />
+            <String fx:value="button" />
+         </styleClass>
       </Button>
       <Hyperlink fx:id="forgotPasswordLink" layoutX="757.0" layoutY="572.0" text="Forgot Password?">
          <font>
