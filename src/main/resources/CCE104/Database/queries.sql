@@ -1,9 +1,9 @@
 mysql -h localhost -u root
-CREATE DATABASE pawfectCareDB;
-USE pawfectCareDB;
+CREATE DATABASE syntaxSquad_db;
+USE syntaxSquad_db;
 
 mysql -h localhost -u root
-USE pawfectCareDB;
+USE syntaxSquad_db;
 
 CREATE TABLE Branch (
     BranchID INT AUTO_INCREMENT PRIMARY KEY,
@@ -54,7 +54,8 @@ CREATE TABLE Pets (
     Species VARCHAR(50),
     Breed VARCHAR(50),
     Age INT,
-    OwnerID INT NOT NULL,
+    OwnerID INT,
+    PetImagePath VARCHAR(255), -- New column for storing image path or URL
     FOREIGN KEY (OwnerID) REFERENCES Owners(OwnerID)
 );
 
@@ -73,6 +74,7 @@ CREATE TABLE Appointments (
     PetID INT NOT NULL,
     EmployeeID INT NOT NULL,
     BranchID INT NOT NULL,
+    Status VARCHAR(50) DEFAULT 'Pending',  -- Added Status column
     FOREIGN KEY (ServiceID) REFERENCES Services(ServiceID),
     FOREIGN KEY (PetID) REFERENCES Pets(PetID),
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID),
@@ -80,24 +82,26 @@ CREATE TABLE Appointments (
 );
 
 CREATE TABLE Payments (
-    PaymentID INT AUTO_INCREMENT PRIMARY KEY,
-    Amount DECIMAL(10, 2) NOT NULL,
-    PaymentDate DATE NOT NULL,
-    Method VARCHAR(50),
-    AppointmentID INT,
-    FOREIGN KEY (AppointmentID) REFERENCES Appointments(AppointmentID)
+      PaymentID INT AUTO_INCREMENT PRIMARY KEY,
+      Amount DECIMAL(10, 2) NOT NULL,
+      PaymentDate DATE NOT NULL,
+      Method VARCHAR(50),
+      AppointmentID INT,
+      Status VARCHAR(50) DEFAULT 'Unpaid',  -- Added Status column
+      FOREIGN KEY (AppointmentID) REFERENCES Appointments(AppointmentID)
 );
 
 CREATE TABLE BoardingReservations (
-    ReservationID INT AUTO_INCREMENT PRIMARY KEY,
-    StartDate DATE NOT NULL,
-    EndDate DATE NOT NULL,
-    PetID INT NOT NULL,
-    BranchID INT NOT NULL,
-    EmployeeID INT NOT NULL,
-    FOREIGN KEY (PetID) REFERENCES Pets(PetID),
-    FOREIGN KEY (BranchID) REFERENCES Branch(BranchID),
-    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+      ReservationID INT AUTO_INCREMENT PRIMARY KEY,
+      StartDate DATE NOT NULL,
+      EndDate DATE NOT NULL,
+      PetID INT NOT NULL,
+      BranchID INT NOT NULL,
+      EmployeeID INT NOT NULL,
+      Status VARCHAR(50) DEFAULT 'Pending',  -- Added Status column
+      FOREIGN KEY (PetID) REFERENCES Pets(PetID),
+      FOREIGN KEY (BranchID) REFERENCES Branch(BranchID),
+      FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
 
 ALTER TABLE Payments
@@ -108,6 +112,7 @@ ADD FOREIGN KEY (ReservationID) REFERENCES BoardingReservations(ReservationID);
 
 CREATE TABLE Reports (
     ReportID INT AUTO_INCREMENT PRIMARY KEY,
+    ReportTitle VARCHAR(100),
     ReportType VARCHAR(50) NOT NULL,
     GeneratedDate DATETIME NOT NULL,
     Content TEXT,

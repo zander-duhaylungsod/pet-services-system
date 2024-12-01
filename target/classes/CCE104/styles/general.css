@@ -30,3 +30,27 @@
 .loginBtn:hover {
    -fx-background-color: #66B1B4;
 }
+
+.table-view .table-column {
+   -fx-font-size: 14px;
+}
+
+/* Style for normal tabs */
+.tab {
+   -fx-background-color: #ffffff; /* Light gray background */
+   -fx-text-fill: black; /* Black text */
+}
+
+/* Style for selected tab */
+.tab:selected {
+   -fx-background-color: #9ae7ec; /* Highlight color when selected */
+   -fx-text-fill: white; /* White text when selected */
+   -fx-focus-color: transparent;  /* Removes the focus border */
+   -fx-faint-focus-color: transparent;  /* Removes faint focus border */
+}
+
+/* Optional: Add hover effect for tabs */
+.tab:hover {
+   -fx-background-color: #96d3d8; /* Gray background when hovered */
+}
+

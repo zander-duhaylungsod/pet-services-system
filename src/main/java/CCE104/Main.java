@@ -30,7 +30,7 @@ public class Main extends Application {
         // Set the new root's opacity to 0 before starting the transition
         newRoot.setOpacity(0);
 
-        FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.3), scene.getRoot());
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.2), scene.getRoot());
         fadeOut.setFromValue(1.0);
         fadeOut.setToValue(0.0);
 
@@ -51,10 +51,6 @@ public class Main extends Application {
     static void switchScene(String fxml) throws IOException {
         Parent newRoot = loadFXML(fxml);
         scene.setRoot(newRoot);
-    }
-
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
     }
 
     public static Parent loadFXML(String fxml) throws IOException {

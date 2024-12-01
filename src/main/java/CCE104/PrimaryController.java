@@ -1,5 +1,7 @@
 package CCE104;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
@@ -31,7 +33,9 @@ public class PrimaryController {
     private Button logOutBtn;
 
     @FXML
-    private Polygon backtoDash;
+    private Polygon backBtn;
+
+    private ObservableList<PetRecord> petRecordsList = FXCollections.observableArrayList();
 
     public void switchToDashboard () throws IOException {
         Main.switchScene("scenes/dashboardAdmin");
@@ -53,28 +57,30 @@ public class PrimaryController {
     }
 
     @FXML
-    public void addPet () throws IOException {
-        Main.switchSceneWithFade("scenes/addPet");
+    public void addPetToDatabase () throws IOException {
+        //add function here
     }
 
     @FXML
-    public void addAppointment () throws IOException {
-        Main.switchSceneWithFade("scenes/addAppointment");
+    public void addOwner () throws IOException {
+        Main.switchSceneWithFade("scenes/addOwner");
     }
 
     @FXML
-    public void addBoarding () throws IOException {
-        Main.switchSceneWithFade("scenes/addBoarding");
+    public void selectFile () throws IOException {
+        //add function here
     }
 
+    //effects
     @FXML
     public void polygonHover () throws IOException {
-        backtoDash.setFill(Color.web("#48d1dd"));
-        backtoDash.setCursor(Cursor.HAND);
+        backBtn.setFill(Color.web("#48d1dd"));
+        backBtn.setCursor(Cursor.HAND);
     }
 
     public void polygonHoverExited () throws IOException {
-        backtoDash.setFill(Color.web("#A1DBDD"));
-        backtoDash.setCursor(Cursor.DEFAULT);
+        backBtn.setFill(Color.web("#A1DBDD"));
+        backBtn.setCursor(Cursor.DEFAULT);
     }
 }
+

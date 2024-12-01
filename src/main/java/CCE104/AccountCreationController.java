@@ -30,7 +30,7 @@ public class AccountCreationController {
     @FXML
     private ToggleButton showPasswordBtn;
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/pawfectCareDB";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = ""; // Replace with your MySQL root password
 

@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1140.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCE104.PrimaryController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1140.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCE104.ReportsPageController">
    <children>
       <Pane layoutX="23.0" layoutY="16.0" prefHeight="687.0" prefWidth="201.0" style="-fx-background-color: #66B1B4; -fx-background-radius: 24px;">
          <children>
@@ -99,7 +99,7 @@
                   <Font name="Segoe UI" size="15.0" />
                </font>
             </Label>
-            <Button alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="49.0" layoutY="72.0" mnemonicParsing="false" prefHeight="89.0" prefWidth="110.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px;" text="0">
+            <Button alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="49.0" layoutY="72.0" mnemonicParsing="false" onAction="#switchToRecords" prefHeight="89.0" prefWidth="110.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px;" text="0">
                <font>
                   <Font name="Segoe UI Bold" size="29.0" />
                </font>
@@ -118,7 +118,7 @@
                   </DropShadow>
                </effect>
             </Button>
-            <TextField layoutX="281.0" layoutY="35.0" prefHeight="38.0" prefWidth="321.0" promptText="Search pets, owners, or services " style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
+            <TextField fx:id="searchField" layoutX="281.0" layoutY="35.0" onKeyTyped="#searchFunction" prefHeight="38.0" prefWidth="321.0" promptText="Search pets, owners, or services " style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="15.0" />
                </font>
@@ -135,31 +135,32 @@
                   <Image url="@../images/searchicon.png" />
                </image>
             </ImageView>
-            <Label layoutX="725.0" layoutY="43.0" prefHeight="19.0" prefWidth="121.0" text="Employee Name">
+            <Label fx:id="employeeName" layoutX="725.0" layoutY="43.0" prefHeight="19.0" prefWidth="121.0" text="Employee Name">
                <font>
                   <Font name="Segoe UI" size="15.0" />
                </font>
             </Label>
-            <Label layoutX="725.0" layoutY="66.0" prefHeight="19.0" prefWidth="121.0" text="Position">
+            <Label fx:id="employeeRole" layoutX="725.0" layoutY="66.0" prefHeight="19.0" prefWidth="121.0" text="Position">
                <font>
                   <Font name="Segoe UI Italic" size="15.0" />
                </font>
             </Label>
             <Circle fill="#b2f0ff" layoutX="697.0" layoutY="62.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
-            <TabPane layoutX="38.0" layoutY="190.0" prefHeight="457.0" prefWidth="783.0" style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE">
+            <TabPane layoutX="38.0" layoutY="190.0" prefHeight="457.0" prefWidth="783.0" style="-fx-background-color: white;" stylesheets="@../styles/general.css" tabClosingPolicy="UNAVAILABLE">
                <tabs>
-                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 115px; -fx-pref-height: 40px; -fx-background-color: #A1DBDD;" text="Payments">
+                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 115px; -fx-pref-height: 40px;" text="Payments">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;">
                            <children>
                               <TableView prefHeight="323.0" prefWidth="783.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
                                  <columns>
-                                    <TableColumn editable="false" prefWidth="119.0" style="-fx-background-color: #A1DBDD;" text="PET" />
-                                    <TableColumn editable="false" prefWidth="130.66668701171875" style="-fx-background-color: #A1DBDD;" text="OWNER" />
-                                    <TableColumn editable="false" prefWidth="130.66668701171875" style="-fx-background-color: #A1DBDD;" text="SERVICE PROVIDED" />
-                                    <TableColumn editable="false" prefWidth="130.66668701171875" style="-fx-background-color: #A1DBDD;" text="PAYMENT DATE" />
-                                    <TableColumn editable="false" prefWidth="130.66668701171875" style="-fx-background-color: #A1DBDD;" text="AMOUNT PAID" />
-                                    <TableColumn editable="false" prefWidth="130.66668701171875" style="-fx-background-color: #A1DBDD;" text="STATUS" />
+                                    <TableColumn fx:id="paymentIDColumn" editable="false" prefWidth="119.0" text="ID" />
+                                    <TableColumn fx:id="petColumn" editable="false" prefWidth="119.0" text="PET" />
+                                    <TableColumn fx:id="ownerColumn" editable="false" prefWidth="130.66668701171875" text="OWNER" />
+                                    <TableColumn fx:id="serviceProvidedColumn" editable="false" prefWidth="130.66668701171875" text="SERVICE PROVIDED" />
+                                    <TableColumn fx:id="paymentDateColumn" editable="false" prefWidth="130.66668701171875" text="PAYMENT DATE" />
+                                    <TableColumn fx:id="amountColumn" editable="false" prefWidth="130.66668701171875" text="AMOUNT" />
+                                    <TableColumn fx:id="paymentStatus" editable="false" prefWidth="130.66668701171875" text="STATUS" />
                                  </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -172,7 +173,7 @@
                                     </DropShadow>
                                  </effect>
                               </TableView>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="204.0" layoutY="342.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="174.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Add Payment">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="195.0" layoutY="342.0" mnemonicParsing="false" onAction="#addPayment" prefHeight="48.0" prefWidth="151.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add Payment">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -184,7 +185,31 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="445.0" layoutY="342.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="174.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Refund Payment">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="566.0" layoutY="342.0" mnemonicParsing="false" onAction="#refundPayment" prefHeight="48.0" prefWidth="171.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Refund Payment">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="381.0" layoutY="343.0" mnemonicParsing="false" onAction="#editPayment" prefHeight="48.0" prefWidth="151.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit Payment">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="65.0" layoutY="343.0" mnemonicParsing="false" onAction="#printPayment" prefHeight="48.0" prefWidth="91.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Print">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -200,15 +225,16 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 105px; -fx-pref-height: 40px; -fx-background-color: #A1DBDD;" text="Reports">
+                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 105px; -fx-pref-height: 40px;" text="Reports">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="178.0" prefWidth="343.0">
                            <children>
                               <TableView prefHeight="323.0" prefWidth="783.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
                                  <columns>
-                                    <TableColumn editable="false" prefWidth="119.0" style="-fx-background-color: #A1DBDD;" text="WEEKLY" />
-                                    <TableColumn editable="false" prefWidth="130.66668701171875" style="-fx-background-color: #A1DBDD;" text="MONTHLY" />
-                                    <TableColumn editable="false" prefWidth="130.66668701171875" style="-fx-background-color: #A1DBDD;" text="ANNUAL" />
+                                    <TableColumn fx:id="titleColumn" editable="false" prefWidth="191.66665649414062" text="Title" />
+                                    <TableColumn fx:id="typeColumn" editable="false" prefWidth="95.3333740234375" text="Type" />
+                                    <TableColumn fx:id="dateColumn" editable="false" prefWidth="453.6666259765625" text="Date" />
+                                    <TableColumn fx:id="createdByColumn" editable="false" prefWidth="453.6666259765625" text="Created By" />
                                  </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -221,7 +247,7 @@
                                     </DropShadow>
                                  </effect>
                               </TableView>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="322.0" layoutY="342.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="174.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Add Report">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="235.0" layoutY="342.0" mnemonicParsing="false" onAction="#addReport" prefHeight="48.0" prefWidth="134.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add Report">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -233,7 +259,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="531.0" layoutY="342.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="174.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="Delete Report">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="594.0" layoutY="342.0" mnemonicParsing="false" onAction="#deleteReport" prefHeight="48.0" prefWidth="151.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Delete Report">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -245,7 +271,19 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="109.0" layoutY="342.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="174.0" style="-fx-background-color: #A1DBDD; -fx-background-radius: 20px;" text="View Report">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="51.0" layoutY="342.0" mnemonicParsing="false" onAction="#viewReport" prefHeight="48.0" prefWidth="134.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="View Report">
+                                 <font>
+                                    <Font name="Segoe UI Bold" size="18.0" />
+                                 </font>
+                                 <effect>
+                                    <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
+                                       <color>
+                                          <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
+                                       </color>
+                                    </DropShadow>
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="427.0" layoutY="343.0" mnemonicParsing="false" onAction="#editReport" prefHeight="48.0" prefWidth="121.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit Report">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
