@@ -5,12 +5,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import java.io.IOException;
 
 public class DashboardController {
-
     @FXML
     private Button addAppointmentBtn;
     @FXML
@@ -18,17 +19,37 @@ public class DashboardController {
     @FXML
     private Button addPetBtn;
     @FXML
+    private TableColumn<?, ?> appointmentDateColumn;
+    @FXML
+    private TableColumn<?, ?> appointmentService;
+    @FXML
+    private TableColumn<?, ?> boardingStartDateColumn;
+    @FXML
     private Button dashboardBtn;
+    @FXML
+    private Button logOutBtn;
+    @FXML
+    private TableColumn<?, ?> ownerNameColumnA;
+    @FXML
+    private TableColumn<?, ?> ownerNameColumnB;
+    @FXML
+    private Button petCounter;
+    @FXML
+    private TableColumn<?, ?> petNameColumnA;
+    @FXML
+    private TableColumn<?, ?> petNameColumnB;
     @FXML
     private Button recordsBtn;
     @FXML
     private Button reportsBtn;
     @FXML
-    private Button logOutBtn;
-    @FXML
     private TextField searchField;
     @FXML
+    private TableView<?> upcomingAppointmentTable;
+    @FXML
+    private TableView<?> upcomingBoardingTable;
 
+    @FXML
     public void initialize() {
         AppState.getInstance().setCurrentPage(AppState.Page.DASHBOARD);
     }
