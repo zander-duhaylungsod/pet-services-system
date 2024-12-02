@@ -12,9 +12,9 @@ import java.io.IOException;
 public class RecordsController {
 
     @FXML
-    private TableView<?> PetOwnerTable;
+    private TableView<?> PetTable;
     @FXML
-    private TableView<?> PetOwnerTable1;
+    private TableView<?> OwnerTable;
     @FXML
     private Tab appointmentTab;
     @FXML

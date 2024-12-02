@@ -206,9 +206,9 @@
                <content>
                   <TableView fx:id="upcomingBoardingTable" prefHeight="352.0" prefWidth="343.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
                      <columns>
-                        <TableColumn fx:id="petNameColumnA" editable="false" prefWidth="119.0" style="-fx-background-color: #A1DBDD;" text="PET" />
-                        <TableColumn fx:id="ownerNameColumnA" editable="false" prefWidth="84.33334350585938" style="-fx-background-color: #A1DBDD;" text="OWNER" />
-                        <TableColumn fx:id="boardingStartDateColumn" editable="false" prefWidth="141.66665649414062" style="-fx-background-color: #A1DBDD;" text="START DATE" />
+                        <TableColumn fx:id="petNameColumnA" editable="false" prefWidth="119.0" text="PET" />
+                        <TableColumn fx:id="ownerNameColumnA" editable="false" prefWidth="84.33334350585938" text="OWNER" />
+                        <TableColumn fx:id="boardingStartDateColumn" editable="false" prefWidth="141.66665649414062" text="START DATE" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -244,10 +244,10 @@
                <content>
                   <TableView fx:id="upcomingAppointmentTable" prefHeight="352.0" prefWidth="414.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
                      <columns>
-                        <TableColumn fx:id="petNameColumnB" editable="false" prefWidth="119.0" style="-fx-background-color: #A1DBDD;" text="PET" />
-                        <TableColumn fx:id="ownerNameColumnB" editable="false" prefWidth="173.33331298828125" style="-fx-background-color: #A1DBDD;" text="OWNER" />
-                        <TableColumn fx:id="appointmentDateColumn" editable="false" prefWidth="173.33331298828125" style="-fx-background-color: #A1DBDD;" text="DATE" />
-                        <TableColumn fx:id="appointmentService" editable="false" prefWidth="173.33331298828125" style="-fx-background-color: #A1DBDD;" text="SERVICE" />
+                        <TableColumn fx:id="petNameColumnB" editable="false" prefWidth="119.0" text="PET" />
+                        <TableColumn fx:id="ownerNameColumnB" editable="false" prefWidth="173.33331298828125" text="OWNER" />
+                        <TableColumn fx:id="appointmentDateColumn" editable="false" prefWidth="173.33331298828125" text="DATE" />
+                        <TableColumn fx:id="appointmentService" editable="false" prefWidth="173.33331298828125" text="SERVICE" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -134,7 +134,7 @@
                <graphic>
                   <ImageView fitHeight="52.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/add%20pet.png" />
+                        <Image url="@../images/addpet.png" />
                      </image>
                   </ImageView>
                </graphic>

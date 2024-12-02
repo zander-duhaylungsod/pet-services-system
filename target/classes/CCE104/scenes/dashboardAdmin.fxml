@@ -16,90 +16,77 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0"
-            prefWidth="1140.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCE104.DashboardController"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://javafx.com/fxml/1 ">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="1140.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CCE104.DashboardController">
    <children>
-      <Pane layoutX="23.0" layoutY="16.0" prefHeight="687.0" prefWidth="201.0"
-            style="-fx-background-color: #66B1B4; -fx-background-radius: 24px;">
+      <Pane layoutX="23.0" layoutY="16.0" prefHeight="687.0" prefWidth="201.0" style="-fx-background-color: #66B1B4; -fx-background-radius: 24px;">
          <children>
-            <ImageView fitHeight="92.0" fitWidth="128.0" layoutX="41.0" layoutY="38.0" pickOnBounds="true"
-                       preserveRatio="true">
+            <ImageView fitHeight="92.0" fitWidth="128.0" layoutX="41.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/paw.png"/>
+                  <Image url="@../images/paw.png" />
                </image>
             </ImageView>
-            <Button fx:id="dashboardBtn" layoutY="141.0" mnemonicParsing="false" onAction="#switchToDashboard"
-                    prefHeight="86.0" prefWidth="201.0" stylesheets="@../styles/general.css" text="Dashboard"
-                    textFill="WHITE">
+            <Button fx:id="dashboardBtn" layoutY="141.0" mnemonicParsing="false" onAction="#switchToDashboard" prefHeight="86.0" prefWidth="201.0" stylesheets="@../styles/general.css" text="Dashboard" textFill="WHITE">
                <font>
-                  <Font name="Segoe UI" size="17.0"/>
+                  <Font name="Segoe UI" size="17.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="39.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/dashboardIcon.png"/>
+                        <Image url="@../images/dashboardIcon.png" />
                      </image>
                   </ImageView>
                </graphic>
                <styleClass>
-                  <String fx:value="buttonA"/>
-                  <String fx:value="button"/>
+                  <String fx:value="buttonA" />
+                  <String fx:value="button" />
                </styleClass>
             </Button>
-            <Button fx:id="recordsBtn" layoutY="226.0" mnemonicParsing="false" onAction="#switchToRecords"
-                    prefHeight="86.0" prefWidth="201.0" style="-fx-opacity: 50%;" stylesheets="@../styles/general.css"
-                    text="Records" textFill="WHITE">
+            <Button fx:id="recordsBtn" layoutY="226.0" mnemonicParsing="false" onAction="#switchToRecords" prefHeight="86.0" prefWidth="201.0" style="-fx-opacity: 50%;" stylesheets="@../styles/general.css" text="Records" textFill="WHITE">
                <font>
-                  <Font name="Segoe UI" size="17.0"/>
+                  <Font name="Segoe UI" size="17.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="36.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/recordsIcon.png"/>
+                        <Image url="@../images/recordsIcon.png" />
                      </image>
                   </ImageView>
                </graphic>
                <styleClass>
-                  <String fx:value="buttonA"/>
-                  <String fx:value="button"/>
+                  <String fx:value="buttonA" />
+                  <String fx:value="button" />
                </styleClass>
             </Button>
-            <Button fx:id="reportsBtn" layoutY="311.0" mnemonicParsing="false" onAction="#switchToReports"
-                    prefHeight="86.0" prefWidth="201.0" style="-fx-opacity: 50%;" stylesheets="@../styles/general.css"
-                    text="Reports" textFill="WHITE">
+            <Button fx:id="reportsBtn" layoutY="311.0" mnemonicParsing="false" onAction="#switchToReports" prefHeight="86.0" prefWidth="201.0" style="-fx-opacity: 50%;" stylesheets="@../styles/general.css" text="Reports" textFill="WHITE">
                <font>
-                  <Font name="Segoe UI" size="17.0"/>
+                  <Font name="Segoe UI" size="17.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="39.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/dashboardIcon.png"/>
+                        <Image url="@../images/dashboardIcon.png" />
                      </image>
                   </ImageView>
                </graphic>
                <styleClass>
-                  <String fx:value="buttonA"/>
-                  <String fx:value="button"/>
+                  <String fx:value="buttonA" />
+                  <String fx:value="button" />
                </styleClass>
             </Button>
-            <Button fx:id="logOutBtn" layoutY="619.0" mnemonicParsing="false" onAction="#logOut" prefHeight="50.0"
-                    prefWidth="201.0" style="-fx-opacity: 50%;" stylesheets="@../styles/general.css" text="Log Out"
-                    textFill="WHITE">
+            <Button fx:id="logOutBtn" layoutY="619.0" mnemonicParsing="false" onAction="#logOut" prefHeight="50.0" prefWidth="201.0" style="-fx-opacity: 50%;" stylesheets="@../styles/general.css" text="Log Out" textFill="WHITE">
                <font>
-                  <Font name="Segoe UI" size="17.0"/>
+                  <Font name="Segoe UI" size="17.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="39.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/logOutIcon.png"/>
+                        <Image url="@../images/logOutIcon.png" />
                      </image>
                   </ImageView>
                </graphic>
                <styleClass>
-                  <String fx:value="buttonA"/>
-                  <String fx:value="button"/>
+                  <String fx:value="buttonA" />
+                  <String fx:value="button" />
                </styleClass>
             </Button>
          </children>
@@ -108,152 +95,128 @@
          <children>
             <Label layoutX="51.0" layoutY="44.0" prefWidth="151.0" text="Total Pets Registered:">
                <font>
-                  <Font name="Segoe UI" size="15.0"/>
+                  <Font name="Segoe UI" size="15.0" />
                </font>
             </Label>
-            <Button fx:id="petCounter" alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" graphicTextGap="0.0"
-                    layoutX="49.0" layoutY="72.0" mnemonicParsing="false" onAction="#switchToRecords" prefHeight="89.0"
-                    prefWidth="110.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px;"
-                    stylesheets="@../styles/general.css" text="0">
+            <Button fx:id="petCounter" alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="49.0" layoutY="72.0" mnemonicParsing="false" onAction="#switchToRecords" prefHeight="89.0" prefWidth="110.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px;" stylesheets="@../styles/general.css" text="0">
                <font>
-                  <Font name="Segoe UI Bold" size="29.0"/>
+                  <Font name="Segoe UI Bold" size="29.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="37.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/totalpetsIcon.png"/>
+                        <Image url="@../images/totalpetsIcon.png" />
                      </image>
                   </ImageView>
                </graphic>
                <effect>
-                  <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425"
-                              spread="0.28" width="66.62">
+                  <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
                      <color>
-                        <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263"/>
+                        <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
                      </color>
                   </DropShadow>
                </effect>
             </Button>
-            <TextField fx:id="searchField" layoutX="281.0" layoutY="35.0" onKeyPressed="#searchFunction"
-                       prefHeight="38.0" prefWidth="321.0" promptText="Search pets, owners, or services "
-                       style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
+            <TextField fx:id="searchField" layoutX="281.0" layoutY="35.0" onKeyPressed="#searchFunction" prefHeight="38.0" prefWidth="321.0" promptText="Search pets, owners, or services " style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
                <font>
-                  <Font name="Segoe UI" size="15.0"/>
+                  <Font name="Segoe UI" size="15.0" />
                </font>
                <effect>
-                  <DropShadow blurType="GAUSSIAN" height="49.83" offsetX="8.0" offsetY="8.0" radius="27.345"
-                              spread="0.1" width="61.55">
+                  <DropShadow blurType="GAUSSIAN" height="49.83" offsetX="8.0" offsetY="8.0" radius="27.345" spread="0.1" width="61.55">
                      <color>
-                        <Color red="0.9210526347160339" green="0.9210526347160339" blue="0.9210526347160339"/>
+                        <Color red="0.9210526347160339" green="0.9210526347160339" blue="0.9210526347160339" />
                      </color>
                   </DropShadow>
                </effect>
             </TextField>
-            <ImageView fitHeight="29.0" fitWidth="33.0" layoutX="561.0" layoutY="38.0" pickOnBounds="true"
-                       preserveRatio="true">
+            <ImageView fitHeight="29.0" fitWidth="33.0" layoutX="561.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/searchicon.png"/>
+                  <Image url="@../images/searchicon.png" />
                </image>
             </ImageView>
             <Label layoutX="725.0" layoutY="43.0" prefHeight="19.0" prefWidth="121.0" text="Employee Name">
                <font>
-                  <Font name="Segoe UI" size="15.0"/>
+                  <Font name="Segoe UI" size="15.0" />
                </font>
             </Label>
             <Label layoutX="725.0" layoutY="66.0" prefHeight="19.0" prefWidth="121.0" text="Position">
                <font>
-                  <Font name="Segoe UI Italic" size="15.0"/>
+                  <Font name="Segoe UI Italic" size="15.0" />
                </font>
             </Label>
-            <Circle fill="#b2f0ff" layoutX="697.0" layoutY="62.0" radius="14.0" stroke="WHITE" strokeType="INSIDE"/>
-            <Button fx:id="addPetBtn" alignment="BOTTOM_CENTER" graphicTextGap="0.0" layoutX="55.0" layoutY="194.0"
-                    mnemonicParsing="false" onAction="#addPet" prefHeight="48.0" prefWidth="169.0"
-                    style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css"
-                    text="Add Pet">
+            <Circle fill="#b2f0ff" layoutX="697.0" layoutY="62.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
+            <Button fx:id="addPetBtn" alignment="BOTTOM_CENTER" graphicTextGap="0.0" layoutX="55.0" layoutY="194.0" mnemonicParsing="false" onAction="#addPet" prefHeight="48.0" prefWidth="169.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add Pet">
                <font>
-                  <Font name="Segoe UI Bold" size="18.0"/>
+                  <Font name="Segoe UI Bold" size="18.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="52.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/add%20pet.png"/>
+                        <Image url="@../images/addpet.png" />
                      </image>
                   </ImageView>
                </graphic>
                <effect>
-                  <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425"
-                              spread="0.28" width="66.62">
+                  <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
                      <color>
-                        <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263"/>
+                        <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
                      </color>
                   </DropShadow>
                </effect>
             </Button>
-            <Button fx:id="addAppointmentBtn" alignment="CENTER" graphicTextGap="10.0" layoutX="275.0" layoutY="196.0"
-                    mnemonicParsing="false" onAction="#addAppointment" prefHeight="64.0" prefWidth="230.0"
-                    style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css"
-                    text="Add Appointment">
+            <Button fx:id="addAppointmentBtn" alignment="CENTER" graphicTextGap="10.0" layoutX="275.0" layoutY="196.0" mnemonicParsing="false" onAction="#addAppointment" prefHeight="64.0" prefWidth="230.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add Appointment">
                <font>
-                  <Font name="Segoe UI Bold" size="18.0"/>
+                  <Font name="Segoe UI Bold" size="18.0" />
                </font>
                <effect>
-                  <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425"
-                              spread="0.28" width="66.62">
+                  <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
                      <color>
-                        <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263"/>
+                        <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
                      </color>
                   </DropShadow>
                </effect>
                <graphic>
                   <ImageView fitHeight="36.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/appointment.png"/>
+                        <Image url="@../images/appointment.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="addBoardingBtn" alignment="CENTER" graphicTextGap="10.0" layoutX="550.0" layoutY="197.0"
-                    mnemonicParsing="false" onAction="#addBoarding" prefHeight="64.0" prefWidth="294.0"
-                    style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css"
-                    text="Add Boarding Reservation">
+            <Button fx:id="addBoardingBtn" alignment="CENTER" graphicTextGap="10.0" layoutX="550.0" layoutY="197.0" mnemonicParsing="false" onAction="#addBoarding" prefHeight="64.0" prefWidth="294.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add Boarding Reservation">
                <font>
-                  <Font name="Segoe UI Bold" size="18.0"/>
+                  <Font name="Segoe UI Bold" size="18.0" />
                </font>
                <effect>
-                  <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425"
-                              spread="0.28" width="66.62">
+                  <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
                      <color>
-                        <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263"/>
+                        <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
                      </color>
                   </DropShadow>
                </effect>
                <graphic>
                   <ImageView fitHeight="36.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/boarding.png"/>
+                        <Image url="@../images/boarding.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
             <ScrollPane layoutX="54.0" layoutY="314.0" prefHeight="352.0" prefWidth="346.0">
                <content>
-                  <TableView fx:id="upcomingBoardingTable" prefHeight="352.0" prefWidth="343.0"
-                             style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
+                  <TableView fx:id="upcomingBoardingTable" prefHeight="352.0" prefWidth="343.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
                      <columns>
-                        <TableColumn fx:id="petNameColumnA" editable="false" prefWidth="119.0"
-                                     style="-fx-background-color: #A1DBDD;" text="PET"/>
-                        <TableColumn fx:id="ownerNameColumnA" editable="false" prefWidth="84.33334350585938"
-                                     style="-fx-background-color: #A1DBDD;" text="OWNER"/>
-                        <TableColumn fx:id="boardingStartDateColumn" editable="false" prefWidth="141.66665649414062"
-                                     style="-fx-background-color: #A1DBDD;" text="START DATE"/>
+                        <TableColumn fx:id="petNameColumnA" editable="false" prefWidth="119.0" text="PET" />
+                        <TableColumn fx:id="ownerNameColumnA" editable="false" prefWidth="84.33334350585938" text="OWNER" />
+                        <TableColumn fx:id="boardingStartDateColumn" editable="false" prefWidth="141.66665649414062" text="START DATE" />
                      </columns>
                      <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                      <effect>
                         <DropShadow blurType="GAUSSIAN" radius="16.595" width="47.38">
                            <color>
-                              <Color red="0.7894737124443054" green="0.7894737124443054" blue="0.7894737124443054"/>
+                              <Color red="0.7894737124443054" green="0.7894737124443054" blue="0.7894737124443054" />
                            </color>
                         </DropShadow>
                      </effect>
@@ -262,44 +225,37 @@
                <effect>
                   <DropShadow blurType="GAUSSIAN" radius="18.7925" width="56.17">
                      <color>
-                        <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285"/>
+                        <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285" />
                      </color>
                   </DropShadow>
                </effect>
             </ScrollPane>
-            <Label layoutX="84.0" layoutY="291.0" prefHeight="19.0" prefWidth="294.0"
-                   text="UPCOMING BOARDING RESERVATION" textFill="#097478">
+            <Label layoutX="84.0" layoutY="291.0" prefHeight="19.0" prefWidth="294.0" text="UPCOMING BOARDING RESERVATION" textFill="#097478">
                <font>
-                  <Font name="Segoe UI Bold" size="16.0"/>
+                  <Font name="Segoe UI Bold" size="16.0" />
                </font>
             </Label>
-            <Label layoutX="530.0" layoutY="293.0" prefHeight="19.0" prefWidth="220.0" text="UPCOMING APPOINTMENTS"
-                   textFill="#097478">
+            <Label layoutX="530.0" layoutY="293.0" prefHeight="19.0" prefWidth="220.0" text="UPCOMING APPOINTMENTS" textFill="#097478">
                <font>
-                  <Font name="Segoe UI Bold" size="16.0"/>
+                  <Font name="Segoe UI Bold" size="16.0" />
                </font>
             </Label>
             <ScrollPane layoutX="437.0" layoutY="317.0" prefHeight="352.0" prefWidth="414.0">
                <content>
-                  <TableView fx:id="upcomingAppointmentTable" prefHeight="352.0" prefWidth="414.0"
-                             style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
+                  <TableView fx:id="upcomingAppointmentTable" prefHeight="352.0" prefWidth="414.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
                      <columns>
-                        <TableColumn fx:id="petNameColumnB" editable="false" prefWidth="119.0"
-                                     style="-fx-background-color: #A1DBDD;" text="PET"/>
-                        <TableColumn fx:id="ownerNameColumnB" editable="false" prefWidth="173.33331298828125"
-                                     style="-fx-background-color: #A1DBDD;" text="OWNER"/>
-                        <TableColumn fx:id="appointmentDateColumn" editable="false" prefWidth="173.33331298828125"
-                                     style="-fx-background-color: #A1DBDD;" text="DATE"/>
-                        <TableColumn fx:id="appointmentService" editable="false" prefWidth="173.33331298828125"
-                                     style="-fx-background-color: #A1DBDD;" text="SERVICE"/>
+                        <TableColumn fx:id="petNameColumnB" editable="false" prefWidth="119.0" text="PET" />
+                        <TableColumn fx:id="ownerNameColumnB" editable="false" prefWidth="173.33331298828125" text="OWNER" />
+                        <TableColumn fx:id="appointmentDateColumn" editable="false" prefWidth="173.33331298828125" text="DATE" />
+                        <TableColumn fx:id="appointmentService" editable="false" prefWidth="173.33331298828125" text="SERVICE" />
                      </columns>
                      <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                      <effect>
                         <DropShadow blurType="GAUSSIAN" radius="16.595" width="47.38">
                            <color>
-                              <Color red="0.7894737124443054" green="0.7894737124443054" blue="0.7894737124443054"/>
+                              <Color red="0.7894737124443054" green="0.7894737124443054" blue="0.7894737124443054" />
                            </color>
                         </DropShadow>
                      </effect>
@@ -308,7 +264,7 @@
                <effect>
                   <DropShadow blurType="GAUSSIAN" radius="18.7925" width="56.17">
                      <color>
-                        <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285"/>
+                        <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285" />
                      </color>
                   </DropShadow>
                </effect>
