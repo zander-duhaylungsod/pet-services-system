@@ -192,7 +192,7 @@
                               </Button>
                               <ScrollPane layoutX="18.0" layoutY="9.0" prefHeight="323.0" prefWidth="748.0">
                                  <content>
-                                    <TableView fx:id="PetOwnerTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
+                                    <TableView fx:id="PetTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
                                           <TableColumn fx:id="recordsPetIDColumn" editable="false" prefWidth="82.0" text="PET ID" />
                                           <TableColumn fx:id="recordsPetNameColumn" editable="false" prefWidth="258.33331298828125" text="PET" />
@@ -279,7 +279,7 @@
                               </Button>
                               <ScrollPane layoutX="18.0" layoutY="9.0" prefHeight="323.0" prefWidth="748.0">
                                  <content>
-                                    <TableView fx:id="PetOwnerTable1" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
+                                    <TableView fx:id="OwnerTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
                                           <TableColumn fx:id="recordsOwnerIDColumn" editable="false" prefWidth="121.33331298828125" text="OWNER ID" />
                                           <TableColumn fx:id="recordsOwnerFirstNameColumn" editable="false" prefWidth="264.66668701171875" text="FIRST NAME" />
