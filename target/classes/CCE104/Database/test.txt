@@ -1,0 +1,29 @@
+
+    private TableView<?> upcomingBoardingTable;
+    private TableColumn<?, ?> ownerNameColumnA;
+    private TableColumn<?, ?> petNameColumnA;
+    private TableColumn<?, ?> boardingStartDateColumn;
+
+
+CREATE TABLE BoardingReservations (
+      ReservationID INT AUTO_INCREMENT PRIMARY KEY,
+      StartDate DATE NOT NULL,
+      EndDate DATE NOT NULL,
+      PetID INT NOT NULL,
+      BranchID INT NOT NULL,
+      EmployeeID INT NOT NULL,
+      Status VARCHAR(50) DEFAULT 'Pending',  -- Added Status column
+      FOREIGN KEY (PetID) REFERENCES Pets(PetID),
+      FOREIGN KEY (BranchID) REFERENCES Branch(BranchID),
+      FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+);
+
+------------------------------------------------------------------------
+
+    private TableView<?> upcomingAppointmentTable;
+    private TableColumn<?, ?> petNameColumnB;
+    private TableColumn<?, ?> ownerNameColumnB;
+    private TableColumn<?, ?> appointmentDateColumn;
+    private TableColumn<?, ?> appointmentService;
+
+
