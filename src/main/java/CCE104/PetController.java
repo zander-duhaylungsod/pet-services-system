@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Polygon;
 import javafx.scene.image.ImageView;
@@ -180,10 +181,14 @@ public class PetController {
             relativePath = relativePath.replace("\\", "/");
 
             // Format the path as @../images/paw.png
-            String formattedPath = "@../" + relativePath + "/" + selectedFile.getName();
+            String formattedPath = "/" + relativePath + "/" + selectedFile.getName();
 
             // Store the formatted path for reference
             petImagePath = formattedPath;
+
+            // Create a Circle to be used as a clip
+            Circle clip = new Circle(75, 75, 75);
+            petImage.setClip(clip);
 
             // Update the ImageView using the relative path (pass the formatted path directly)
             petImage.setImage(new Image("file:" + formattedPath)); // Load image using relative path

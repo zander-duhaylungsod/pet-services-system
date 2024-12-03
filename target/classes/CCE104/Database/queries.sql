@@ -1,8 +1,8 @@
 mysql -h localhost -u root
-CREATE DATABASE syntaxSquad_db;
 USE syntaxSquad_db;
 
 mysql -h localhost -u root
+CREATE DATABASE syntaxSquad_db;
 USE syntaxSquad_db;
 
 CREATE TABLE Branch (

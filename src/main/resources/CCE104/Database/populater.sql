@@ -32,7 +32,7 @@ VALUES
 
 INSERT INTO Employees (FirstName, LastName, Phone, Role, BranchID)
 VALUES
-    ( 'Mellon', 'Manifester', '09854363213', 'Administrator', 1),
+    ( 'Mellon', 'Manifester', '09854363513', 'Administrator', 1),
     ( 'Angel', 'Semora',  '09346545685', 'Manager', 1), -- Will be set as Manager
     ('Juno', 'Carpenter',  '09124567890', 'Receptionist', 2),
     ( 'Kyla', 'Ramos', '09233456789', 'Veterinarian', 3);
