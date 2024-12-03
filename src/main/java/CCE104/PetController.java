@@ -25,6 +25,7 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class PetController {
 
@@ -153,51 +154,134 @@ public class PetController {
 
     @FXML
     public void selectFile() throws IOException {
-        FileChooser fileChooser = new FileChooser(); // Set the initial directory to the parent folder of your relative path
-        File initialDirectory = new File("src/main/resources/CCE104/images");
+        FileChooser fileChooser = new FileChooser();
+
+        // Use project root directory dynamically
+        File projectRoot = new File(System.getProperty("user.dir"));
+        File initialDirectory = new File(projectRoot, "src/main/resources/CCE104/images");
+
         fileChooser.setInitialDirectory(initialDirectory);
         fileChooser.setTitle("Select Pet Image");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
 
         File selectedFile = fileChooser.showOpenDialog(new Stage());
         if (selectedFile != null) {
-            // Define the base directory, e.g., the project directory or any directory you want to use
-            String baseDirectory = "C:/Users/Admin/IdeaProjects/pet-services-system/src/main/resources/CCE104"; // Replace with your base directory
+            try {
+                // Get the project root directory dynamically
+                java.nio.file.Path projectRootPath = projectRoot.toPath().toAbsolutePath();
+                java.nio.file.Path selectedFilePath = selectedFile.toPath().toAbsolutePath();
 
-            // Convert the base directory and the selected file to Path objects
-            java.nio.file.Path basePath = Paths.get(baseDirectory).toAbsolutePath();
-            java.nio.file.Path filePath = selectedFile.toPath().toAbsolutePath();
+                // Calculate relative path from the resources directory
+                java.nio.file.Path resourcesPath = projectRootPath.resolve("src/main/resources");
+                java.nio.file.Path relativePath = resourcesPath.relativize(selectedFilePath.getParent());
 
-            // Manually calculate the relative path
-            java.nio.file.Path parentPath = filePath.getParent();
-            String relativePath = parentPath != null ? parentPath.toString().replace(basePath.toString(), "") : "";
+                // Construct the formatted path
+                String formattedPath = "/" + relativePath.toString().replace("\\", "/") + "/" + selectedFile.getName();
 
-            // If there's no parentPath, the file is at the root level, use the file name
-            if (relativePath.isEmpty()) {
-                relativePath = selectedFile.getName();
+                // Store the formatted path
+                petImagePath = formattedPath;
+
+                // Create a Circle to be used as a clip
+                Circle clip = new Circle(75, 75, 75);
+                petImage.setClip(clip);
+
+                // Update the ImageView using the relative path
+                petImage.setImage(new Image("file:" + new File(resourcesPath.toFile(), formattedPath).getAbsolutePath()));
+            } catch (Exception e) {
+                // Handle any potential path resolution errors
+                e.printStackTrace();
+
+                showErrorDialog("Failed to select image", "Could not resolve image path");
             }
-
-            // Ensure that the path uses forward slashes
-            relativePath = relativePath.replace("\\", "/");
-
-            // Format the path as @../images/paw.png
-            String formattedPath = "/" + relativePath + "/" + selectedFile.getName();
-
-            // Store the formatted path for reference
-            petImagePath = formattedPath;
-
-            // Create a Circle to be used as a clip
-            Circle clip = new Circle(75, 75, 75);
-            petImage.setClip(clip);
-
-            // Update the ImageView using the relative path (pass the formatted path directly)
-            petImage.setImage(new Image("file:" + formattedPath)); // Load image using relative path
         }
     }
 
+    private void showErrorDialog(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
     @FXML
-    public void savePetChanges () throws IOException {
-        //add function here
+    public void savePetChanges () throws IOException, SQLException {
+        try {
+            // Step 1: Validate input fields
+            String name = petName.getText();
+            String species = petSpecies.getText();
+            String breed = petBreed.getText();
+            Integer age = petAge.getValue();
+            String ownerID = petOwnerID.getText();
+
+            if (name == null || name.isEmpty()) {
+                showErrorDialog("Validation Error", "Pet name cannot be empty.");
+                return;
+            }
+            if (species == null || species.isEmpty()) {
+                showErrorDialog("Validation Error", "Pet species cannot be empty.");
+                return;
+            }
+            if (breed == null || breed.isEmpty()) {
+                showErrorDialog("Validation Error", "Pet breed cannot be empty.");
+                return;
+            }
+            if (age == null || age <= 0) {
+                showErrorDialog("Validation Error", "Age must be a positive number.");
+                return;
+            }
+            if (ownerID == null || ownerID.isEmpty() || !ownerID.matches("\\d+")) {
+                showErrorDialog("Validation Error", "Owner ID must be a valid number.");
+                return;
+            }
+
+            // Step 2: Get the selected Pet ID from RecordsController
+            RecordsController recordsController = PetRecord.getInstance().getRecordsController();
+            Integer selectedPetID = recordsController.getSelectedPetID();
+            if (selectedPetID == null) {
+                showErrorDialog("No Pet Selected", "Please select a pet to edit.");
+                return;
+            }
+
+            // Step 3: Update pet in the database
+            String updateQuery = "UPDATE Pets SET Name = ?, Species = ?, Breed = ?, Age = ?, OwnerID = ?, PetImagePath = ? WHERE PetID = ?";
+            try (Connection conn = DriverManager.getConnection(url,user,password);
+                 PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+
+                stmt.setString(1, name);
+                stmt.setString(2, species);
+                stmt.setString(3, breed);
+                stmt.setInt(4, age);
+                stmt.setInt(5, Integer.parseInt(ownerID));
+                stmt.setString(6, petImagePath);
+                stmt.setInt(7, selectedPetID);
+
+                int rowsUpdated = stmt.executeUpdate();
+                if (rowsUpdated > 0) {
+                    showSuccessDialog("Success", "Pet details updated successfully.");
+                    //recordsController.refreshPetTable(); // Refresh the table in RecordsController
+                } else {
+                    showErrorDialog("Update Failed", "No changes were made to the pet details.");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorDialog("Error", "An error occurred while saving pet changes.");
+        }
+    }
+
+    public static void showSuccessDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title); alert.setHeaderText(null);
+        alert.setContentText(message); alert.showAndWait();
+    }
+
+    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    String user = "root";
+    String password = "";
+
+    private static Connection getConnection(String url, String user, String password) throws SQLException {
+        return DriverManager.getConnection(url, user, password);
     }
 
     @FXML

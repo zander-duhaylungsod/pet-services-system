@@ -1,10 +1,3 @@
-
-    private TableView<?> upcomingBoardingTable;
-    private TableColumn<?, ?> ownerNameColumnA;
-    private TableColumn<?, ?> petNameColumnA;
-    private TableColumn<?, ?> boardingStartDateColumn;
-
-
 CREATE TABLE BoardingReservations (
       ReservationID INT AUTO_INCREMENT PRIMARY KEY,
       StartDate DATE NOT NULL,
@@ -26,4 +19,32 @@ CREATE TABLE BoardingReservations (
     private TableColumn<?, ?> appointmentDateColumn;
     private TableColumn<?, ?> appointmentService;
 
+------------------------------------------------------------------------
+    @FXML
+    private TableView<?> PetTable;
 
+    @FXML
+    private TableColumn<?, ?> recordsPetBreedColumn;
+    @FXML
+    private TableColumn<?, ?> recordsPetIDColumn;
+    @FXML
+    private TableColumn<?, ?> recordsPetNameColumn;
+    @FXML
+    private TableColumn<?, ?> recordsPetOwnerIDColumn;
+    @FXML
+    private TableColumn<?, ?> recordsPetOwnerNameColumn;
+    @FXML
+    private TableColumn<?, ?> recordsPetSpeciesColumn;
+
+    TABLE:
+    CREATE TABLE Employees (
+        EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
+        Password VARCHAR(255),
+        FirstName VARCHAR(50) NOT NULL,
+        LastName VARCHAR(50) NOT NULL,
+        Email VARCHAR(100) UNIQUE,
+        Phone VARCHAR(15) NOT NULL UNIQUE,
+        Role VARCHAR(50),
+        BranchID INT NOT NULL,
+        FOREIGN KEY (BranchID) REFERENCES Branch(BranchID)
+    );

@@ -2,19 +2,25 @@ package CCE104;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import java.io.IOException;
 
 public class RecordsController {
 
     @FXML
-    private TableView<?> PetTable;
+    private TableView<PetRecord> PetTable;
     @FXML
     private TableView<?> OwnerTable;
+    @FXML
+    private TableView<?> ServiceTable;
+    @FXML
+    private TableView<?> AppointmentTable;
+    @FXML
+    private TableView<?> BoardingTable;
+    @FXML
+    private TableView<?> EmployeeTable;
+
     @FXML
     private Tab appointmentTab;
     @FXML
@@ -101,6 +107,7 @@ public class RecordsController {
 
     @FXML
     public void initialize() {
+        PetRecord.getInstance().setRecordsController(this);
         AppState.getInstance().setCurrentPage(AppState.Page.RECORDS);
     }
 
@@ -157,7 +164,22 @@ public class RecordsController {
     //edit functions
     @FXML
     public void editPet () throws IOException {
+        PetRecord selectedPet = PetTable.getSelectionModel().getSelectedItem();
+        if (selectedPet == null) {
+            showAlert("No Selection", "Please select a pet to edit.");
+            return;
+        }
+
+        PetRecord.setSelectedPet(selectedPet);
         Main.switchSceneWithFade("scenes/editPet");
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     @FXML
@@ -240,6 +262,12 @@ public class RecordsController {
     @FXML
     void searchFunction(KeyEvent event) {
         //add search function here
+    }
+
+    //table dependencies
+    public Integer getSelectedPetID() {
+        PetRecord selectedPet = (PetRecord) PetTable.getSelectionModel().getSelectedItem();
+        return selectedPet != null ? selectedPet.getPetID() : null;
     }
 }
 
