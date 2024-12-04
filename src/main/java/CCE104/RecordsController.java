@@ -18,7 +18,7 @@ public class RecordsController {
     @FXML
     private TableView<PetRecord> PetTable;
     @FXML
-    private TableView<?> OwnerTable;
+    private TableView<OwnerRecord> OwnerTable;
     @FXML
     private TableView<?> ServiceTable;
     @FXML
@@ -116,6 +116,7 @@ public class RecordsController {
     @FXML
     private Tab serviceTab;
     private ObservableList<PetRecord> petList = FXCollections.observableArrayList();
+    private ObservableList<OwnerRecord> ownerList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -130,11 +131,20 @@ public class RecordsController {
         recordsPetOwnerIDColumn.setCellValueFactory(new PropertyValueFactory<>("ownerID"));
         recordsPetOwnerNameColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
 
+        // Initialize owner table columns
+        recordsOwnerEmailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        recordsOwnerFirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        recordsOwnerIDColumn.setCellValueFactory(new PropertyValueFactory<>("ownerID"));
+        recordsOwnerLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        recordsOwnerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+
         //load Data
         loadPets();
+        loadOwners();
 
         //bind data to table
         PetTable.setItems(petList);
+        OwnerTable.setItems(ownerList);
     }
 
     public void switchToDashboard () throws IOException {
@@ -269,7 +279,38 @@ public class RecordsController {
     //delete functions
     @FXML
     public void deletePet () throws IOException {
-        AppState.getInstance().setCurrentPetPage(AppState.Pet.DELETE);
+        // Get the selected pet
+        PetRecord selectedPet = PetTable.getSelectionModel().getSelectedItem();
+
+        // Check if a pet is selected
+        if (selectedPet == null) {
+            showAlert("No Selection", "Please select a pet to delete.");
+            return;
+        }
+
+        // Confirm deletion with the user
+        showConfirmationDialog("Confirm Deletion","Are you sure you want to delete the selected pet?");
+
+        // Delete the pet from the database
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement("DELETE FROM Pets WHERE PetID = ?")) {
+
+            stmt.setInt(1, selectedPet.getPetID());
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                // Remove the pet from the list and refresh the table
+                petList.remove(selectedPet);
+                PetTable.refresh();
+                showAlert("Deletion Successful", "The pet has been successfully deleted.");
+            } else {
+                showAlert("Deletion Failed", "Failed to delete the pet. Please try again.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorDialog("Error", "An error occurred while deleting the pet.");
+        }
+
     }
 
     @FXML
@@ -347,6 +388,30 @@ public class RecordsController {
         }
     }
 
+    public void loadOwners() {
+        ownerList.clear();
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT " +
+                             "Owners.OwnerID, Owners.FirstName, Owners.LastName, Owners.Email, Owners.Phone " +
+                             "FROM Owners;"
+             )) {
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ownerList.add(new OwnerRecord(
+                        rs.getInt("OwnerID"),
+                        rs.getString("FirstName"),
+                        rs.getString("LastName"),
+                        rs.getString("Email"),
+                        rs.getString("Phone")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     //alerts
     private void showErrorDialog(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -354,6 +419,15 @@ public class RecordsController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    private void showConfirmationDialog(String title, String content) {
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle(title);
+        confirmationAlert.setHeaderText(null);
+        confirmationAlert.setContentText(content);
+        if (confirmationAlert.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+            return;
+        }
     }
 }
 

@@ -60,7 +60,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         // Database credentials
-        String url = "jdbc:mysql://localhost:3306/pawfectCareDB"; // Update with your database name
+        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db"; // Update with your database name
         String user = "root"; // Default username for XAMPP
         String password = ""; // Default password (leave empty if not set)
 
