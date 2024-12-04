@@ -48,3 +48,22 @@ CREATE TABLE BoardingReservations (
         BranchID INT NOT NULL,
         FOREIGN KEY (BranchID) REFERENCES Branch(BranchID)
     );
+
+------------------------------------------------------------------------
+
+    @FXML
+    private Spinner<Integer> petAge;
+    @FXML
+    private TextField petBreed;
+    @FXML
+    private ImageView petImage;
+    @FXML
+    private TextField petName;
+    @FXML
+    private TextArea petNotes;
+    @FXML
+    private TextField petOwnerID;
+    @FXML
+    private TextField petSpecies;
+    private String petImagePath = null; // To store the image path
+

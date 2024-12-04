@@ -1,10 +1,17 @@
 package CCE104;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class RecordsController {
 
@@ -20,7 +27,6 @@ public class RecordsController {
     private TableView<?> BoardingTable;
     @FXML
     private TableView<?> EmployeeTable;
-
     @FXML
     private Tab appointmentTab;
     @FXML
@@ -103,12 +109,26 @@ public class RecordsController {
     private Button reportsBtn;
     @FXML
     private Tab serviceTab;
-
+    private ObservableList<PetRecord> petList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         PetRecord.getInstance().setRecordsController(this);
         AppState.getInstance().setCurrentPage(AppState.Page.RECORDS);
+
+        // Initialize pet table columns
+        recordsPetIDColumn.setCellValueFactory(new PropertyValueFactory<>("petID"));
+        recordsPetNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        recordsPetSpeciesColumn.setCellValueFactory(new PropertyValueFactory<>("species"));
+        recordsPetBreedColumn.setCellValueFactory(new PropertyValueFactory<>("breed"));
+        recordsPetOwnerIDColumn.setCellValueFactory(new PropertyValueFactory<>("ownerID"));
+        recordsPetOwnerNameColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
+
+        //load Data
+        loadPets();
+
+        //bind data to table
+        PetTable.setItems(petList);
     }
 
     public void switchToDashboard () throws IOException {
@@ -264,10 +284,47 @@ public class RecordsController {
         //add search function here
     }
 
-    //table dependencies
+    //table dependencies & database functions
+    private Connection connect() throws Exception {
+        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+        String user = "root";
+        String password = ""; // Replace with your MySQL password
+        return DriverManager.getConnection(url, user, password);
+    }
+
     public Integer getSelectedPetID() {
-        PetRecord selectedPet = (PetRecord) PetTable.getSelectionModel().getSelectedItem();
+        PetRecord selectedPet = PetTable.getSelectionModel().getSelectedItem();
         return selectedPet != null ? selectedPet.getPetID() : null;
+    }
+
+    //Pet Table Management --
+    public void loadPets() {
+        petList.clear();
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT " +
+                             "Pets.PetID, Pets.Name, Pets.Species, Pets.Breed, Pets.Age, " +
+                             "Pets.OwnerID, Owners.FirstName AS OwnerName, Pets.PetImagePath " +
+                             "FROM Pets " +
+                             "LEFT JOIN Owners " +
+                             "ON Pets.OwnerID = Owners.OwnerID")) {
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                petList.add(new PetRecord(
+                        rs.getInt("PetID"),
+                        rs.getString("Name"),
+                        rs.getString("Species"),
+                        rs.getString("Breed"),
+                        rs.getInt("Age"),
+                        rs.getInt("OwnerID"),
+                        rs.getString("OwnerName"),
+                        rs.getString("PetImagePath")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 

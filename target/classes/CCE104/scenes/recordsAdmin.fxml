@@ -369,7 +369,7 @@
                                     </DropShadow>
                                  </effect>
                                  <content>
-                                    <TableView prefHeight="330.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
+                                    <TableView fx:id="ServiceTable" prefHeight="330.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
                                           <TableColumn fx:id="recordsServicesColumn" editable="false" prefWidth="184.0" text="SERVICES" />
                                           <TableColumn fx:id="recordsPriceColumn" editable="false" prefWidth="115.0" text="PRICE" />
@@ -456,7 +456,7 @@
                                     </DropShadow>
                                  </effect>
                                  <content>
-                                    <TableView prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
+                                    <TableView fx:id="AppointmentTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
                                           <TableColumn fx:id="recordsAppointmentPetColumn" editable="false" prefWidth="119.0" text="PET" />
                                           <TableColumn fx:id="recordsAppointmentOwnerColumn" editable="false" prefWidth="130.66668701171875" text="OWNER" />
@@ -542,7 +542,7 @@
                                     </DropShadow>
                                  </effect>
                                  <content>
-                                    <TableView prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
+                                    <TableView fx:id="BoardingTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
                                           <TableColumn fx:id="recordsBoardingPetColumn" editable="false" prefWidth="119.0" text="PET" />
                                           <TableColumn fx:id="recordsBoardingOwnerColumn" editable="false" prefWidth="130.66668701171875" text="OWNER" />
@@ -579,7 +579,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="employeeTab" closable="false" style="-fx-font-size: 20px; -fx-pref-width: 135px; -fx-pref-height: 40px;" text="Employees">
+                  <Tab closable="false" style="-fx-font-size: 20px; -fx-pref-width: 135px; -fx-pref-height: 40px;" text="Employees">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -628,7 +628,7 @@
                                     </DropShadow>
                                  </effect>
                                  <content>
-                                    <TableView prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
+                                    <TableView fx:id="EmployeeTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
                                           <TableColumn fx:id="recordsEmployeeIDColumn" editable="false" prefWidth="79.33331298828125" text="ID" />
                                           <TableColumn fx:id="recordsEmployeeFirstNameColumn" editable="false" prefWidth="130.66665649414062" text="FIRST NAME" />

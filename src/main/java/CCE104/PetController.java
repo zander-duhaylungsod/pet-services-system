@@ -62,6 +62,22 @@ public class PetController {
     public void initialize() {
         SpinnerValueFactory<Integer> ageFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1);
         petAge.setValueFactory(ageFactory);
+
+        PetRecord selectedPet = PetRecord.getSelectedPet(); // Retrieve the selected pet
+
+        if (selectedPet != null) {
+            petName.setText(selectedPet.getName());
+            petSpecies.setText(selectedPet.getSpecies());
+            petBreed.setText(selectedPet.getBreed());
+            petAge.getValueFactory().setValue(selectedPet.getPetAge());
+            petOwnerID.setText(String.valueOf(selectedPet.getOwnerID()));
+
+            // Load the image
+            petImagePath = selectedPet.getPetImagePath(); // Store the image path
+            //if (petImagePath != null && !petImagePath.isEmpty()) {
+                petImage.setImage(new Image("file:" +"@../images/brownie.jpg"));
+            //}
+        }
     }
 
     //database functions
@@ -100,7 +116,13 @@ public class PetController {
             connection.close();
 
             if (rowsAffected > 0) {
-                System.out.println("Pet added successfully!");
+                showSuccessDialog("Success", "Pet added successfully.");
+                petName.setText("");
+                petSpecies.setText("");
+                petBreed.setText("");
+                petNotes.setText("");
+                petOwnerID.setText("");
+                petImage.setImage(null);
             } else {
                 System.out.println("Failed to add pet.");
             }
@@ -213,6 +235,7 @@ public class PetController {
             String breed = petBreed.getText();
             Integer age = petAge.getValue();
             String ownerID = petOwnerID.getText();
+            String path = petImagePath;
 
             if (name == null || name.isEmpty()) {
                 showErrorDialog("Validation Error", "Pet name cannot be empty.");
@@ -253,13 +276,13 @@ public class PetController {
                 stmt.setString(3, breed);
                 stmt.setInt(4, age);
                 stmt.setInt(5, Integer.parseInt(ownerID));
-                stmt.setString(6, petImagePath);
+                stmt.setString(6, path);
                 stmt.setInt(7, selectedPetID);
 
                 int rowsUpdated = stmt.executeUpdate();
                 if (rowsUpdated > 0) {
                     showSuccessDialog("Success", "Pet details updated successfully.");
-                    //recordsController.refreshPetTable(); // Refresh the table in RecordsController
+                    recordsController.loadPets();
                 } else {
                     showErrorDialog("Update Failed", "No changes were made to the pet details.");
                 }

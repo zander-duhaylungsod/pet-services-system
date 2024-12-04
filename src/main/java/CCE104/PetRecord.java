@@ -8,25 +8,34 @@ public class PetRecord {
     private int age;
     private int ownerID;
     private String petImagePath;
+    private String ownerName;
 
     // Constructor, Getters, and Setters
-    public PetRecord(int petID, String name, String species, String breed, int age, int ownerID, String petImagePath) {
+    public PetRecord(int petID, String name, String species, String breed, int age, int ownerID, String ownerName, String petImagePath) {
         this.petID = petID;
         this.name = name;
         this.species = species;
         this.breed = breed;
         this.age = age;
         this.ownerID = ownerID;
+        this.ownerName = ownerName;
         this.petImagePath = petImagePath;
     }
 
     // getters and setters...
     public int getPetID() { return petID; }
+
     public void setPetID(int petID) { this.petID = petID; }
-    public int getOwnerID() {
-        return ownerID;
-    }
-    public String getPetName() {return name;}
+
+    public int getOwnerID() { return ownerID; }
+
+    public String getName() {return name;}
+    public String getSpecies() {return species;}
+    public String getBreed() {return breed;}
+    public String getOwnerName() {return ownerName;}
+    public String getPetImagePath() {return petImagePath;}
+    public int getPetAge() {return age;}
+
 
     private static PetRecord instance;
     private RecordsController recordsController;
