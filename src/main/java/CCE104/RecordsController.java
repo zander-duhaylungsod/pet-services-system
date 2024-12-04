@@ -66,6 +66,12 @@ public class RecordsController {
     @FXML
     private Button recordsBtn;
     @FXML
+    private Button petAddBtn;
+    @FXML
+    private Button petDeleteBtn;
+    @FXML
+    private Button petEditBtn;
+    @FXML
     private TableColumn<?, ?> recordsDescriptionColumn;
     @FXML
     private TableColumn<?, ?> recordsEmployeeBranchColumn;
@@ -153,6 +159,7 @@ public class RecordsController {
     //add functions
     @FXML
     public void addPet () throws IOException {
+        AppState.getInstance().setCurrentPetPage(AppState.Pet.ADD);
         Main.switchSceneWithFade("scenes/addPet");
     }
 
@@ -185,12 +192,14 @@ public class RecordsController {
     @FXML
     public void editPet () throws IOException {
         PetRecord selectedPet = PetTable.getSelectionModel().getSelectedItem();
+
         if (selectedPet == null) {
             showAlert("No Selection", "Please select a pet to edit.");
             return;
         }
 
         PetRecord.setSelectedPet(selectedPet);
+        AppState.getInstance().setCurrentPetPage(AppState.Pet.EDIT);
         Main.switchSceneWithFade("scenes/editPet");
     }
 
@@ -230,6 +239,15 @@ public class RecordsController {
     //view functions
     @FXML
     public void viewPet () throws IOException {
+        AppState.getInstance().setCurrentPetPage(AppState.Pet.VIEW);
+        PetRecord selectedPet = PetTable.getSelectionModel().getSelectedItem();
+
+        if (selectedPet == null) {
+            showAlert("No Selection", "Please select a pet to view.");
+            return;
+        }
+
+        PetRecord.setSelectedPet(selectedPet);
         Main.switchSceneWithFade("scenes/viewPet");
     }
 
@@ -251,7 +269,7 @@ public class RecordsController {
     //delete functions
     @FXML
     public void deletePet () throws IOException {
-        //add delete pet function here
+        AppState.getInstance().setCurrentPetPage(AppState.Pet.DELETE);
     }
 
     @FXML
@@ -304,7 +322,8 @@ public class RecordsController {
              PreparedStatement stmt = conn.prepareStatement(
                      "SELECT " +
                              "Pets.PetID, Pets.Name, Pets.Species, Pets.Breed, Pets.Age, " +
-                             "Pets.OwnerID, Owners.FirstName AS OwnerName, Pets.PetImagePath " +
+                             "Pets.OwnerID, Owners.FirstName AS OwnerName, Pets.PetNotes " +
+                             ", Pets.PetImagePath " +
                              "FROM Pets " +
                              "LEFT JOIN Owners " +
                              "ON Pets.OwnerID = Owners.OwnerID")) {
@@ -319,12 +338,22 @@ public class RecordsController {
                         rs.getInt("Age"),
                         rs.getInt("OwnerID"),
                         rs.getString("OwnerName"),
+                        rs.getString("PetNotes"),
                         rs.getString("PetImagePath")
                 ));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //alerts
+    private void showErrorDialog(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
 

@@ -26,6 +26,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class PetController {
 
@@ -39,6 +40,8 @@ public class PetController {
     private Spinner<Integer> petAge;
     @FXML
     private TextField petBreed;
+    @FXML
+    private TextField petAgeField;
     @FXML
     private ImageView petImage;
     @FXML
@@ -60,23 +63,36 @@ public class PetController {
 
     @FXML
     public void initialize() {
-        SpinnerValueFactory<Integer> ageFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1);
-        petAge.setValueFactory(ageFactory);
+        SpinnerValueFactory<Integer> ageFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 99, 1);
+        // Get the current Pet action from AppState
+        AppState appState = AppState.getInstance();
+        AppState.Pet currentPetPage = appState.getCurrentPetPage();
+        if(currentPetPage != AppState.Pet.VIEW) {
+            petAge.setValueFactory(ageFactory); }
 
         PetRecord selectedPet = PetRecord.getSelectedPet(); // Retrieve the selected pet
 
-        if (selectedPet != null) {
-            petName.setText(selectedPet.getName());
-            petSpecies.setText(selectedPet.getSpecies());
-            petBreed.setText(selectedPet.getBreed());
-            petAge.getValueFactory().setValue(selectedPet.getPetAge());
-            petOwnerID.setText(String.valueOf(selectedPet.getOwnerID()));
+        // Check if the current pet action is not ADD
+        if (currentPetPage != AppState.Pet.ADD) {
+            if (selectedPet != null) {
+                petName.setText(selectedPet.getName());
+                petSpecies.setText(selectedPet.getSpecies());
+                petBreed.setText(selectedPet.getBreed());
+                if(currentPetPage != AppState.Pet.VIEW) {
+                    petAge.getValueFactory().setValue(selectedPet.getPetAge()); }
+                if(currentPetPage == AppState.Pet.VIEW) {
+                    petAgeField.setText(Integer.toString(selectedPet.getPetAge())); }
+                petOwnerID.setText(String.valueOf(selectedPet.getOwnerID()));
+                petNotes.setText(selectedPet.getPetNotes());
+                petImagePath = selectedPet.getPetImagePath();
 
-            // Load the image
-            petImagePath = selectedPet.getPetImagePath(); // Store the image path
-            //if (petImagePath != null && !petImagePath.isEmpty()) {
-                petImage.setImage(new Image("file:" +"@../images/brownie.jpg"));
-            //}
+                if (petImagePath != null && !petImagePath.isEmpty()) {
+                    Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(petImagePath)));
+                    Circle clip = new Circle(75, 75, 75);
+                    petImage.setClip(clip);
+                    petImage.setImage(image);
+                }
+            }
         }
     }
 
@@ -92,6 +108,7 @@ public class PetController {
             String breed = petBreed.getText().trim();
             Integer age = (Integer) petAge.getValue();
             String ownerID = petOwnerID.getText().trim();
+            String notes = petNotes.getText().trim();
 
             // Connect to the database
             String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
@@ -100,14 +117,15 @@ public class PetController {
             Connection connection = DriverManager.getConnection(url, user, password);
 
             // Insert data into Pets table
-            String query = "INSERT INTO Pets (Name, Species, Breed, Age, OwnerID, PetImagePath) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Pets (Name, Species, Breed, Age, OwnerID, PetNotes, PetImagePath) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, name);
             statement.setString(2, species);
             statement.setString(3, breed.isEmpty() ? null : breed);
             statement.setInt(4, age != null ? age : 0);
             statement.setInt(5, Integer.parseInt(ownerID));
-            statement.setString(6, petImagePath);
+            statement.setString(6, notes);
+            statement.setString(7, petImagePath);
 
             int rowsAffected = statement.executeUpdate();
 
@@ -117,12 +135,7 @@ public class PetController {
 
             if (rowsAffected > 0) {
                 showSuccessDialog("Success", "Pet added successfully.");
-                petName.setText("");
-                petSpecies.setText("");
-                petBreed.setText("");
-                petNotes.setText("");
-                petOwnerID.setText("");
-                petImage.setImage(null);
+                clearPetFields();
             } else {
                 System.out.println("Failed to add pet.");
             }
@@ -226,6 +239,15 @@ public class PetController {
         alert.showAndWait();
     }
 
+    private void clearPetFields() {
+        petName.setText("");
+        petSpecies.setText("");
+        petBreed.setText("");
+        petNotes.setText("");
+        petOwnerID.setText("");
+        petImage.setImage(null);
+    }
+
     @FXML
     public void savePetChanges () throws IOException, SQLException {
         try {
@@ -236,6 +258,7 @@ public class PetController {
             Integer age = petAge.getValue();
             String ownerID = petOwnerID.getText();
             String path = petImagePath;
+            String notes = petNotes.getText();
 
             if (name == null || name.isEmpty()) {
                 showErrorDialog("Validation Error", "Pet name cannot be empty.");
@@ -267,7 +290,7 @@ public class PetController {
             }
 
             // Step 3: Update pet in the database
-            String updateQuery = "UPDATE Pets SET Name = ?, Species = ?, Breed = ?, Age = ?, OwnerID = ?, PetImagePath = ? WHERE PetID = ?";
+            String updateQuery = "UPDATE Pets SET Name = ?, Species = ?, Breed = ?, Age = ?, OwnerID = ?, PetNotes = ?, PetImagePath = ? WHERE PetID = ?";
             try (Connection conn = DriverManager.getConnection(url,user,password);
                  PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
 
@@ -276,13 +299,14 @@ public class PetController {
                 stmt.setString(3, breed);
                 stmt.setInt(4, age);
                 stmt.setInt(5, Integer.parseInt(ownerID));
-                stmt.setString(6, path);
-                stmt.setInt(7, selectedPetID);
+                stmt.setString(6, notes);
+                stmt.setString(7, path);
+                stmt.setInt(8, selectedPetID);
 
                 int rowsUpdated = stmt.executeUpdate();
                 if (rowsUpdated > 0) {
                     showSuccessDialog("Success", "Pet details updated successfully.");
-                    recordsController.loadPets();
+                    Main.switchSceneWithFade("scenes/recordsAdmin");
                 } else {
                     showErrorDialog("Update Failed", "No changes were made to the pet details.");
                 }

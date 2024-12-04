@@ -11,18 +11,17 @@ VALUES
     ('Daniel', 'Garcia', 'daniel.garcia@example.com', '8901234567'),
     ('Sophia', 'Anderson', 'sophia.anderson@example.com', '9012345678');
 
-INSERT INTO Pets (Name, Species, Breed, Age, OwnerID, PetImagePath)
+INSERT INTO Pets (Name, Species, Breed, PetImagePath, PetNotes, Age, OwnerID)
 VALUES
-    ('Buddy', 'Dog', 'Golden Retriever', 3, 1, '/images/pets/buddy.jpg'),
-    ('Max', 'Dog', 'German Shepherd', 5, 2, '/images/pets/max.jpg'),
-    ('Mittens', 'Cat', 'Siamese', 2, 3, '/images/pets/mittens.jpg'),
-    ('Charlie', 'Dog', 'Bulldog', 4, 4, '/images/pets/charlie.jpg'),
-    ('Bella', 'Cat', 'Persian', 3, 5, '/images/pets/bella.jpg'),
-    ('Rocky', 'Dog', 'Labrador', 6, 6, '/images/pets/rocky.jpg'),
-    ('Daisy', 'Rabbit', 'Holland Lop', 1, 7, '/images/pets/daisy.jpg'),
-    ('Luna', 'Cat', 'Maine Coon', 4, 8, '/images/pets/luna.jpg'),
-    ('Jack', 'Dog', 'Beagle', 2, 9, '/images/pets/jack.jpg'),
-    ('Coco', 'Bird', 'Parakeet', 1, 10, '/images/pets/coco.jpg');
+    ('Buddy', 'Dog', 'Aspin', 'images/buddy.jpg', 'Very friendly and loves playing fetch.', 3, 1),
+    ('Mingming', 'Cat', 'Puspin', 'images/mingming.jpg', 'Prefers quiet environments and loves napping.', 2, 2),
+    ('Pipoy', 'Bird', 'Lovebird', 'images/pipoy.jpg', 'Enjoys chirping and being near windows.', 1, 3),
+    ('Chico', 'Dog', 'Shih Tzu', 'images/chico.jpg', 'Requires special shampoo for sensitive skin.', 4, 4),
+    ('Max', 'Dog', 'Golden Retriever', 'images/max.jpg', 'Highly energetic and great with kids.', 5, 1),
+    ('Bella', 'Cat', 'Persian', 'images/bella.jpg', 'Needs regular grooming to maintain fur.', 3, 3),
+    ('Tweety', 'Bird', 'Canary', 'images/tweety.jpg', 'Loves singing in the mornings.', 2, 2),
+    ('Rocky', 'Dog', 'Bulldog', 'images/rocky.jpg', 'Prone to overheating; needs frequent hydration.', 6, 4);
+
 
 INSERT INTO Branch (BranchName, Location, Phone)
 VALUES

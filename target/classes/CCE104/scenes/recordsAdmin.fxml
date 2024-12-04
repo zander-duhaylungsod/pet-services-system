@@ -154,7 +154,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;">
                            <children>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="99.0" layoutY="354.0" mnemonicParsing="false" onAction="#addPet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add">
+                              <Button fx:id="petAddBtn" alignment="CENTER" graphicTextGap="0.0" layoutX="99.0" layoutY="354.0" mnemonicParsing="false" onAction="#addPet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -166,7 +166,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="260.0" layoutY="353.0" mnemonicParsing="false" onAction="#editPet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit">
+                              <Button fx:id="petEditBtn" alignment="CENTER" graphicTextGap="0.0" layoutX="260.0" layoutY="353.0" mnemonicParsing="false" onAction="#editPet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -178,7 +178,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="577.0" layoutY="354.0" mnemonicParsing="false" onAction="#deletePet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Delete">
+                              <Button fx:id="petDeleteBtn" alignment="CENTER" graphicTextGap="0.0" layoutX="577.0" layoutY="354.0" mnemonicParsing="false" onAction="#deletePet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Delete">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -221,7 +221,7 @@
                                     </DropShadow>
                                  </effect>
                               </ScrollPane>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="415.0" layoutY="354.0" mnemonicParsing="false" onAction="#viewPet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="View">
+                              <Button fx:id="petViewBtn" alignment="CENTER" graphicTextGap="0.0" layoutX="415.0" layoutY="354.0" mnemonicParsing="false" onAction="#viewPet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="View">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>

@@ -9,9 +9,10 @@ public class PetRecord {
     private int ownerID;
     private String petImagePath;
     private String ownerName;
+    private String petNotes;
 
     // Constructor, Getters, and Setters
-    public PetRecord(int petID, String name, String species, String breed, int age, int ownerID, String ownerName, String petImagePath) {
+    public PetRecord(int petID, String name, String species, String breed, int age, int ownerID, String ownerName, String petNotes, String petImagePath) {
         this.petID = petID;
         this.name = name;
         this.species = species;
@@ -19,6 +20,7 @@ public class PetRecord {
         this.age = age;
         this.ownerID = ownerID;
         this.ownerName = ownerName;
+        this.petNotes = petNotes;
         this.petImagePath = petImagePath;
     }
 
@@ -34,6 +36,7 @@ public class PetRecord {
     public String getBreed() {return breed;}
     public String getOwnerName() {return ownerName;}
     public String getPetImagePath() {return petImagePath;}
+    public String getPetNotes() {return petNotes;}
     public int getPetAge() {return age;}
 
 
