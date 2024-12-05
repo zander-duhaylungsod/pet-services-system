@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Optional;
 
 public class RecordsController {
 
@@ -115,12 +116,17 @@ public class RecordsController {
     private Button reportsBtn;
     @FXML
     private Tab serviceTab;
+    @FXML
+    private TabPane recordsTabPane;
+
     private ObservableList<PetRecord> petList = FXCollections.observableArrayList();
     private ObservableList<OwnerRecord> ownerList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         PetRecord.getInstance().setRecordsController(this);
+        OwnerRecord.getInstance().setRecordsController(this);
+
         AppState.getInstance().setCurrentPage(AppState.Page.RECORDS);
 
         // Initialize pet table columns
@@ -145,6 +151,12 @@ public class RecordsController {
         //bind data to table
         PetTable.setItems(petList);
         OwnerTable.setItems(ownerList);
+
+        // Tabpane Setup
+        recordsTabPane.getSelectionModel().select(AppState.getInstance().getCurrentTabIndex());
+        recordsTabPane.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            AppState.getInstance().setCurrentTabIndex(newValue.intValue());
+        });
     }
 
     public void switchToDashboard () throws IOException {
@@ -175,6 +187,7 @@ public class RecordsController {
 
     @FXML
     public void addOwner () throws IOException {
+        AppState.getInstance().setCurrentOwnerPage(AppState.Owner.ADD);
         Main.switchSceneWithFade("scenes/addOwner");
     }
 
@@ -223,6 +236,15 @@ public class RecordsController {
 
     @FXML
     public void editOwner () throws IOException {
+        OwnerRecord selectedOwner = OwnerTable.getSelectionModel().getSelectedItem();
+
+        if (selectedOwner == null) {
+            showAlert("No Selection", "Please select an owner to edit.");
+            return;
+        }
+
+        OwnerRecord.setSelectedOwner(selectedOwner);
+        AppState.getInstance().setCurrentOwnerPage(AppState.Owner.EDIT);
         Main.switchSceneWithFade("scenes/editOwner");
     }
 
@@ -289,33 +311,63 @@ public class RecordsController {
         }
 
         // Confirm deletion with the user
-        showConfirmationDialog("Confirm Deletion","Are you sure you want to delete the selected pet?");
+        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected pet?");
 
         // Delete the pet from the database
-        try (Connection conn = connect();
-             PreparedStatement stmt = conn.prepareStatement("DELETE FROM Pets WHERE PetID = ?")) {
+        if(confirm) {
+            try (Connection conn = connect();
+                 PreparedStatement stmt = conn.prepareStatement("DELETE FROM Pets WHERE PetID = ?")) {
 
-            stmt.setInt(1, selectedPet.getPetID());
-            int rowsAffected = stmt.executeUpdate();
+                stmt.setInt(1, selectedPet.getPetID());
+                int rowsAffected = stmt.executeUpdate();
 
-            if (rowsAffected > 0) {
-                // Remove the pet from the list and refresh the table
-                petList.remove(selectedPet);
-                PetTable.refresh();
-                showAlert("Deletion Successful", "The pet has been successfully deleted.");
-            } else {
-                showAlert("Deletion Failed", "Failed to delete the pet. Please try again.");
+                if (rowsAffected > 0) {
+                    // Remove the pet from the list and refresh the table
+                    petList.remove(selectedPet);
+                    PetTable.refresh();
+                    showAlert("Deletion Successful", "The pet has been successfully deleted.");
+                } else {
+                    showAlert("Deletion Failed", "Failed to delete the pet. Please try again.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showErrorDialog("Error", "An error occurred while deleting the pet.");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showErrorDialog("Error", "An error occurred while deleting the pet.");
         }
-
     }
 
     @FXML
     public void deleteOwner () throws IOException {
-        //add delete owner function here
+        OwnerRecord selectedOwner = OwnerTable.getSelectionModel().getSelectedItem();
+
+        if (selectedOwner == null) {
+            showAlert("No Selection", "Please select an owner to delete.");
+            return;
+        }
+
+        // Confirm deletion with the user
+        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected pet?");
+
+        // Delete the pet from the database
+        if(confirm) {
+            try (Connection conn = connect();
+                 PreparedStatement stmt = conn.prepareStatement("DELETE FROM Owners WHERE OwnerID = ?")) {
+
+                stmt.setInt(1, selectedOwner.getOwnerID());
+                int rowsAffected = stmt.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    ownerList.remove(selectedOwner);
+                    OwnerTable.refresh();
+                    showAlert("Deletion Successful", "The pet has been successfully deleted.");
+                } else {
+                    showAlert("Deletion Failed", "Failed to delete the pet. Please try again.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showErrorDialog("Error", "An error occurred while deleting the pet.");
+            }
+        }
     }
 
     @FXML
@@ -420,14 +472,19 @@ public class RecordsController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-    private void showConfirmationDialog(String title, String content) {
+
+    private boolean showConfirmationDialog(String title, String content) {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle(title);
         confirmationAlert.setHeaderText(null);
         confirmationAlert.setContentText(content);
-        if (confirmationAlert.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
-            return;
-        }
+
+        // Show the dialog and wait for the user's response
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+
+        // Return true if the user clicked "OK", false otherwise (including "Cancel" or closing the dialog)
+        return result.isPresent() && result.get() == ButtonType.OK;
     }
+
 }
 

@@ -148,7 +148,7 @@
                </font>
             </Label>
             <Circle fill="#b2f0ff" layoutX="697.0" layoutY="62.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
-            <TabPane layoutX="38.0" layoutY="190.0" prefHeight="457.0" prefWidth="783.0" style="-fx-background-color: white;" stylesheets="@../styles/general.css" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="recordsTabPane" layoutX="38.0" layoutY="190.0" prefHeight="457.0" prefWidth="783.0" style="-fx-background-color: white;" stylesheets="@../styles/general.css" tabClosingPolicy="UNAVAILABLE">
                <tabs>
                   <Tab fx:id="petTab" closable="false" style="-fx-font-size: 20px; -fx-pref-width: 70px; -fx-pref-height: 40px;" text="Pets">
                      <content>

@@ -204,7 +204,7 @@
             </Button>
             <ScrollPane layoutX="54.0" layoutY="314.0" prefHeight="352.0" prefWidth="346.0">
                <content>
-                  <TableView fx:id="upcomingBoardingTable" prefHeight="352.0" prefWidth="343.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
+                  <TableView fx:id="upcomingBoardingTable" prefHeight="352.0" prefWidth="343.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                      <columns>
                         <TableColumn fx:id="petNameColumnA" editable="false" prefWidth="119.0" text="PET" />
                         <TableColumn fx:id="ownerNameColumnA" editable="false" prefWidth="84.33334350585938" text="OWNER" />
@@ -242,7 +242,7 @@
             </Label>
             <ScrollPane layoutX="437.0" layoutY="317.0" prefHeight="352.0" prefWidth="414.0">
                <content>
-                  <TableView fx:id="upcomingAppointmentTable" prefHeight="352.0" prefWidth="414.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
+                  <TableView fx:id="upcomingAppointmentTable" prefHeight="352.0" prefWidth="414.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                      <columns>
                         <TableColumn fx:id="petNameColumnB" editable="false" prefWidth="119.0" text="PET" />
                         <TableColumn fx:id="ownerNameColumnB" editable="false" prefWidth="173.33331298828125" text="OWNER" />

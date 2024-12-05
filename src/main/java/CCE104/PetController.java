@@ -140,10 +140,10 @@ public class PetController {
                 System.out.println("Failed to add pet.");
             }
         } catch (IllegalArgumentException e) {
-            System.out.println("Validation Error: " + e.getMessage());
+            showErrorDialog("Error", "Validation Error: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error adding pet to the database: " + e.getMessage());
+            showErrorDialog("Error", "An error occurred while adding pet.");
         }
     }
 

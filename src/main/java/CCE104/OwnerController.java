@@ -2,13 +2,17 @@ package CCE104;
 
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.Objects;
 
 public class OwnerController {
 
@@ -34,6 +38,174 @@ public class OwnerController {
     private TextField searchField;
     @FXML
     private Label EmployeeName;
+
+    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    String user = "root";
+    String password = "";
+
+    public void initialize() {
+        AppState appState = AppState.getInstance();
+        AppState.Owner currentOwnerPage = appState.getCurrentOwnerPage();
+        OwnerRecord selectedOwner = OwnerRecord.getSelectedOwner();
+
+        // Check if the current pet action is not ADD
+        if (currentOwnerPage != AppState.Owner.ADD) {
+            if (selectedOwner != null) {
+                ownerFirstName.setText(selectedOwner.getFirstName());
+                ownerLastName.setText(selectedOwner.getLastName());
+                ownerEmail.setText(selectedOwner.getEmail());
+                ownerPhone.setText(selectedOwner.getPhone());
+            }
+        }
+    }
+
+    @FXML
+    public void searchFunction(KeyEvent event) {
+        //add search function here
+    }
+
+    @FXML
+    public void addOwnerToDatabase () throws IOException {
+        try {
+            // Validate inputs
+            validateOwnerInputs();
+
+            String firstName = ownerFirstName.getText().trim();
+            String lastName = ownerLastName.getText().trim();
+            String email = ownerEmail.getText().trim();
+            String phone = ownerPhone.getText().trim();
+
+            // Connect to the database
+            String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+            String user = "root";
+            String password = ""; // Replace with your password
+            Connection connection = DriverManager.getConnection(url, user, password);
+
+            // Insert data into Owners table
+            String query = "INSERT INTO Owners (FirstName, LastName, Email, Phone) VALUES (?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, firstName);
+            statement.setString(2, lastName.isEmpty() ? null : lastName);
+            statement.setString(3, email);
+            statement.setString(4, phone);
+
+            int rowsAffected = statement.executeUpdate();
+
+            // Close the connection
+            statement.close();
+            connection.close();
+
+            if (rowsAffected > 0) {
+                showSuccessDialog("Success", "Owner registered successfully.");
+                clearOwnerFields();
+            } else {
+                showAlert("Error","Failed to register owner.");
+            }
+        } catch (IllegalArgumentException e) {
+            showErrorDialog("Error", "Validation Error: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorDialog("Error", "An error occurred while registering owner.");
+        }
+    }
+
+    @FXML
+    public void saveOwnerChanges () throws IOException {
+        try {
+            validateOwnerInputs();
+            String firstName = ownerFirstName.getText();
+            String lastName = ownerLastName.getText();
+            String email = ownerEmail.getText();
+            String phone = ownerPhone.getText();
+
+            //Update owner changes in the database
+            String updateQuery = "UPDATE Owners SET FirstName = ?, LastName = ?, Email = ?, Phone = ? WHERE PetID = ?";
+            try (Connection conn = DriverManager.getConnection(url,user,password);
+                 PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+
+                stmt.setString(1, firstName);
+                stmt.setString(2, lastName);
+                stmt.setString(3, email);
+                stmt.setString(4, phone);
+
+                int rowsUpdated = stmt.executeUpdate();
+                if (rowsUpdated > 0) {
+                    showSuccessDialog("Success", "Owner details updated successfully.");
+                    Main.switchSceneWithFade("scenes/recordsAdmin");
+                } else {
+                    showErrorDialog("Update Failed", "No changes were made to the owner details.");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorDialog("Error", "An error occurred while saving owner changes.");
+        }
+    }
+
+    //validators & cleaners
+    private void validateOwnerInputs() {
+        String firstName = ownerFirstName.getText().trim();
+        String lastName = ownerLastName.getText().trim();
+        String email = ownerEmail.getText().trim();
+        String phone = ownerPhone.getText().trim();
+
+        if (firstName.isEmpty()) {
+            showAlert("Validation Error", "Your first name is required.");
+            return;
+        }
+
+        if (lastName.isEmpty()) {
+            showAlert("Validation Error", "Your last name is required.");
+            return;
+        }
+
+        if (email.isEmpty()) {
+            showAlert("Validation Error", "Your email is required.");
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            showAlert("Error", "Invalid email format!");
+            return;
+        }
+
+        if (!isValidPhoneNumber(phone)) {
+            showAlert("Error", "Invalid phone number!");
+            return;
+        }
+
+        if (phone.isEmpty()) {
+            showAlert("Validation Error", "Your phone no. is required.");
+            return;
+        }
+    }
+
+    private void clearOwnerFields() {
+        ownerFirstName.setText("");
+        ownerLastName.setText("");
+        ownerEmail.setText("");
+        ownerPhone.setText("");
+    }
+
+    private boolean isValidEmail(String email) {
+        return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber != null && phoneNumber.matches("^09\\d{2}\\d{3}-?\\d{4}$") && phoneNumber.replaceAll("-", "").length() == 11;
+    }
+
+    // transitons & effects
+    @FXML
+    public void polygonHover () throws IOException {
+        backBtn.setFill(Color.web("#48d1dd"));
+        backBtn.setCursor(Cursor.HAND);
+    }
+
+    public void polygonHoverExited () throws IOException {
+        backBtn.setFill(Color.web("#A1DBDD"));
+        backBtn.setCursor(Cursor.DEFAULT);
+    }
 
     public void switchToDashboard () throws IOException {
         Main.switchScene("scenes/dashboardAdmin");
@@ -66,31 +238,28 @@ public class OwnerController {
         }
     }
 
-    @FXML
-    public void searchFunction(KeyEvent event) {
-        //add search function here
+    //dialogs
+    public static void showSuccessDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title); alert.setHeaderText(null);
+        alert.setContentText(message); alert.showAndWait();
     }
 
-    @FXML
-    public void addOwnerToDatabase () throws IOException {
-        //add function here
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
-    @FXML
-    public void saveOwnerChanges () throws IOException {
-        //add function here
+    private void showErrorDialog(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
-    //effects
-    @FXML
-    public void polygonHover () throws IOException {
-        backBtn.setFill(Color.web("#48d1dd"));
-        backBtn.setCursor(Cursor.HAND);
-    }
-
-    public void polygonHoverExited () throws IOException {
-        backBtn.setFill(Color.web("#A1DBDD"));
-        backBtn.setCursor(Cursor.DEFAULT);
-    }
 }
 

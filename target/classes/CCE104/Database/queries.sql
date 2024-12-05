@@ -35,7 +35,7 @@ CREATE TABLE Owners (
     FirstName VARCHAR(50) NOT NULL,
     LastName VARCHAR(50) NOT NULL,
     Email VARCHAR(100),
-    Phone VARCHAR(15)
+    Phone VARCHAR(11)
 );
 
 CREATE TABLE Pets (
