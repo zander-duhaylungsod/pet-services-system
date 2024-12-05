@@ -34,19 +34,19 @@ CREATE TABLE Owners (
     OwnerID INT AUTO_INCREMENT PRIMARY KEY,
     FirstName VARCHAR(50) NOT NULL,
     LastName VARCHAR(50) NOT NULL,
-    Email VARCHAR(100),
-    Phone VARCHAR(11)
+    Email VARCHAR(100) NOT NULL,
+    Phone VARCHAR(11) NOT NULL
 );
 
 CREATE TABLE Pets (
     PetID INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(50) NOT NULL,
-    Species VARCHAR(50),
+    Species VARCHAR(50) NOT NULL,
     Breed VARCHAR(50),
     PetImagePath VARCHAR(255),
     PetNotes TEXT,
     Age INT(2),
-    OwnerID INT,
+    OwnerID INT NOT NULL,
     FOREIGN KEY (OwnerID) REFERENCES Owners(OwnerID) ON DELETE CASCADE
 );
 
@@ -54,7 +54,7 @@ CREATE TABLE Services (
     ServiceID INT AUTO_INCREMENT PRIMARY KEY,
     ServiceName VARCHAR(100) NOT NULL,
     Price DECIMAL(10, 2) NOT NULL,
-    Description TEXT
+    Description TEXT NOT NULL
 );
 
 CREATE TABLE Appointments (

@@ -14,7 +14,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.Objects;
 
-public class OwnerController {
+public class  OwnerController {
 
     @FXML
     private Polygon backBtn;
@@ -46,9 +46,9 @@ public class OwnerController {
     public void initialize() {
         AppState appState = AppState.getInstance();
         AppState.Owner currentOwnerPage = appState.getCurrentOwnerPage();
+
         OwnerRecord selectedOwner = OwnerRecord.getSelectedOwner();
 
-        // Check if the current pet action is not ADD
         if (currentOwnerPage != AppState.Owner.ADD) {
             if (selectedOwner != null) {
                 ownerFirstName.setText(selectedOwner.getFirstName());
@@ -68,8 +68,9 @@ public class OwnerController {
     public void addOwnerToDatabase () throws IOException {
         try {
             // Validate inputs
-            validateOwnerInputs();
-
+            if (!validateOwnerInputs()) {
+                return;  // Exit the method early if validation fails
+            }
             String firstName = ownerFirstName.getText().trim();
             String lastName = ownerLastName.getText().trim();
             String email = ownerEmail.getText().trim();
@@ -112,14 +113,24 @@ public class OwnerController {
     @FXML
     public void saveOwnerChanges () throws IOException {
         try {
-            validateOwnerInputs();
+            if (!validateOwnerInputs()) {
+                return;  // Exit the method early if validation fails
+            }
             String firstName = ownerFirstName.getText();
             String lastName = ownerLastName.getText();
             String email = ownerEmail.getText();
             String phone = ownerPhone.getText();
 
-            //Update owner changes in the database
-            String updateQuery = "UPDATE Owners SET FirstName = ?, LastName = ?, Email = ?, Phone = ? WHERE PetID = ?";
+            //Get selected ID
+            RecordsController recordsController = OwnerRecord.getInstance().getRecordsController();
+            Integer selectedOwnerID = recordsController.getSelectedOwnerID();
+            if (selectedOwnerID == null) {
+                showErrorDialog("No Owner Selected", "Please select an owner to edit.");
+                return;
+            }
+
+            //Update changes in the database
+            String updateQuery = "UPDATE Owners SET FirstName = ?, LastName = ?, Email = ?, Phone = ? WHERE OwnerID = ?";
             try (Connection conn = DriverManager.getConnection(url,user,password);
                  PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
 
@@ -127,6 +138,7 @@ public class OwnerController {
                 stmt.setString(2, lastName);
                 stmt.setString(3, email);
                 stmt.setString(4, phone);
+                stmt.setInt(5, selectedOwnerID);
 
                 int rowsUpdated = stmt.executeUpdate();
                 if (rowsUpdated > 0) {
@@ -143,7 +155,7 @@ public class OwnerController {
     }
 
     //validators & cleaners
-    private void validateOwnerInputs() {
+    private boolean validateOwnerInputs() {
         String firstName = ownerFirstName.getText().trim();
         String lastName = ownerLastName.getText().trim();
         String email = ownerEmail.getText().trim();
@@ -151,33 +163,35 @@ public class OwnerController {
 
         if (firstName.isEmpty()) {
             showAlert("Validation Error", "Your first name is required.");
-            return;
+            return false;  // Return false to indicate validation failure
         }
 
         if (lastName.isEmpty()) {
             showAlert("Validation Error", "Your last name is required.");
-            return;
+            return false;
         }
 
         if (email.isEmpty()) {
             showAlert("Validation Error", "Your email is required.");
-            return;
+            return false;
         }
 
         if (!isValidEmail(email)) {
             showAlert("Error", "Invalid email format!");
-            return;
-        }
-
-        if (!isValidPhoneNumber(phone)) {
-            showAlert("Error", "Invalid phone number!");
-            return;
+            return false;
         }
 
         if (phone.isEmpty()) {
             showAlert("Validation Error", "Your phone no. is required.");
-            return;
+            return false;
         }
+
+        if (!isValidPhoneNumber(phone)) {
+            showAlert("Error", "Invalid phone number!");
+            return false;
+        }
+
+        return true;  // If all validations pass, return true
     }
 
     private void clearOwnerFields() {
@@ -260,6 +274,5 @@ public class OwnerController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-
 }
 

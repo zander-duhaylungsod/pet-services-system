@@ -186,7 +186,7 @@
                   <Font name="Segoe UI" size="20.0" />
                </font>
             </TextArea>
-            <Button alignment="CENTER" graphicTextGap="0.0" layoutX="330.0" layoutY="618.0" mnemonicParsing="false" onAction="#printPet" prefHeight="48.0" prefWidth="169.0" style="-fx-background-radius: 20px;" stylesheets="@../styles/general.css" text="Print">
+            <Button alignment="CENTER" disable="true" graphicTextGap="0.0" layoutX="330.0" layoutY="618.0" mnemonicParsing="false" onAction="#printPet" prefHeight="48.0" prefWidth="169.0" style="-fx-background-radius: 20px;" stylesheets="@../styles/general.css" text="Print" visible="false">
                <font>
                   <Font name="Segoe UI Bold" size="18.0" />
                </font>
@@ -211,7 +211,7 @@
                   </DropShadow>
                </effect>
             </Polygon>
-            <ImageView fx:id="petImage" fitHeight="120.0" fitWidth="151.0" layoutX="36.0" layoutY="22.0" pickOnBounds="true" style="-fx-background-radius: 20px;">
+            <ImageView fx:id="petImage" fitHeight="150.0" fitWidth="150.0" layoutX="36.0" pickOnBounds="true" style="-fx-background-radius: 20px;">
                <image>
                   <Image url="@../images/boarding.png" />
                </image>

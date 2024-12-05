@@ -21,9 +21,9 @@ public class RecordsController {
     @FXML
     private TableView<OwnerRecord> OwnerTable;
     @FXML
-    private TableView<?> ServiceTable;
+    private TableView<ServiceRecord> ServiceTable;
     @FXML
-    private TableView<?> AppointmentTable;
+    private TableView<AppointmentRecord> AppointmentTable;
     @FXML
     private TableView<?> BoardingTable;
     @FXML
@@ -47,9 +47,13 @@ public class RecordsController {
     @FXML
     private TableColumn<?, ?> recordsAppointmentDateColumn;
     @FXML
-    private TableColumn<?, ?> recordsAppointmentOwnerColumn;
+    private TableColumn<?, ?> recordsAppointmentOwnerIDColumn;
     @FXML
-    private TableColumn<?, ?> recordsAppointmentPetColumn;
+    private TableColumn<?, ?> recordsAppointmentOwnerNameColumn;
+    @FXML
+    private TableColumn<?, ?> recordsAppointmentPetIDColumn;
+    @FXML
+    private TableColumn<?, ?> recordsAppointmentPetNameColumn;
     @FXML
     private TableColumn<?, ?> recordsAppointmentServiceColumn;
     @FXML
@@ -121,15 +125,19 @@ public class RecordsController {
 
     private ObservableList<PetRecord> petList = FXCollections.observableArrayList();
     private ObservableList<OwnerRecord> ownerList = FXCollections.observableArrayList();
+    private ObservableList<ServiceRecord> serviceList = FXCollections.observableArrayList();
+    private ObservableList<AppointmentRecord> appointmentList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         PetRecord.getInstance().setRecordsController(this);
         OwnerRecord.getInstance().setRecordsController(this);
+        ServiceRecord.getInstance().setRecordsController(this);
+        AppointmentRecord.getInstance().setRecordsController(this);
 
         AppState.getInstance().setCurrentPage(AppState.Page.RECORDS);
 
-        // Initialize pet table columns
+        // Initialize pets table columns
         recordsPetIDColumn.setCellValueFactory(new PropertyValueFactory<>("petID"));
         recordsPetNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         recordsPetSpeciesColumn.setCellValueFactory(new PropertyValueFactory<>("species"));
@@ -137,45 +145,41 @@ public class RecordsController {
         recordsPetOwnerIDColumn.setCellValueFactory(new PropertyValueFactory<>("ownerID"));
         recordsPetOwnerNameColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
 
-        // Initialize owner table columns
+        // Initialize owners table columns
         recordsOwnerEmailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         recordsOwnerFirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         recordsOwnerIDColumn.setCellValueFactory(new PropertyValueFactory<>("ownerID"));
         recordsOwnerLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         recordsOwnerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
 
+        // Initialize services table columns
+        recordsServicesColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
+        recordsPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        recordsDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+
+        // Initialize appointments table columns
+        recordsAppointmentPetIDColumn.setCellValueFactory(new PropertyValueFactory<>("petID"));
+        recordsAppointmentPetNameColumn.setCellValueFactory(new PropertyValueFactory<>("petName"));
+        recordsAppointmentOwnerIDColumn.setCellValueFactory(new PropertyValueFactory<>("ownerID"));
+        recordsAppointmentOwnerNameColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
+        recordsPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        recordsDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+
         //load Data
         loadPets();
         loadOwners();
+        loadServices();
 
         //bind data to table
         PetTable.setItems(petList);
         OwnerTable.setItems(ownerList);
+        ServiceTable.setItems(serviceList);
 
         // Tabpane Setup
         recordsTabPane.getSelectionModel().select(AppState.getInstance().getCurrentTabIndex());
         recordsTabPane.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             AppState.getInstance().setCurrentTabIndex(newValue.intValue());
         });
-    }
-
-    public void switchToDashboard () throws IOException {
-        Main.switchScene("scenes/dashboardAdmin");
-    }
-
-    @FXML
-    public void switchToRecords () throws IOException {
-        Main.switchScene("scenes/recordsAdmin");
-    }
-
-    @FXML
-    public void switchToReports () throws IOException {
-        Main.switchScene("scenes/reportsAdmin");
-    }
-
-    @FXML
-    public void logOut () throws IOException {
-        Main.switchSceneWithFade("scenes/signIn");
     }
 
     //add functions
@@ -193,6 +197,7 @@ public class RecordsController {
 
     @FXML
     public void addService () throws IOException {
+        AppState.getInstance().setCurrentServicePage(AppState.Service.ADD);
         Main.switchSceneWithFade("scenes/addService");
     }
 
@@ -226,14 +231,6 @@ public class RecordsController {
         Main.switchSceneWithFade("scenes/editPet");
     }
 
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
     @FXML
     public void editOwner () throws IOException {
         OwnerRecord selectedOwner = OwnerTable.getSelectionModel().getSelectedItem();
@@ -250,6 +247,15 @@ public class RecordsController {
 
     @FXML
     public void editService () throws IOException {
+        ServiceRecord selectedService = ServiceTable.getSelectionModel().getSelectedItem();
+
+        if (selectedService == null) {
+            showAlert("No Selection", "Please select a service to edit.");
+            return;
+        }
+
+        ServiceRecord.setSelectedService(selectedService);
+        AppState.getInstance().setCurrentServicePage(AppState.Service.EDIT);
         Main.switchSceneWithFade("scenes/editService");
     }
 
@@ -285,6 +291,15 @@ public class RecordsController {
 
     @FXML
     public void viewService () throws IOException {
+        ServiceRecord selectedService = ServiceTable.getSelectionModel().getSelectedItem();
+
+        if (selectedService == null) {
+            showAlert("No Selection", "Please select a service to view.");
+            return;
+        }
+
+        ServiceRecord.setSelectedService(selectedService);
+        AppState.getInstance().setCurrentServicePage(AppState.Service.VIEW);
         Main.switchSceneWithFade("scenes/viewService");
     }
 
@@ -311,7 +326,7 @@ public class RecordsController {
         }
 
         // Confirm deletion with the user
-        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected pet?");
+        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected pet? \nThis will delete associated records.");
 
         // Delete the pet from the database
         if(confirm) {
@@ -346,7 +361,7 @@ public class RecordsController {
         }
 
         // Confirm deletion with the user
-        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected pet?");
+        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected owner? \nThis will delete associated records.");
 
         // Delete the pet from the database
         if(confirm) {
@@ -359,20 +374,49 @@ public class RecordsController {
                 if (rowsAffected > 0) {
                     ownerList.remove(selectedOwner);
                     OwnerTable.refresh();
-                    showAlert("Deletion Successful", "The pet has been successfully deleted.");
+                    showAlert("Deletion Successful", "The owner has been successfully deleted.");
                 } else {
-                    showAlert("Deletion Failed", "Failed to delete the pet. Please try again.");
+                    showAlert("Deletion Failed", "Failed to delete the owner. Please try again.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                showErrorDialog("Error", "An error occurred while deleting the pet.");
+                showErrorDialog("Error", "An error occurred while deleting the owner.");
             }
         }
     }
 
     @FXML
     public void deleteService () throws IOException {
-        //add delete service function here
+        ServiceRecord selectedService = ServiceTable.getSelectionModel().getSelectedItem();
+
+        if (selectedService == null) {
+            showAlert("No Selection", "Please select a service to delete.");
+            return;
+        }
+
+        // Confirm deletion with the user
+        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected service? \nThis will delete associated records.");
+
+        // Delete the pet from the database
+        if(confirm) {
+            try (Connection conn = connect();
+                 PreparedStatement stmt = conn.prepareStatement("DELETE FROM Services WHERE ServiceID = ?")) {
+
+                stmt.setInt(1, selectedService.getServiceID());
+                int rowsAffected = stmt.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    serviceList.remove(selectedService);
+                    ServiceTable.refresh();
+                    showAlert("Deletion Successful", "The service has been successfully deleted.");
+                } else {
+                    showAlert("Deletion Failed", "Failed to delete the service. Please try again.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showErrorDialog("Error", "An error occurred while deleting the service.");
+            }
+        }
     }
 
     @FXML
@@ -403,9 +447,20 @@ public class RecordsController {
         return DriverManager.getConnection(url, user, password);
     }
 
+    //ID getters
     public Integer getSelectedPetID() {
         PetRecord selectedPet = PetTable.getSelectionModel().getSelectedItem();
         return selectedPet != null ? selectedPet.getPetID() : null;
+    }
+
+    public Integer getSelectedOwnerID() {
+        OwnerRecord selectedOwner = OwnerTable.getSelectionModel().getSelectedItem();
+        return selectedOwner != null ? selectedOwner.getOwnerID() : null;
+    }
+
+    public Integer getSelectedServiceID() {
+        ServiceRecord selectedService = ServiceTable.getSelectionModel().getSelectedItem();
+        return selectedService != null ? selectedService.getServiceID() : null;
     }
 
     //Pet Table Management --
@@ -464,6 +519,48 @@ public class RecordsController {
         }
     }
 
+    public void loadServices() {
+        serviceList.clear();
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT " +
+                             "Services.ServiceID, Services.ServiceName, Services.Price, Services.Description " +
+                             "FROM Services;")) {
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                serviceList.add(new ServiceRecord(
+                        rs.getInt("ServiceID"),
+                        rs.getString("ServiceName"),
+                        rs.getDouble("Price"),
+                        rs.getString("Description")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //transitions and effects
+    public void switchToDashboard () throws IOException {
+        Main.switchScene("scenes/dashboardAdmin");
+    }
+
+    @FXML
+    public void switchToRecords () throws IOException {
+        Main.switchScene("scenes/recordsAdmin");
+    }
+
+    @FXML
+    public void switchToReports () throws IOException {
+        Main.switchScene("scenes/reportsAdmin");
+    }
+
+    @FXML
+    public void logOut () throws IOException {
+        Main.switchSceneWithFade("scenes/signIn");
+    }
+
     //alerts
     private void showErrorDialog(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -486,5 +583,12 @@ public class RecordsController {
         return result.isPresent() && result.get() == ButtonType.OK;
     }
 
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 }
 

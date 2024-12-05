@@ -101,7 +101,9 @@ public class PetController {
     public void addPetToDatabase () throws IOException {
         try {
             // Validate inputs
-            validatePetInputs();
+            if(!validatePetInputs()){
+                return;
+            }
 
             String name = petName.getText().trim();
             String species = petSpecies.getText().trim();
@@ -147,36 +149,39 @@ public class PetController {
         }
     }
 
-    private void validatePetInputs() {
+    private boolean validatePetInputs() {
         String name = petName.getText().trim();
         String species = petSpecies.getText().trim();
         String ownerID = petOwnerID.getText().trim();
 
         if (name.isEmpty()) {
             showAlert("Validation Error", "Pet name is required.");
-            return;
+            return false;
         }
 
         if (species.isEmpty()) {
             showAlert("Validation Error", "Species is required.");
-            return;
+            return false;
         }
 
         if (ownerID.isEmpty()) {
             showAlert("Validation Error", "Owner ID is required.");
-            return;
+            return false;
         }
 
         try {
             Integer.parseInt(ownerID); // Ensure Owner ID is a valid integer
         } catch (NumberFormatException e) {
             showAlert("Validation Error", "Owner ID must be a valid number.");
-            return;
+            return false;
         }
 
         if (petImagePath == null || petImagePath.isEmpty()) {
             showAlert("Validation Error", "Please select an image for the pet.");
+            return false;
         }
+
+        return true;
     }
 
     private void showAlert(String title, String message) {
@@ -251,7 +256,10 @@ public class PetController {
     @FXML
     public void savePetChanges () throws IOException, SQLException {
         try {
-            // Step 1: Validate input fields
+            if(!validatePetInputs()){
+                return;
+            }
+
             String name = petName.getText();
             String species = petSpecies.getText();
             String breed = petBreed.getText();
@@ -259,27 +267,6 @@ public class PetController {
             String ownerID = petOwnerID.getText();
             String path = petImagePath;
             String notes = petNotes.getText();
-
-            if (name == null || name.isEmpty()) {
-                showErrorDialog("Validation Error", "Pet name cannot be empty.");
-                return;
-            }
-            if (species == null || species.isEmpty()) {
-                showErrorDialog("Validation Error", "Pet species cannot be empty.");
-                return;
-            }
-            if (breed == null || breed.isEmpty()) {
-                showErrorDialog("Validation Error", "Pet breed cannot be empty.");
-                return;
-            }
-            if (age == null || age <= 0) {
-                showErrorDialog("Validation Error", "Age must be a positive number.");
-                return;
-            }
-            if (ownerID == null || ownerID.isEmpty() || !ownerID.matches("\\d+")) {
-                showErrorDialog("Validation Error", "Owner ID must be a valid number.");
-                return;
-            }
 
             // Step 2: Get the selected Pet ID from RecordsController
             RecordsController recordsController = PetRecord.getInstance().getRecordsController();
@@ -333,7 +320,17 @@ public class PetController {
 
     @FXML
     public void printPet () throws IOException {
-        //add function here
+        RecordsController recordsController = PetRecord.getInstance().getRecordsController();
+        Integer selectedPetID = recordsController.getSelectedPetID();
+
+        String name = petName.getText();
+        String species = petSpecies.getText();
+        String breed = petBreed.getText();
+        Integer age = petAge.getValue();
+        String ownerID = petOwnerID.getText();
+        String path = petImagePath;
+        String notes = petNotes.getText();
+        Integer petID = selectedPetID;
     }
 
     @FXML

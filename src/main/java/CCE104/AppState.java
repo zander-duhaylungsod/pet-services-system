@@ -14,14 +14,12 @@ public class AppState {
         return instance;
     }
 
-    // Enum to represent the possible pages
     public enum Page {
         DASHBOARD,
         RECORDS,
         REPORTS
     }
 
-    //Enum to represent Pet Buttons
     public enum Pet {
         ADD,
         EDIT,
@@ -35,16 +33,34 @@ public class AppState {
         DELETE
     }
 
+    public enum Service {
+        ADD,
+        EDIT,
+        VIEW,
+        DELETE
+    }
+
+    public enum Appointment {
+        ADD,
+        EDIT,
+        VIEW,
+        DELETE
+    }
+
     // Current active states
     private Page currentPage;
     private Pet currentPetPage;
     private Owner currentOwnerPage;
+    private Service currentServicePage;
+    private Appointment currentAppointmentPage;
 
     // Private constructor to prevent instantiation
     private AppState() {
         currentPage = Page.DASHBOARD; // Default to dashboard
         currentPetPage = Pet.ADD;
         currentOwnerPage = Owner.ADD;
+        currentServicePage = Service.ADD;
+        currentAppointmentPage = Appointment.ADD;
     }
 
     // Getter for current page
@@ -57,6 +73,8 @@ public class AppState {
     public Owner getCurrentOwnerPage() {
         return currentOwnerPage;
     }
+    public Service getCurrentServicePage() { return currentServicePage; }
+    public Appointment getCurrentAppointmentPage() { return currentAppointmentPage; }
     public int getCurrentTabIndex() {
         return currentTabIndex;
     }
@@ -71,6 +89,8 @@ public class AppState {
     public void setCurrentOwnerPage(Owner page) {
         currentOwnerPage = page;
     }
+    public void setCurrentServicePage(Service page) { currentServicePage = page; }
+    public void setCurrentAppointmentPage(Appointment page) { currentAppointmentPage = page; }
     public void setCurrentTabIndex(int index) {
         this.currentTabIndex = index;
     }
