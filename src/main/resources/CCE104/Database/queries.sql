@@ -64,12 +64,10 @@ CREATE TABLE Appointments (
     ServiceID INT NOT NULL,
     PetID INT NOT NULL,
     EmployeeID INT,
---     BranchID INT NOT NULL,
     Status VARCHAR(50) DEFAULT 'Pending',  -- Added Status column
     FOREIGN KEY (ServiceID) REFERENCES Services(ServiceID) ON DELETE CASCADE,
     FOREIGN KEY (PetID) REFERENCES Pets(PetID) ON DELETE CASCADE,
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL,
---     FOREIGN KEY (BranchID) REFERENCES Branch(BranchID) ON DELETE CASCADE
 );
 
 CREATE TABLE Payments (

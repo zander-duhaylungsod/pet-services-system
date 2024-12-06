@@ -215,16 +215,7 @@
                   </DropShadow>
                </effect>
             </Polygon>
-            <ChoiceBox fx:id="serviceA" layoutX="240.0" layoutY="271.0" prefHeight="25.0" prefWidth="201.0" style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
-               <effect>
-                  <DropShadow blurType="GAUSSIAN">
-                     <color>
-                        <Color red="0.8684210777282715" green="0.8684210777282715" blue="0.8684210777282715" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </ChoiceBox>
-            <DatePicker fx:id="appointmentDate" layoutX="240.0" layoutY="330.0" prefHeight="29.0" prefWidth="252.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-background-color: white;">
+            <DatePicker fx:id="appointmentDate" layoutX="240.0" layoutY="330.0" prefHeight="29.0" prefWidth="252.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-background-color: white; -fx-font-size: 15px;">
                <effect>
                   <DropShadow blurType="GAUSSIAN">
                      <color>
@@ -233,7 +224,7 @@
                   </DropShadow>
                </effect>
             </DatePicker>
-            <ChoiceBox fx:id="serviceB" layoutX="475.0" layoutY="271.0" prefHeight="25.0" prefWidth="201.0" style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
+            <ChoiceBox fx:id="serviceB" disable="true" layoutX="475.0" layoutY="271.0" prefHeight="25.0" prefWidth="201.0" style="-fx-background-radius: 20px; -fx-background-color: WHITE;" visible="false">
                <effect>
                   <DropShadow blurType="GAUSSIAN">
                      <color>
@@ -247,7 +238,16 @@
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <ComboBox fx:id="appointmentStatus" layoutX="237.0" layoutY="456.0" prefHeight="29.0" prefWidth="189.0" style="-fx-background-color: WHITE;">
+            <ComboBox fx:id="appointmentStatus" layoutX="237.0" layoutY="456.0" prefHeight="29.0" prefWidth="212.0" style="-fx-background-color: WHITE; -fx-font-size: 15px;">
+               <effect>
+                  <DropShadow>
+                     <color>
+                        <Color red="0.9078947305679321" green="0.9078947305679321" blue="0.9078947305679321" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </ComboBox>
+            <ComboBox fx:id="appointmentService" layoutX="237.0" layoutY="270.0" prefHeight="29.0" prefWidth="345.0" style="-fx-background-color: WHITE; -fx-font-size: 15px;">
                <effect>
                   <DropShadow>
                      <color>

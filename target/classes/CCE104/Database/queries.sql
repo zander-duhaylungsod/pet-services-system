@@ -5,12 +5,12 @@ mysql -h localhost -u root
 CREATE DATABASE syntaxSquad_db;
 USE syntaxSquad_db;
 
-CREATE TABLE Branch (
-    BranchID INT AUTO_INCREMENT PRIMARY KEY,
-    BranchName VARCHAR(100) NOT NULL,
-    Location VARCHAR(255) NOT NULL,
-    Phone VARCHAR(15)
-);
+-- CREATE TABLE Branch (
+--     BranchID INT AUTO_INCREMENT PRIMARY KEY,
+--     BranchName VARCHAR(100) NOT NULL,
+--     Location VARCHAR(255) NOT NULL,
+--     Phone VARCHAR(15)
+-- );
 
 CREATE TABLE Employees (
     EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
@@ -20,15 +20,15 @@ CREATE TABLE Employees (
     Email VARCHAR(100) UNIQUE,
     Phone VARCHAR(15) NOT NULL UNIQUE,
     Role VARCHAR(50),
-    BranchID INT NOT NULL,
-    FOREIGN KEY (BranchID) REFERENCES Branch(BranchID) ON DELETE CASCADE
+--     BranchID INT NOT NULL,
+--     FOREIGN KEY (BranchID) REFERENCES Branch(BranchID) ON DELETE CASCADE
 );
 
-ALTER TABLE Branch
-ADD ManagerID INT UNIQUE;
-
-ALTER TABLE Branch
-ADD FOREIGN KEY (ManagerID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL;
+-- ALTER TABLE Branch
+-- ADD ManagerID INT UNIQUE;
+--
+-- ALTER TABLE Branch
+-- ADD FOREIGN KEY (ManagerID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL;
 
 CREATE TABLE Owners (
     OwnerID INT AUTO_INCREMENT PRIMARY KEY,
@@ -64,12 +64,10 @@ CREATE TABLE Appointments (
     ServiceID INT NOT NULL,
     PetID INT NOT NULL,
     EmployeeID INT,
-    BranchID INT NOT NULL,
     Status VARCHAR(50) DEFAULT 'Pending',  -- Added Status column
     FOREIGN KEY (ServiceID) REFERENCES Services(ServiceID) ON DELETE CASCADE,
     FOREIGN KEY (PetID) REFERENCES Pets(PetID) ON DELETE CASCADE,
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL,
-    FOREIGN KEY (BranchID) REFERENCES Branch(BranchID) ON DELETE CASCADE
 );
 
 CREATE TABLE Payments (
@@ -87,11 +85,11 @@ CREATE TABLE BoardingReservations (
       StartDate DATE NOT NULL,
       EndDate DATE NOT NULL,
       PetID INT NOT NULL,
-      BranchID INT NOT NULL,
+--       BranchID INT NOT NULL,
       EmployeeID INT,
       Status VARCHAR(50) DEFAULT 'Pending',  -- Added Status column
       FOREIGN KEY (PetID) REFERENCES Pets(PetID) ON DELETE CASCADE,
-      FOREIGN KEY (BranchID) REFERENCES Branch(BranchID) ON DELETE CASCADE,
+--       FOREIGN KEY (BranchID) REFERENCES Branch(BranchID) ON DELETE CASCADE,
       FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL
 );
 

@@ -458,9 +458,11 @@
                                  <content>
                                     <TableView fx:id="AppointmentTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
-                                          <TableColumn fx:id="recordsAppointmentPetColumn" editable="false" prefWidth="119.0" text="PET" />
-                                          <TableColumn fx:id="recordsAppointmentOwnerColumn" editable="false" prefWidth="130.66668701171875" text="OWNER" />
+                                          <TableColumn fx:id="recordsAppointmentIDColumn" editable="false" prefWidth="119.0" text="ID" />
+                                          <TableColumn fx:id="recordsAppointmentPetNameColumn" editable="false" prefWidth="119.0" text="PET" />
+                                          <TableColumn fx:id="recordsAppointmentOwnerNameColumn" editable="false" prefWidth="130.66668701171875" text="OWNER" />
                                           <TableColumn fx:id="recordsAppointmentDateColumn" editable="false" prefWidth="173.33331298828125" text="DATE" />
+                                          <TableColumn fx:id="recordsAppointmentTimeColumn" editable="false" prefWidth="173.33331298828125" text="TIME" />
                                           <TableColumn fx:id="recordsAppointmentServiceColumn" editable="false" prefWidth="173.33331298828125" text="SERVICE" />
                                           <TableColumn fx:id="recordsAppointmentStatusColumn" editable="false" prefWidth="173.33331298828125" text="STATUS" />
                                        </columns>
@@ -579,7 +581,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab closable="false" style="-fx-font-size: 20px; -fx-pref-width: 135px; -fx-pref-height: 40px;" text="Employees">
+                  <Tab fx:id="employeeTab" closable="false" style="-fx-font-size: 20px; -fx-pref-width: 135px; -fx-pref-height: 40px;" text="Employees">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>

@@ -45,13 +45,13 @@ public class RecordsController {
     @FXML
     private Tab petTab;
     @FXML
+    private TableColumn<?, ?> recordsAppointmentIDColumn;
+    @FXML
     private TableColumn<?, ?> recordsAppointmentDateColumn;
     @FXML
-    private TableColumn<?, ?> recordsAppointmentOwnerIDColumn;
+    private TableColumn<?, ?> recordsAppointmentTimeColumn;
     @FXML
     private TableColumn<?, ?> recordsAppointmentOwnerNameColumn;
-    @FXML
-    private TableColumn<?, ?> recordsAppointmentPetIDColumn;
     @FXML
     private TableColumn<?, ?> recordsAppointmentPetNameColumn;
     @FXML
@@ -158,22 +158,26 @@ public class RecordsController {
         recordsDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 
         // Initialize appointments table columns
-        recordsAppointmentPetIDColumn.setCellValueFactory(new PropertyValueFactory<>("petID"));
+        recordsAppointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
         recordsAppointmentPetNameColumn.setCellValueFactory(new PropertyValueFactory<>("petName"));
-        recordsAppointmentOwnerIDColumn.setCellValueFactory(new PropertyValueFactory<>("ownerID"));
         recordsAppointmentOwnerNameColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
-        recordsPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        recordsDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        recordsAppointmentDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        recordsAppointmentTimeColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
+        recordsAppointmentServiceColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
+        recordsAppointmentStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         //load Data
         loadPets();
         loadOwners();
         loadServices();
+        loadAppointments();
 
         //bind data to table
         PetTable.setItems(petList);
         OwnerTable.setItems(ownerList);
         ServiceTable.setItems(serviceList);
+        AppointmentTable.setItems(appointmentList);
+
 
         // Tabpane Setup
         recordsTabPane.getSelectionModel().select(AppState.getInstance().getCurrentTabIndex());
@@ -203,6 +207,7 @@ public class RecordsController {
 
     @FXML
     public void addAppointment () throws IOException {
+        AppState.getInstance().setCurrentAppointmentPage(AppState.Appointment.ADD);
         Main.switchSceneWithFade("scenes/addAppointment");
     }
 
@@ -261,6 +266,15 @@ public class RecordsController {
 
     @FXML
     public void editAppointment () throws IOException {
+        AppointmentRecord selectedAppointment = AppointmentTable.getSelectionModel().getSelectedItem();
+
+        if (selectedAppointment == null) {
+            showAlert("No Selection", "Please select an appointment to update.");
+            return;
+        }
+
+        AppointmentRecord.setSelectedAppointment(selectedAppointment);
+        AppState.getInstance().setCurrentAppointmentPage(AppState.Appointment.EDIT);
         Main.switchSceneWithFade("scenes/editAppointment");
     }
 
@@ -305,6 +319,15 @@ public class RecordsController {
 
     @FXML
     public void viewAppointment () throws IOException {
+        AppointmentRecord selectedAppointment = AppointmentTable.getSelectionModel().getSelectedItem();
+
+        if (selectedAppointment == null) {
+            showAlert("No Selection", "Please select an appointment to update.");
+            return;
+        }
+
+        AppointmentRecord.setSelectedAppointment(selectedAppointment);
+        AppState.getInstance().setCurrentAppointmentPage(AppState.Appointment.VIEW);
         Main.switchSceneWithFade("scenes/printAppointment");
     }
 
@@ -474,7 +497,7 @@ public class RecordsController {
                              ", Pets.PetImagePath " +
                              "FROM Pets " +
                              "LEFT JOIN Owners " +
-                             "ON Pets.OwnerID = Owners.OwnerID")) {
+                             "ON Pets.OwnerID = Owners.OwnerID;")) {
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -534,6 +557,43 @@ public class RecordsController {
                         rs.getString("ServiceName"),
                         rs.getDouble("Price"),
                         rs.getString("Description")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadAppointments() {
+        appointmentList.clear();
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT " +
+                             "a.AppointmentID, " +
+                             "a.Date, " +
+                             "a.Time, " +
+                             "a.ServiceID, " +
+                             "s.ServiceName, " +
+                             "a.PetID, " +
+                             "p.Name, " +
+                             "o.FirstName, " +
+                             "a.Status " +
+                             "FROM Appointments a " +
+                             "JOIN Services s ON a.ServiceID = s.ServiceID " +
+                             "JOIN Pets p ON a.PetID = p.PetID " +
+                             "JOIN Owners o ON p.OwnerID = o.OwnerID;"
+             )) {
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                appointmentList.add(new AppointmentRecord(
+                        rs.getInt("AppointmentID"),
+                        rs.getString("Name"),
+                        rs.getString("FirstName"),
+                        rs.getDate("Date"),
+                        rs.getTime("Time"),
+                        rs.getString("ServiceName"),
+                        rs.getString("Status")
                 ));
             }
         } catch (Exception e) {

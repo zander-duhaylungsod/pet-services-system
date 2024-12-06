@@ -61,6 +61,17 @@ VALUES
     ('Check-Up', 300.00, 'General pet health check-up'),
     ('Boarding', 1200.00, 'Overnight pet boarding service');
 
+INSERT INTO Services (ServiceName, Price, Description)
+VALUES
+    ('Full Grooming Package', 1000.00, 'Complete grooming package including bathing, nail trimming, and fur styling.'),
+    ('Bathing Only', 300.00, 'Basic cleaning and drying service for pets.'),
+    ('Fur Styling', 500.00, 'Custom haircuts and trims based on pet breed and owner preferences.'),
+    ('Teeth Cleaning', 400.00, 'Dental hygiene service for pets, ensuring clean teeth and fresh breath.'),
+    ('Basic Obedience Training', 1500.00, 'Introductory training to teach pets basic commands like sit, stay, and heel.'),
+    ('General Checkup', 800.00, 'Health assessment to ensure the pet is in good condition.'),
+    ('Full Package Vaccination', 2000.00, 'Comprehensive vaccination package covering essential pet immunizations.');
+
+
 INSERT INTO Appointments (Date, Time, ServiceID, PetID, EmployeeID, BranchID, Status)
 VALUES
     ('2024-12-05', '09:00:00', 1, 1, 4, 1, 'Pending'),
