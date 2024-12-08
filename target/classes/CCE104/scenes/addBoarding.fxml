@@ -210,7 +210,7 @@
                   </DropShadow>
                </effect>
             </Polygon>
-            <DatePicker fx:id="endDate" layoutX="240.0" layoutY="359.0" prefHeight="29.0" prefWidth="252.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-background-color: white;">
+            <DatePicker fx:id="endDate" layoutX="240.0" layoutY="359.0" onAction="#onDateSelected" prefHeight="29.0" prefWidth="252.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-background-color: white; -fx-font-size: 16px;">
                <effect>
                   <DropShadow blurType="GAUSSIAN">
                      <color>
@@ -219,7 +219,7 @@
                   </DropShadow>
                </effect>
             </DatePicker>
-            <DatePicker fx:id="startDate" layoutX="240.0" layoutY="301.0" prefHeight="29.0" prefWidth="252.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-background-color: white;">
+            <DatePicker fx:id="startDate" layoutX="240.0" layoutY="301.0" onAction="#onDateSelected" prefHeight="29.0" prefWidth="252.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-background-color: white; -fx-font-size: 16px;">
                <effect>
                   <DropShadow blurType="GAUSSIAN">
                      <color>
@@ -243,7 +243,7 @@
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <ComboBox fx:id="boardingStatus" layoutX="237.0" layoutY="484.0" prefHeight="29.0" prefWidth="189.0" style="-fx-background-color: WHITE;">
+            <ComboBox fx:id="boardingStatus" layoutX="237.0" layoutY="484.0" prefHeight="29.0" prefWidth="189.0" style="-fx-background-color: WHITE; -fx-font-size: 16px;">
                <effect>
                   <DropShadow>
                      <color>

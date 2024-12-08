@@ -1,3 +1,5 @@
+DROP DATABASE syntaxSquad_db;
+
 mysql -h localhost -u root
 USE syntaxSquad_db;
 
@@ -5,30 +7,19 @@ mysql -h localhost -u root
 CREATE DATABASE syntaxSquad_db;
 USE syntaxSquad_db;
 
--- CREATE TABLE Branch (
---     BranchID INT AUTO_INCREMENT PRIMARY KEY,
---     BranchName VARCHAR(100) NOT NULL,
---     Location VARCHAR(255) NOT NULL,
---     Phone VARCHAR(15)
--- );
-
 CREATE TABLE Employees (
     EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
     Password VARCHAR(255),
     FirstName VARCHAR(50) NOT NULL,
     LastName VARCHAR(50) NOT NULL,
     Email VARCHAR(100) UNIQUE,
-    Phone VARCHAR(15) NOT NULL UNIQUE,
-    Role VARCHAR(50),
---     BranchID INT NOT NULL,
---     FOREIGN KEY (BranchID) REFERENCES Branch(BranchID) ON DELETE CASCADE
+    Phone VARCHAR(11) NOT NULL UNIQUE,
+    Role VARCHAR(50)
 );
-
--- ALTER TABLE Branch
--- ADD ManagerID INT UNIQUE;
---
--- ALTER TABLE Branch
--- ADD FOREIGN KEY (ManagerID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL;
+-- Roles:
+-- 'Admin','Manager', 'Receptionist', 'Groomer', 'Boarding Attendant',
+-- 'Veterinarian', 'Pet Trainer',
+-- 'Cleaning Staff'
 
 CREATE TABLE Owners (
     OwnerID INT AUTO_INCREMENT PRIMARY KEY,
@@ -40,7 +31,7 @@ CREATE TABLE Owners (
 
 CREATE TABLE Pets (
     PetID INT AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(50) NOT NULL,
+    Name VARCHAR(50) NOT NULL UNIQUE,
     Species VARCHAR(50) NOT NULL,
     Breed VARCHAR(50),
     PetImagePath VARCHAR(255),
@@ -67,7 +58,7 @@ CREATE TABLE Appointments (
     Status VARCHAR(50) DEFAULT 'Pending',  -- Added Status column
     FOREIGN KEY (ServiceID) REFERENCES Services(ServiceID) ON DELETE CASCADE,
     FOREIGN KEY (PetID) REFERENCES Pets(PetID) ON DELETE CASCADE,
-    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL,
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL
 );
 
 CREATE TABLE Payments (
@@ -76,7 +67,7 @@ CREATE TABLE Payments (
       PaymentDate DATE NOT NULL,
       Method VARCHAR(50),
       AppointmentID INT,
-      Status VARCHAR(50) DEFAULT 'Unpaid',  -- Added Status column
+      Status VARCHAR(50) DEFAULT 'Unpaid',
       FOREIGN KEY (AppointmentID) REFERENCES Appointments(AppointmentID) ON DELETE SET NULL
 );
 
@@ -85,11 +76,9 @@ CREATE TABLE BoardingReservations (
       StartDate DATE NOT NULL,
       EndDate DATE NOT NULL,
       PetID INT NOT NULL,
---       BranchID INT NOT NULL,
       EmployeeID INT,
-      Status VARCHAR(50) DEFAULT 'Pending',  -- Added Status column
+      Status VARCHAR(50) DEFAULT 'Pending',
       FOREIGN KEY (PetID) REFERENCES Pets(PetID) ON DELETE CASCADE,
---       FOREIGN KEY (BranchID) REFERENCES Branch(BranchID) ON DELETE CASCADE,
       FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL
 );
 

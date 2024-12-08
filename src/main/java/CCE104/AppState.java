@@ -47,12 +47,20 @@ public class AppState {
         DELETE
     }
 
+    public enum Boarding {
+        ADD,
+        EDIT,
+        VIEW,
+        DELETE
+    }
+
     // Current active states
     private Page currentPage;
     private Pet currentPetPage;
     private Owner currentOwnerPage;
     private Service currentServicePage;
     private Appointment currentAppointmentPage;
+    private Boarding currentBoardingPage;
 
     // Private constructor to prevent instantiation
     private AppState() {
@@ -61,6 +69,7 @@ public class AppState {
         currentOwnerPage = Owner.ADD;
         currentServicePage = Service.ADD;
         currentAppointmentPage = Appointment.ADD;
+        currentBoardingPage = Boarding.ADD;
     }
 
     // Getter for current page
@@ -75,6 +84,7 @@ public class AppState {
     }
     public Service getCurrentServicePage() { return currentServicePage; }
     public Appointment getCurrentAppointmentPage() { return currentAppointmentPage; }
+    public Boarding getCurrentBoardingPage() { return currentBoardingPage; }
     public int getCurrentTabIndex() {
         return currentTabIndex;
     }
@@ -91,6 +101,7 @@ public class AppState {
     }
     public void setCurrentServicePage(Service page) { currentServicePage = page; }
     public void setCurrentAppointmentPage(Appointment page) { currentAppointmentPage = page; }
+    public void setCurrentBoardingPage(Boarding page) { currentBoardingPage = page; }
     public void setCurrentTabIndex(int index) {
         this.currentTabIndex = index;
     }

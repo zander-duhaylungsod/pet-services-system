@@ -22,10 +22,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Objects;
 
 public class PetController {
@@ -181,7 +178,36 @@ public class PetController {
             return false;
         }
 
+        if (!isOwnerIDRegistered(ownerID)) {
+            showAlert("Validation Error", "The provided OwnerID is not registered in the system.");
+            return false;
+        }
         return true;
+    }
+
+    private boolean isOwnerIDRegistered(String ownerID) {
+        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+        String user = "root";
+        String password = "";
+        String query = "SELECT COUNT(*) FROM Owners WHERE OwnerID = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, ownerID);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                return count > 0;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to validate OwnerID.");
+        }
+
+        return false;
     }
 
     private void showAlert(String title, String message) {

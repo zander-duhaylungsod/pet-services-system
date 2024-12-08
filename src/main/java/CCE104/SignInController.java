@@ -60,6 +60,15 @@ public class SignInController {
             // Authenticate user with either email or employee ID
             if (authenticateUser(connection, identifier, password)) {
                 showAlert(AlertType.INFORMATION, "Success", "Sign-in successful!");
+
+                // Retrieve and store the employeeID, email, and role in the User model
+                int employeeID = getEmployeeIDFromDatabase(connection, identifier);
+                String role = getEmployeeRoleFromDatabase(connection, identifier);
+                User.setEmployeeID(employeeID);
+                User.setEmail(identifier);  // Store email
+                User.setRole(role);         // Store role
+
+                // Switch to the dashboard
                 Main.switchSceneWithFade("scenes/dashboardAdmin");
             } else {
                 showAlert(AlertType.ERROR, "Error", "Invalid Employee ID/Email or password!");
@@ -69,6 +78,39 @@ public class SignInController {
             showAlert(AlertType.ERROR, "Error", "Failed to sign in: " + e.getMessage());
         }
     }
+
+    // Method to retrieve the employeeID from the database
+    private int getEmployeeIDFromDatabase(Connection connection, String identifier) throws Exception {
+        String query = "SELECT EmployeeID FROM Employees WHERE (Email = ? OR EmployeeID = ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, identifier); // Email
+            stmt.setString(2, identifier); // Employee ID
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("EmployeeID"); // Retrieve the EmployeeID
+                }
+            }
+        }
+        return -1; // Return -1 if not found
+    }
+
+    // Method to retrieve the role from the database
+    private String getEmployeeRoleFromDatabase(Connection connection, String identifier) throws Exception {
+        String query = "SELECT Role FROM Employees WHERE (Email = ? OR EmployeeID = ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, identifier); // Email
+            stmt.setString(2, identifier); // Employee ID
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("Role"); // Retrieve the Role
+                }
+            }
+        }
+        return null; // Return null if role is not found
+    }
+
 
     private boolean authenticateUser(Connection connection, String identifier, String password) throws Exception {
         String query = "SELECT * FROM Employees WHERE (Email = ? OR EmployeeID = ?)";

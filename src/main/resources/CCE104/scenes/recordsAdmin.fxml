@@ -546,8 +546,9 @@
                                  <content>
                                     <TableView fx:id="BoardingTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
-                                          <TableColumn fx:id="recordsBoardingPetColumn" editable="false" prefWidth="119.0" text="PET" />
-                                          <TableColumn fx:id="recordsBoardingOwnerColumn" editable="false" prefWidth="130.66668701171875" text="OWNER" />
+                                          <TableColumn fx:id="recordsBoardingIDColumn" editable="false" prefWidth="60.66668701171875" text="ID" />
+                                          <TableColumn fx:id="recordsBoardingPetColumn" editable="false" prefWidth="129.0" text="PET" />
+                                          <TableColumn fx:id="recordsBoardingOwnerColumn" editable="false" prefWidth="126.0" text="OWNER" />
                                           <TableColumn fx:id="recordsBoardingCheckinDate" editable="false" prefWidth="173.33331298828125" text="CHECK-IN DATE" />
                                           <TableColumn fx:id="recordsBoardingCheckOutDate" editable="false" prefWidth="173.33331298828125" text="CHECK-OUT DATE" />
                                           <TableColumn fx:id="recordsBoardingStatusColumn" editable="false" prefWidth="173.33331298828125" text="STATUS" />

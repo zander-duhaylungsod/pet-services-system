@@ -25,7 +25,7 @@ public class RecordsController {
     @FXML
     private TableView<AppointmentRecord> AppointmentTable;
     @FXML
-    private TableView<?> BoardingTable;
+    private TableView<BoardingRecord> BoardingTable;
     @FXML
     private TableView<?> EmployeeTable;
     @FXML
@@ -64,6 +64,8 @@ public class RecordsController {
     private TableColumn<?, ?> recordsBoardingCheckinDate;
     @FXML
     private TableColumn<?, ?> recordsBoardingOwnerColumn;
+    @FXML
+    private TableColumn<?, ?> recordsBoardingIDColumn;
     @FXML
     private TableColumn<?, ?> recordsBoardingPetColumn;
     @FXML
@@ -127,6 +129,7 @@ public class RecordsController {
     private ObservableList<OwnerRecord> ownerList = FXCollections.observableArrayList();
     private ObservableList<ServiceRecord> serviceList = FXCollections.observableArrayList();
     private ObservableList<AppointmentRecord> appointmentList = FXCollections.observableArrayList();
+    private ObservableList<BoardingRecord> boardingList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -134,6 +137,7 @@ public class RecordsController {
         OwnerRecord.getInstance().setRecordsController(this);
         ServiceRecord.getInstance().setRecordsController(this);
         AppointmentRecord.getInstance().setRecordsController(this);
+        BoardingRecord.getInstance().setRecordsController(this);
 
         AppState.getInstance().setCurrentPage(AppState.Page.RECORDS);
 
@@ -166,17 +170,27 @@ public class RecordsController {
         recordsAppointmentServiceColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
         recordsAppointmentStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
+        // Initialize boarding table columns
+        recordsBoardingIDColumn.setCellValueFactory(new PropertyValueFactory<>("reservationID"));
+        recordsBoardingPetColumn.setCellValueFactory(new PropertyValueFactory<>("petName"));
+        recordsBoardingOwnerColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
+        recordsBoardingCheckinDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        recordsBoardingCheckOutDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        recordsBoardingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
         //load Data
         loadPets();
         loadOwners();
         loadServices();
         loadAppointments();
+        loadBoarding();
 
         //bind data to table
         PetTable.setItems(petList);
         OwnerTable.setItems(ownerList);
         ServiceTable.setItems(serviceList);
         AppointmentTable.setItems(appointmentList);
+        BoardingTable.setItems(boardingList);
 
 
         // Tabpane Setup
@@ -213,6 +227,7 @@ public class RecordsController {
 
     @FXML
     public void addBoarding () throws IOException {
+        AppState.getInstance().setCurrentBoardingPage(AppState.Boarding.ADD);
         Main.switchSceneWithFade("scenes/addBoarding");
     }
 
@@ -280,6 +295,15 @@ public class RecordsController {
 
     @FXML
     public void editBoarding () throws IOException {
+        BoardingRecord selectedBoarding = BoardingTable.getSelectionModel().getSelectedItem();
+
+        if (selectedBoarding == null) {
+            showAlert("No Selection", "Please select a reservation to update.");
+            return;
+        }
+
+        BoardingRecord.setSelectedBoarding(selectedBoarding);
+        AppState.getInstance().setCurrentBoardingPage(AppState.Boarding.EDIT);
         Main.switchSceneWithFade("scenes/editBoarding");
     }
 
@@ -333,25 +357,30 @@ public class RecordsController {
 
     @FXML
     public void viewBoarding () throws IOException {
+        BoardingRecord selectedBoarding = BoardingTable.getSelectionModel().getSelectedItem();
+
+        if (selectedBoarding == null) {
+            showAlert("No Selection", "Please select a reservation to view.");
+            return;
+        }
+
+        BoardingRecord.setSelectedBoarding(selectedBoarding);
+        AppState.getInstance().setCurrentBoardingPage(AppState.Boarding.VIEW);
         Main.switchSceneWithFade("scenes/printBoarding");
     }
 
     //delete functions
     @FXML
     public void deletePet () throws IOException {
-        // Get the selected pet
         PetRecord selectedPet = PetTable.getSelectionModel().getSelectedItem();
 
-        // Check if a pet is selected
         if (selectedPet == null) {
             showAlert("No Selection", "Please select a pet to delete.");
             return;
         }
 
-        // Confirm deletion with the user
         Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected pet? \nThis will delete associated records.");
 
-        // Delete the pet from the database
         if(confirm) {
             try (Connection conn = connect();
                  PreparedStatement stmt = conn.prepareStatement("DELETE FROM Pets WHERE PetID = ?")) {
@@ -360,7 +389,6 @@ public class RecordsController {
                 int rowsAffected = stmt.executeUpdate();
 
                 if (rowsAffected > 0) {
-                    // Remove the pet from the list and refresh the table
                     petList.remove(selectedPet);
                     PetTable.refresh();
                     showAlert("Deletion Successful", "The pet has been successfully deleted.");
@@ -386,7 +414,6 @@ public class RecordsController {
         // Confirm deletion with the user
         Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected owner? \nThis will delete associated records.");
 
-        // Delete the pet from the database
         if(confirm) {
             try (Connection conn = connect();
                  PreparedStatement stmt = conn.prepareStatement("DELETE FROM Owners WHERE OwnerID = ?")) {
@@ -444,12 +471,68 @@ public class RecordsController {
 
     @FXML
     public void deleteAppointment () throws IOException {
-        //add delete appointment function here
+        AppointmentRecord selectedAppointment = AppointmentTable.getSelectionModel().getSelectedItem();
+
+        if (selectedAppointment == null) {
+            showAlert("No Selection", "Please select an appointment to delete.");
+            return;
+        }
+
+        // Confirm deletion with the user
+        Boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected appointment? \nThis will affect associated records.");
+
+        if(confirm) {
+            try (Connection conn = connect();
+                 PreparedStatement stmt = conn.prepareStatement("DELETE FROM Appointments WHERE AppointmentID = ?")) {
+
+                stmt.setInt(1, selectedAppointment.getAppointmentID());
+                int rowsAffected = stmt.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    appointmentList.remove(selectedAppointment);
+                    AppointmentTable.refresh();
+                    showAlert("Deletion Successful", "The appointment has been successfully terminated.");
+                } else {
+                    showAlert("Deletion Failed", "Failed to delete appointment. Please check and try again.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showErrorDialog("Error", "An error occurred while deleting the appointment.");
+            }
+        }
     }
 
     @FXML
     public void deleteBoarding () throws IOException {
-        //add delete boarding function here
+        BoardingRecord selectedBoarding = BoardingTable.getSelectionModel().getSelectedItem();
+
+        if (selectedBoarding == null) {
+            showAlert("No Selection", "Please select a reservation to delete.");
+            return;
+        }
+
+        // Confirm deletion with the user
+        Boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected reservation? \nThis will affect associated records.");
+
+        if(confirm) {
+            try (Connection conn = connect();
+                 PreparedStatement stmt = conn.prepareStatement("DELETE FROM BoardingReservations WHERE ReservationID = ?")) {
+
+                stmt.setInt(1, selectedBoarding.getReservationID());
+                int rowsAffected = stmt.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    boardingList.remove(selectedBoarding);
+                    BoardingTable.refresh();
+                    showAlert("Deletion Successful", "The reservation has been successfully terminated.");
+                } else {
+                    showAlert("Deletion Failed", "Failed to delete reservation. Please check and try again.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showErrorDialog("Error", "An error occurred while deleting the reservation.");
+            }
+        }
     }
 
     @FXML
@@ -484,6 +567,15 @@ public class RecordsController {
     public Integer getSelectedServiceID() {
         ServiceRecord selectedService = ServiceTable.getSelectionModel().getSelectedItem();
         return selectedService != null ? selectedService.getServiceID() : null;
+    }
+
+    public Integer getSelectedAppointmentID() {
+        AppointmentRecord selectedAppointment = AppointmentTable.getSelectionModel().getSelectedItem();
+        return selectedAppointment != null ? selectedAppointment.getAppointmentID() : null;
+    }
+    public Integer getSelectedBoardingID() {
+        BoardingRecord selectedBoarding = BoardingTable.getSelectionModel().getSelectedItem();
+        return selectedBoarding != null ? selectedBoarding.getReservationID() : null;
     }
 
     //Pet Table Management --
@@ -577,6 +669,7 @@ public class RecordsController {
                              "a.PetID, " +
                              "p.Name, " +
                              "o.FirstName, " +
+                             "o.LastName, " +
                              "a.Status " +
                              "FROM Appointments a " +
                              "JOIN Services s ON a.ServiceID = s.ServiceID " +
@@ -586,13 +679,48 @@ public class RecordsController {
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
+                String fullName = rs.getString("FirstName") + " " + rs.getString("LastName");
                 appointmentList.add(new AppointmentRecord(
                         rs.getInt("AppointmentID"),
                         rs.getString("Name"),
-                        rs.getString("FirstName"),
+                        fullName,
                         rs.getDate("Date"),
                         rs.getTime("Time"),
                         rs.getString("ServiceName"),
+                        rs.getString("Status")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadBoarding() {
+        boardingList.clear();
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT " +
+                             "b.ReservationID, " +
+                             "p.Name AS PetName, " +
+                             "o.FirstName, " +
+                             "o.LastName, " +
+                             "b.StartDate, " +
+                             "b.EndDate, " +
+                             "b.Status " +
+                             "FROM BoardingReservations b " +
+                             "JOIN Pets p ON b.PetID = p.PetID " +
+                             "JOIN Owners o ON p.OwnerID = o.OwnerID;"
+             )) {
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String fullName = rs.getString("FirstName") + " " + rs.getString("LastName");
+                boardingList.add(new BoardingRecord(
+                        rs.getInt("ReservationID"),
+                        rs.getString("PetName"),
+                        fullName, // Concatenated first and last name
+                        rs.getDate("StartDate"),
+                        rs.getDate("EndDate"),
                         rs.getString("Status")
                 ));
             }

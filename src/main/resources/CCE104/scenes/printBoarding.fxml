@@ -187,7 +187,7 @@
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <Button alignment="CENTER" graphicTextGap="0.0" layoutX="348.0" layoutY="618.0" mnemonicParsing="false" onAction="#printBoarding" prefHeight="48.0" prefWidth="184.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Save Changes">
+            <Button alignment="CENTER" graphicTextGap="0.0" layoutX="348.0" layoutY="618.0" mnemonicParsing="false" onAction="#printBoarding" prefHeight="48.0" prefWidth="184.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Print">
                <font>
                   <Font name="Segoe UI Bold" size="18.0" />
                </font>
