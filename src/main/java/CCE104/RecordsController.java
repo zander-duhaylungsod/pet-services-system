@@ -27,7 +27,7 @@ public class RecordsController {
     @FXML
     private TableView<BoardingRecord> BoardingTable;
     @FXML
-    private TableView<?> EmployeeTable;
+    private TableView<EmployeeRecord> EmployeeTable;
     @FXML
     private Tab appointmentTab;
     @FXML
@@ -130,6 +130,7 @@ public class RecordsController {
     private ObservableList<ServiceRecord> serviceList = FXCollections.observableArrayList();
     private ObservableList<AppointmentRecord> appointmentList = FXCollections.observableArrayList();
     private ObservableList<BoardingRecord> boardingList = FXCollections.observableArrayList();
+    private ObservableList<EmployeeRecord> employeeList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -138,6 +139,7 @@ public class RecordsController {
         ServiceRecord.getInstance().setRecordsController(this);
         AppointmentRecord.getInstance().setRecordsController(this);
         BoardingRecord.getInstance().setRecordsController(this);
+        EmployeeRecord.getInstance().setRecordsController(this);
 
         AppState.getInstance().setCurrentPage(AppState.Page.RECORDS);
 
@@ -178,12 +180,20 @@ public class RecordsController {
         recordsBoardingCheckOutDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
         recordsBoardingStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
+        // Initialize employee table columns
+        recordsEmployeeIDColumn.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
+        recordsEmployeeFirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        recordsEmployeeLastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        recordsEmployeePhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        recordsEmployeeRoleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
+
         //load Data
         loadPets();
         loadOwners();
         loadServices();
         loadAppointments();
         loadBoarding();
+        loadEmployees();
 
         //bind data to table
         PetTable.setItems(petList);
@@ -191,6 +201,7 @@ public class RecordsController {
         ServiceTable.setItems(serviceList);
         AppointmentTable.setItems(appointmentList);
         BoardingTable.setItems(boardingList);
+        EmployeeTable.setItems(employeeList);
 
 
         // Tabpane Setup
@@ -233,6 +244,7 @@ public class RecordsController {
 
     @FXML
     public void addEmployee () throws IOException {
+        AppState.getInstance().setCurrentEmployeePage(AppState.Employee.ADD);
         Main.switchSceneWithFade("scenes/addEmployee");
     }
 
@@ -309,6 +321,15 @@ public class RecordsController {
 
     @FXML
     public void editEmployee () throws IOException {
+        EmployeeRecord selectedEmployee = EmployeeTable.getSelectionModel().getSelectedItem();
+
+        if (selectedEmployee == null) {
+            showAlert("No Selection", "Please select an employee to edit.");
+            return;
+        }
+
+        EmployeeRecord.setSelectedEmployee(selectedEmployee);
+        AppState.getInstance().setCurrentEmployeePage(AppState.Employee.EDIT);
         Main.switchSceneWithFade("scenes/editEmployee");
     }
 
@@ -391,13 +412,13 @@ public class RecordsController {
                 if (rowsAffected > 0) {
                     petList.remove(selectedPet);
                     PetTable.refresh();
-                    showAlert("Deletion Successful", "The pet has been successfully deleted.");
+                    showAlert("Deletion Successful", "The pet record has been successfully deleted.");
                 } else {
-                    showAlert("Deletion Failed", "Failed to delete the pet. Please try again.");
+                    showAlert("Deletion Failed", "Failed to delete the pet record. Please try again.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                showErrorDialog("Error", "An error occurred while deleting the pet.");
+                showErrorDialog("Error", "An error occurred while deleting the pet record.");
             }
         }
     }
@@ -424,13 +445,13 @@ public class RecordsController {
                 if (rowsAffected > 0) {
                     ownerList.remove(selectedOwner);
                     OwnerTable.refresh();
-                    showAlert("Deletion Successful", "The owner has been successfully deleted.");
+                    showAlert("Deletion Successful", "The owner record has been successfully deleted.");
                 } else {
-                    showAlert("Deletion Failed", "Failed to delete the owner. Please try again.");
+                    showAlert("Deletion Failed", "Failed to delete the owner record. Please try again.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                showErrorDialog("Error", "An error occurred while deleting the owner.");
+                showErrorDialog("Error", "An error occurred while deleting the owner record.");
             }
         }
     }
@@ -537,7 +558,34 @@ public class RecordsController {
 
     @FXML
     public void deleteEmployee () throws IOException {
-        //add delete employee function here
+        EmployeeRecord selectedEmployee = EmployeeTable.getSelectionModel().getSelectedItem();
+
+        if (selectedEmployee == null) {
+            showAlert("No Selection", "Please select an employee to delete.");
+            return;
+        }
+
+        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected employee? \nThis will delete associated records.");
+
+        if(confirm) {
+            try (Connection conn = connect();
+                 PreparedStatement stmt = conn.prepareStatement("DELETE FROM Employees WHERE EmployeeID = ?")) {
+
+                stmt.setInt(1, selectedEmployee.getEmployeeID());
+                int rowsAffected = stmt.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    employeeList.remove(selectedEmployee);
+                    EmployeeTable.refresh();
+                    showAlert("Deletion Successful", "The employee record has been successfully deleted.");
+                } else {
+                    showAlert("Deletion Failed", "Failed to delete the employee record. Please try again.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showErrorDialog("Error", "An error occurred while deleting the employee record.");
+            }
+        }
     }
 
     @FXML
@@ -573,12 +621,18 @@ public class RecordsController {
         AppointmentRecord selectedAppointment = AppointmentTable.getSelectionModel().getSelectedItem();
         return selectedAppointment != null ? selectedAppointment.getAppointmentID() : null;
     }
+
     public Integer getSelectedBoardingID() {
         BoardingRecord selectedBoarding = BoardingTable.getSelectionModel().getSelectedItem();
         return selectedBoarding != null ? selectedBoarding.getReservationID() : null;
     }
 
-    //Pet Table Management --
+    public Integer getSelectedEmployeeID() {
+        EmployeeRecord selectedEmployee = EmployeeTable.getSelectionModel().getSelectedItem();
+        return selectedEmployee != null ? selectedEmployee.getEmployeeID() : null;
+    }
+
+    //Table Loading --
     public void loadPets() {
         petList.clear();
         try (Connection conn = connect();
@@ -722,6 +776,28 @@ public class RecordsController {
                         rs.getDate("StartDate"),
                         rs.getDate("EndDate"),
                         rs.getString("Status")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadEmployees() {
+        employeeList.clear();
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT EmployeeID, FirstName, LastName, Phone, Role FROM Employees;"
+             )) {
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                employeeList.add(new EmployeeRecord(
+                        rs.getInt("EmployeeID"),
+                        rs.getString("FirstName"),
+                        rs.getString("LastName"),
+                        rs.getString("Phone"),
+                        rs.getString("Role")
                 ));
             }
         } catch (Exception e) {

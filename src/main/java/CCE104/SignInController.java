@@ -159,4 +159,10 @@ public class SignInController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    @FXML
+    public void resetPassword () throws IOException {
+        AppState.getInstance().setCurrentEmployeePage(AppState.Employee.RESET);
+        Main.switchSceneWithFade("scenes/resetPassword");
+    }
 }

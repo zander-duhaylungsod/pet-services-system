@@ -31,7 +31,7 @@ CREATE TABLE Owners (
 
 CREATE TABLE Pets (
     PetID INT AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(50) NOT NULL UNIQUE,
+    Name VARCHAR(50) NOT NULL,
     Species VARCHAR(50) NOT NULL,
     Breed VARCHAR(50),
     PetImagePath VARCHAR(255),
@@ -61,16 +61,6 @@ CREATE TABLE Appointments (
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL
 );
 
-CREATE TABLE Payments (
-      PaymentID INT AUTO_INCREMENT PRIMARY KEY,
-      Amount DECIMAL(10, 2) NOT NULL,
-      PaymentDate DATE NOT NULL,
-      Method VARCHAR(50),
-      AppointmentID INT,
-      Status VARCHAR(50) DEFAULT 'Unpaid',
-      FOREIGN KEY (AppointmentID) REFERENCES Appointments(AppointmentID) ON DELETE SET NULL
-);
-
 CREATE TABLE BoardingReservations (
       ReservationID INT AUTO_INCREMENT PRIMARY KEY,
       StartDate DATE NOT NULL,
@@ -82,11 +72,23 @@ CREATE TABLE BoardingReservations (
       FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL
 );
 
-ALTER TABLE Payments
-ADD ReservationID INT;
+CREATE TABLE Payments (
+      PaymentID INT AUTO_INCREMENT PRIMARY KEY,
+      Amount DECIMAL(10, 2) NOT NULL,
+      PaymentDate DATE NOT NULL,
+      Method VARCHAR(50),
+      AppointmentID INT,
+      ReservationID INT,
+      Status VARCHAR(50) DEFAULT 'Unpaid',
+      FOREIGN KEY (AppointmentID) REFERENCES Appointments(AppointmentID) ON DELETE SET NULL,
+      FOREIGN KEY (ReservationID) REFERENCES BoardingReservations(ReservationID) ON DELETE SET NULL,
+);
 
-ALTER TABLE Payments
-ADD FOREIGN KEY (ReservationID) REFERENCES BoardingReservations(ReservationID) ON DELETE SET NULL;
+-- ALTER TABLE Payments
+-- ADD ReservationID INT;
+--
+-- ALTER TABLE Payments
+-- ADD FOREIGN KEY (ReservationID) REFERENCES BoardingReservations(ReservationID) ON DELETE SET NULL;
 
 CREATE TABLE Reports (
     ReportID INT AUTO_INCREMENT PRIMARY KEY,

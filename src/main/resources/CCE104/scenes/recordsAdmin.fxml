@@ -253,7 +253,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="349.0" layoutY="354.0" mnemonicParsing="false" onAction="#editOwner" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="346.0" layoutY="354.0" mnemonicParsing="false" onAction="#editOwner" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -458,7 +458,7 @@
                                  <content>
                                     <TableView fx:id="AppointmentTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
-                                          <TableColumn fx:id="recordsAppointmentIDColumn" editable="false" prefWidth="119.0" text="ID" />
+                                          <TableColumn fx:id="recordsAppointmentIDColumn" editable="false" prefWidth="119.0" text="APPOINTMENT ID" />
                                           <TableColumn fx:id="recordsAppointmentPetNameColumn" editable="false" prefWidth="119.0" text="PET" />
                                           <TableColumn fx:id="recordsAppointmentOwnerNameColumn" editable="false" prefWidth="130.66668701171875" text="OWNER" />
                                           <TableColumn fx:id="recordsAppointmentDateColumn" editable="false" prefWidth="173.33331298828125" text="DATE" />
@@ -546,7 +546,7 @@
                                  <content>
                                     <TableView fx:id="BoardingTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
-                                          <TableColumn fx:id="recordsBoardingIDColumn" editable="false" prefWidth="60.66668701171875" text="ID" />
+                                          <TableColumn fx:id="recordsBoardingIDColumn" editable="false" prefWidth="60.66668701171875" text="BOARDING ID" />
                                           <TableColumn fx:id="recordsBoardingPetColumn" editable="false" prefWidth="129.0" text="PET" />
                                           <TableColumn fx:id="recordsBoardingOwnerColumn" editable="false" prefWidth="126.0" text="OWNER" />
                                           <TableColumn fx:id="recordsBoardingCheckinDate" editable="false" prefWidth="173.33331298828125" text="CHECK-IN DATE" />
@@ -586,7 +586,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="149.0" layoutY="355.0" mnemonicParsing="false" onAction="#addEmployee" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Add">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="150.0" layoutY="354.0" mnemonicParsing="false" onAction="#addEmployee" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Add">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -598,7 +598,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="348.0" layoutY="355.0" mnemonicParsing="false" onAction="#editEmployee" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Edit">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="346.0" layoutY="354.0" mnemonicParsing="false" onAction="#editEmployee" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Edit">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -610,7 +610,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="529.0" layoutY="355.0" mnemonicParsing="false" onAction="#deleteEmployee" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Delete">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="530.0" layoutY="354.0" mnemonicParsing="false" onAction="#deleteEmployee" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Delete">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -633,12 +633,11 @@
                                  <content>
                                     <TableView fx:id="EmployeeTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
-                                          <TableColumn fx:id="recordsEmployeeIDColumn" editable="false" prefWidth="79.33331298828125" text="ID" />
+                                          <TableColumn fx:id="recordsEmployeeIDColumn" editable="false" prefWidth="79.33331298828125" text="EMPLOYEE ID" />
                                           <TableColumn fx:id="recordsEmployeeFirstNameColumn" editable="false" prefWidth="130.66665649414062" text="FIRST NAME" />
                                           <TableColumn fx:id="recordsEmployeeLastNameColumn" editable="false" prefWidth="144.33334350585938" text="LAST NAME" />
                                           <TableColumn fx:id="recordsEmployeePhoneColumn" editable="false" prefWidth="178.3333740234375" text="PHONE" />
                                           <TableColumn fx:id="recordsEmployeeRoleColumn" editable="false" prefWidth="107.0" text="ROLE" />
-                                          <TableColumn fx:id="recordsEmployeeBranchColumn" editable="false" prefWidth="116.0" text="BRANCH" />
                                        </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

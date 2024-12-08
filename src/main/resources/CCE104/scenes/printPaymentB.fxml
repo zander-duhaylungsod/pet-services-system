@@ -2,8 +2,6 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
@@ -140,12 +138,12 @@
                </font>
             </Label>
             <Circle fill="#b2f0ff" layoutX="697.0" layoutY="62.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
-            <Label layoutX="359.0" layoutY="147.0" prefHeight="29.0" prefWidth="189.0" text="EDIT PAYMENT" textFill="#097478">
+            <Label layoutX="351.0" layoutY="147.0" prefHeight="29.0" prefWidth="225.0" text="PAYMENT DETAILS" textFill="#097478">
                <font>
                   <Font name="Segoe UI Bold" size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="petID" layoutX="256.0" layoutY="234.0" prefHeight="39.0" prefWidth="481.0" promptText="Registered Pet" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
+            <TextField fx:id="petID" editable="false" layoutX="256.0" layoutY="234.0" prefHeight="39.0" prefWidth="481.0" promptText="Registered Pet" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
@@ -174,12 +172,12 @@
                   </DropShadow>
                </effect>
             </TextField>
-            <Label layoutX="91.0" layoutY="286.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Amount:">
+            <Label layoutX="91.0" layoutY="286.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Amount Paid:">
                <font>
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <Button alignment="CENTER" graphicTextGap="0.0" layoutX="348.0" layoutY="618.0" mnemonicParsing="false" onAction="#savePaymentChanges" prefHeight="48.0" prefWidth="184.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Save Changes">
+            <Button alignment="CENTER" graphicTextGap="0.0" layoutX="348.0" layoutY="618.0" mnemonicParsing="false" onAction="#printPayment" prefHeight="48.0" prefWidth="184.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Print">
                <font>
                   <Font name="Segoe UI Bold" size="18.0" />
                </font>
@@ -200,35 +198,17 @@
                   </DropShadow>
                </effect>
             </Polygon>
-            <Label layoutX="91.0" layoutY="395.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Method:">
+            <Label layoutX="91.0" layoutY="399.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Method:">
                <font>
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <ComboBox fx:id="paymentMethod" layoutX="259.0" layoutY="413.0" prefHeight="29.0" prefWidth="189.0" style="-fx-background-color: WHITE;">
-               <effect>
-                  <DropShadow blurType="GAUSSIAN" height="47.38" radius="16.595" spread="0.11">
-                     <color>
-                        <Color red="0.8552631735801697" green="0.8552631735801697" blue="0.8552631735801697" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </ComboBox>
             <Label layoutX="92.0" layoutY="345.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Payment Date:">
                <font>
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <DatePicker fx:id="paymentDate" layoutX="257.0" layoutY="359.0" prefHeight="29.0" prefWidth="252.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-background-color: white;">
-               <effect>
-                  <DropShadow blurType="GAUSSIAN">
-                     <color>
-                        <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </DatePicker>
-            <TextField fx:id="appointmentID" editable="false" layoutX="256.0" layoutY="465.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
+            <TextField fx:id="reservationID" editable="false" layoutX="251.0" layoutY="480.0" prefHeight="39.0" prefWidth="193.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
@@ -240,12 +220,17 @@
                   </DropShadow>
                </effect>
             </TextField>
-            <Label layoutX="92.0" layoutY="455.0" prefHeight="53.0" prefWidth="142.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Appointment ID:">
+            <Label layoutX="92.0" layoutY="470.0" prefHeight="53.0" prefWidth="142.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Reservation ID:">
                <font>
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <TextField fx:id="reservationID" editable="false" layoutX="256.0" layoutY="521.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
+            <Label layoutX="453.0" layoutY="399.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Status:">
+               <font>
+                  <Font name="Segoe UI Emoji" size="19.0" />
+               </font>
+            </Label>
+            <TextField fx:id="paymentDateField" editable="false" layoutX="254.0" layoutY="354.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
@@ -257,26 +242,41 @@
                   </DropShadow>
                </effect>
             </TextField>
-            <Label layoutX="92.0" layoutY="511.0" prefHeight="53.0" prefWidth="142.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Reservation ID:">
+            <TextField fx:id="paymentMethodField" editable="false" layoutX="251.0" layoutY="412.0" prefHeight="39.0" prefWidth="177.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
                <font>
-                  <Font name="Segoe UI Emoji" size="19.0" />
+                  <Font name="Segoe UI" size="20.0" />
                </font>
-            </Label>
-            <Label layoutX="475.0" layoutY="395.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Status:">
-               <font>
-                  <Font name="Segoe UI Emoji" size="19.0" />
-               </font>
-            </Label>
-            <ComboBox fx:id="paymentStatus" layoutX="553.0" layoutY="413.0" prefHeight="29.0" prefWidth="189.0" style="-fx-background-color: WHITE;">
                <effect>
-                  <DropShadow blurType="GAUSSIAN" height="47.38" radius="16.595" spread="0.11">
+                  <DropShadow blurType="GAUSSIAN" height="35.66" radius="17.33" width="35.66">
                      <color>
-                        <Color red="0.8552631735801697" green="0.8552631735801697" blue="0.8552631735801697" />
+                        <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285" />
                      </color>
                   </DropShadow>
                </effect>
-            </ComboBox>
+            </TextField>
+            <TextField fx:id="paymentStatusField" editable="false" layoutX="522.0" layoutY="410.0" prefHeight="39.0" prefWidth="216.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
+               <font>
+                  <Font name="Segoe UI" size="20.0" />
+               </font>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" height="35.66" radius="17.33" width="35.66">
+                     <color>
+                        <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </TextField>
          </children>
       </AnchorPane>
+      <Label layoutX="570.0" layoutY="193.0" prefHeight="30.0" prefWidth="198.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Remaining Amount to Pay:">
+         <font>
+            <Font name="Segoe UI Emoji" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="remainingAmount" layoutX="767.0" layoutY="191.0" prefHeight="36.0" prefWidth="138.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="0">
+         <font>
+            <Font name="Segoe UI Emoji" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

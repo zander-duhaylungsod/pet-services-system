@@ -1,5 +1,7 @@
 package CCE104;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
@@ -38,6 +40,7 @@ public class  OwnerController {
     private TextField searchField;
     @FXML
     private Label EmployeeName;
+    ObservableList<String> employeeList = FXCollections.observableArrayList("Admin", "Manager", "Receptionist", "Groomer", "Boarding Attendant","Veterinarian","Pet Trainer","Cleaning Staff");
 
     String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
     String user = "root";

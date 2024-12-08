@@ -176,7 +176,7 @@ public class AppointmentController {
                 Alerts.showSuccessDialog("Success", "Appointment added successfully.");
                 clearAppointmentFields();
             } else {
-                System.out.println("Failed to add appointment.");
+                Alerts.showAlert("Error","Failed to add appointment. Please check your inputs.");
             }
         } catch (IllegalArgumentException e) {
             Alerts.showErrorDialog("Error", "Validation Error: " + e.getMessage());

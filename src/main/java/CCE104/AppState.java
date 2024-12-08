@@ -54,6 +54,23 @@ public class AppState {
         DELETE
     }
 
+    public enum Employee {
+        ADD,
+        EDIT,
+        DELETE,
+        RESET
+    }
+
+    public enum Payment {
+        PAYMENTA,
+        PAYMENTB,
+        EDITA,
+        EDITB,
+        PRINTA,
+        PRINTB,
+        REFUND
+    }
+
     // Current active states
     private Page currentPage;
     private Pet currentPetPage;
@@ -61,6 +78,8 @@ public class AppState {
     private Service currentServicePage;
     private Appointment currentAppointmentPage;
     private Boarding currentBoardingPage;
+    private Employee currentEmployeePage;
+    private Payment currentPaymentPage;
 
     // Private constructor to prevent instantiation
     private AppState() {
@@ -70,6 +89,8 @@ public class AppState {
         currentServicePage = Service.ADD;
         currentAppointmentPage = Appointment.ADD;
         currentBoardingPage = Boarding.ADD;
+        currentEmployeePage = Employee.ADD;
+        currentPaymentPage = Payment.PAYMENTA;
     }
 
     // Getter for current page
@@ -85,6 +106,8 @@ public class AppState {
     public Service getCurrentServicePage() { return currentServicePage; }
     public Appointment getCurrentAppointmentPage() { return currentAppointmentPage; }
     public Boarding getCurrentBoardingPage() { return currentBoardingPage; }
+    public Employee getCurrentEmployeePage() { return currentEmployeePage; }
+    public Payment getCurrentPaymentPage() { return currentPaymentPage; }
     public int getCurrentTabIndex() {
         return currentTabIndex;
     }
@@ -102,6 +125,8 @@ public class AppState {
     public void setCurrentServicePage(Service page) { currentServicePage = page; }
     public void setCurrentAppointmentPage(Appointment page) { currentAppointmentPage = page; }
     public void setCurrentBoardingPage(Boarding page) { currentBoardingPage = page; }
+    public void setCurrentEmployeePage(Employee page) { currentEmployeePage = page; }
+    public void setCurrentPaymentPage(Payment page) { currentPaymentPage = page; }
     public void setCurrentTabIndex(int index) {
         this.currentTabIndex = index;
     }
