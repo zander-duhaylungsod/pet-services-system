@@ -208,11 +208,35 @@ public class PaymentRecord {
     private void calculateRemainingAmount() {
         PaymentRecord selectedPayment = PaymentRecord.getSelectedPayment();
 
-        if (selectedPayment.getAppointmentID() != 0) {
-            remainingAmount = PaymentController.fetchServicePriceByAppointment(selectedPayment.getAppointmentID()) - amount;
-        } else if (selectedPayment.getReservationID() != 0) {
-            remainingAmount = PaymentController.calculateTotalCost(selectedPayment.getReservationID()) - amount;
+        if (selectedPayment == null) {
+            System.out.println("No payment selected.");
+            return;
         }
+
+        double totalPaid = 0.0;
+        double totalCost = 0.0;
+
+        // Fetch existing payments associated with AppointmentID or ReservationID
+        if (selectedPayment.getAppointmentID() != 0) {
+            // Calculate total paid amount for the same AppointmentID
+            totalPaid = PaymentController.fetchTotalPaidByAppointment(selectedPayment.getAppointmentID());
+            totalCost = PaymentController.fetchServicePriceByAppointment(selectedPayment.getAppointmentID());
+        } else if (selectedPayment.getReservationID() != 0) {
+            // Calculate total paid amount for the same ReservationID
+            totalPaid = PaymentController.fetchTotalPaidByReservation(selectedPayment.getReservationID());
+            totalCost = PaymentController.calculateTotalCost(selectedPayment.getReservationID());
+        }
+
+        // Add current amount to total paid
+        totalPaid += amount;
+
+        // Calculate remaining amount
+        remainingAmount = totalCost - totalPaid;
+
+        // Debugging/Logging
+        System.out.println("Total Cost: " + totalCost);
+        System.out.println("Total Paid: " + totalPaid);
+        System.out.println("Remaining Amount: " + remainingAmount);
     }
 
     public double getRemainingAmount() {

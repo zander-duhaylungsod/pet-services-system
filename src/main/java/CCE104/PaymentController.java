@@ -70,7 +70,7 @@ public class PaymentController {
     String user = "root";
     String password = "";
 
-    ObservableList<String> statusList = FXCollections.observableArrayList("Pending", "Partially Paid", "Fully Paid", "Refunded");
+    ObservableList<String> statusList = FXCollections.observableArrayList("Pending", "Partial Payment", "Full Payment", "Refunded", "Voided");
     ObservableList<String> methodList = FXCollections.observableArrayList("Cash", "GCash", "Credit Card", "Debit Card");
     
     public void initialize() throws IOException {
@@ -81,11 +81,13 @@ public class PaymentController {
         if(currentPaymentPage == AppState.Payment.PAYMENTA || currentPaymentPage == AppState.Payment.PAYMENTB){
             paymentStatus.setItems(statusList);
             paymentMethod.setItems(methodList);
+            paymentDate.setValue(LocalDate.now());
         }
 
         if(currentPaymentPage == AppState.Payment.EDITA || currentPaymentPage == AppState.Payment.EDITB ){
             paymentStatus.setItems(statusList);
             paymentMethod.setItems(methodList);
+            paymentDate.setValue(LocalDate.now());
 
             paymentDate.setValue(selectedPayment.getPaymentDate().toLocalDate());
             petID.setText(String.valueOf(selectedPayment.getPetID()));
@@ -144,31 +146,31 @@ public class PaymentController {
             Connection connection = DriverManager.getConnection(url, user, password);
 
             // Check if either reservationID or appointmentID already exists in the Payments table
-            String checkQuery = "SELECT COUNT(*) FROM Payments WHERE ReservationID = ? OR AppointmentID = ?";
-            PreparedStatement checkStatement = connection.prepareStatement(checkQuery);
-
-            if (reservationID == null) {
-                checkStatement.setNull(1, Types.INTEGER);
-            } else {
-                checkStatement.setInt(1, Integer.parseInt(reservationID));
-            }
-
-            if (appointmentID == null) {
-                checkStatement.setNull(2, Types.INTEGER);
-            } else {
-                checkStatement.setInt(2, Integer.parseInt(appointmentID));
-            }
-
-            ResultSet resultSet = checkStatement.executeQuery();
-            resultSet.next();
-            int count = resultSet.getInt(1);
-
-            if (count > 0) {
-                Alerts.showErrorDialog("Error", "A payment with the same ReservationID or AppointmentID already exists.");
-                checkStatement.close();
-                connection.close();
-                return;
-            }
+//            String checkQuery = "SELECT COUNT(*) FROM Payments WHERE ReservationID = ? OR AppointmentID = ?";
+//            PreparedStatement checkStatement = connection.prepareStatement(checkQuery);
+//
+//            if (reservationID == null) {
+//                checkStatement.setNull(1, Types.INTEGER);
+//            } else {
+//                checkStatement.setInt(1, Integer.parseInt(reservationID));
+//            }
+//
+//            if (appointmentID == null) {
+//                checkStatement.setNull(2, Types.INTEGER);
+//            } else {
+//                checkStatement.setInt(2, Integer.parseInt(appointmentID));
+//            }
+//
+//            ResultSet resultSet = checkStatement.executeQuery();
+//            resultSet.next();
+//            int count = resultSet.getInt(1);
+//
+//            if (count > 0) {
+//                Alerts.showErrorDialog("Error", "A payment with the same ReservationID or AppointmentID already exists.");
+//                checkStatement.close();
+//                connection.close();
+//                return;
+//            }
 
             // Insert data into Payments table
             String query = "INSERT INTO Payments (PaymentDate, Amount, Method, Status, ReservationID, AppointmentID) VALUES (?, ?, ?, ?, ?, ?)";
@@ -194,7 +196,7 @@ public class PaymentController {
 
             // Close the statement
             statement.close();
-            checkStatement.close();
+//            checkStatement.close();
 
             // Close the connection
             connection.close();
@@ -503,13 +505,69 @@ public class PaymentController {
         AppState.Payment currentPaymentPage = appState.getCurrentPaymentPage();
         if (currentPaymentPage == AppState.Payment.PAYMENTA || currentPaymentPage == AppState.Payment.EDITA) {
             totalCost = fetchServicePriceByAppointment(Integer.parseInt(this.appointmentID.getText().trim()));
+            paymentAmount += fetchTotalPaidByAppointment(Integer.parseInt(appointmentID.getText()));
         } else if (currentPaymentPage == AppState.Payment.PAYMENTB || currentPaymentPage == AppState.Payment.EDITB) {
             int reservationID = Integer.parseInt(this.reservationID.getText().trim());
             System.out.println("Reservation ID: " + reservationID);
             totalCost = calculateTotalCost(reservationID);
+            paymentAmount += fetchTotalPaidByReservation(reservationID);
+
         }
 
         return totalCost - paymentAmount;
+    }
+
+    public static double fetchTotalPaidByAppointment(int appointmentID) {
+        double totalPaid = 0.0;
+        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+        String user = "root";
+        String password = "";
+
+        try {
+            Connection connection = DriverManager.getConnection(url, user, password);
+            String query = "SELECT SUM(Amount) AS TotalPaid FROM Payments WHERE AppointmentID = ? " +
+                    "AND (Status = 'Partial Payment' OR Status = 'Full Payment');";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, appointmentID);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalPaid = rs.getDouble("TotalPaid");
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalPaid;
+    }
+
+    public static double fetchTotalPaidByReservation(int reservationID) {
+        double totalPaid = 0.0;
+        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+        String user = "root";
+        String password = "";
+
+        try {
+            String query = "SELECT SUM(Amount) AS TotalPaid FROM Payments WHERE ReservationID = ?" +
+                    "AND (Status = 'Partial Payment' OR Status = 'Full Payment');";
+            Connection connection = DriverManager.getConnection(url, user, password);
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, reservationID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalPaid = rs.getDouble("TotalPaid");
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalPaid;
     }
 
     public void onActionIDType() throws IOException{

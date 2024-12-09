@@ -200,7 +200,7 @@
                   </DropShadow>
                </effect>
             </Polygon>
-            <Label layoutX="91.0" layoutY="395.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Method:">
+            <Label layoutX="91.0" layoutY="400.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Method:">
                <font>
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
@@ -245,7 +245,7 @@
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <Label layoutX="475.0" layoutY="395.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Status:">
+            <Label layoutX="476.0" layoutY="402.0" prefHeight="53.0" prefWidth="64.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Status:">
                <font>
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
