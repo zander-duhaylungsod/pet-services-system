@@ -76,10 +76,11 @@ CREATE TABLE Payments (
       PaymentID INT AUTO_INCREMENT PRIMARY KEY,
       Amount DECIMAL(10, 2) NOT NULL,
       PaymentDate DATE NOT NULL,
+      PaymentType ENUM('Appointment', 'Reservation') NOT NULL,
       Method VARCHAR(50),
       AppointmentID INT,
       ReservationID INT,
-      Status VARCHAR(50) DEFAULT 'Unpaid',
+      Status VARCHAR(50) DEFAULT 'Pending',
       FOREIGN KEY (AppointmentID) REFERENCES Appointments(AppointmentID) ON DELETE SET NULL,
       FOREIGN KEY (ReservationID) REFERENCES BoardingReservations(ReservationID) ON DELETE SET NULL,
 );

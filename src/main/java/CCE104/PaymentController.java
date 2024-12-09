@@ -7,6 +7,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -56,6 +57,14 @@ public class PaymentController {
     private ComboBox<String> paymentStatus;
     @FXML
     private TextField petID;
+    @FXML
+    private TextField paymentIDField;
+    @FXML
+    private TextArea reasonField;
+    @FXML
+    private TextField refundAmountField;
+    @FXML
+    private DatePicker refundDate;
     @FXML
     private Button recordsBtn;
     @FXML
@@ -119,6 +128,12 @@ public class PaymentController {
             } else {
                 appointmentID.setText(String.valueOf(selectedPayment.getAppointmentID()));
             }
+        }
+
+        if(currentPaymentPage == AppState.Payment.REFUND){
+            paymentIDField.setText(String.valueOf(selectedPayment.getPaymentID()));
+            refundDate.setValue(LocalDate.now());
+            refundAmountField.setText(String.valueOf(selectedPayment.getAmount()));
         }
     }
 
@@ -190,6 +205,15 @@ public class PaymentController {
                 statement.setNull(6, Types.INTEGER);
             } else {
                 statement.setInt(6, Integer.parseInt(appointmentID));
+            }
+
+            if(Double.parseDouble(remainingAmount.getText() ) <= 0){
+                Alerts.showAlert("Overpayment","The payment amount exceeds the total cost, please input the exact required.");
+                return;
+            }
+
+            if(!(Alerts.showConfirmationDialog("Confirmation","Are you sure to add payment? Please double check all fields."))){
+                return;
             }
 
             int rowsAffected = statement.executeUpdate();
@@ -608,11 +632,20 @@ public class PaymentController {
                 statement.setString(4, paymentStatus);
                 statement.setInt(5, selectedPaymentID);
 
+                if(Double.parseDouble(remainingAmount.getText() ) <= 0){
+                    Alerts.showAlert("Overpayment","The payment amount exceeds the total cost, please input the exact required.");
+                    return;
+                }
+
+                if(!(Alerts.showConfirmationDialog("Confirmation","Are you sure to update payment? Please double check all changes."))){
+                    return;
+                }
+
                 int rowsUpdated = statement.executeUpdate();
                 if (rowsUpdated > 0) {
                     Alerts.showSuccessDialog("Success", "Payment details updated successfully.");
                     clearPaymentFields();
-                    switchToRecords();
+                    switchToReports();
                 } else {
                     Alerts.showErrorDialog("Update Failed", "No changes were made to the payment details.");
                 }
@@ -654,7 +687,7 @@ public class PaymentController {
             }
             String serviceName = selectedPayment.getService();
             String employeeName = User.getEmployeeName();
-            String paymentDate = this.paymentDate.getValue().toString();
+            String paymentDate = this.paymentDateField.getText();
             String paymentStatus = selectedPayment.getStatus();
             double amountPaid = selectedPayment.getAmount();
             double remainingAmount = selectedPayment.getRemainingAmount();
@@ -663,15 +696,15 @@ public class PaymentController {
             String reminderMessage =
                     "\n-------------------------------------- Reminder -----------------------------------\n" +
                             "Dear Valued Customer,\n\n" +
-                            "Thank you for choosing PAWFECTCare: Pet Grooming and Boarding Services! We are delighted to have the opportunity to care for your cherished pet.\n\n" +
+                            "Thank you for choosing PAWFECTCare: Pet Grooming and Boarding Services!\n We are delighted to have the opportunity to care for your cherished pet.\n\n" +
                             "This is a confirmation of your payment. Please keep this receipt for your records.\n\n" +
                             "If you have any questions or need further assistance, please don’t hesitate to contact us:\n" +
                             "- Phone: 09651245784\n" +
                             "Reminders:\n" +
                             "- Keep this receipt as proof of payment for future reference.\n" +
-                            "- If there are any discrepancies or issues with your payment, please notify us within 7 days of this receipt.\n" +
+                            "- If there are any discrepancies or issues with your payment, please notify us within \n7 days of this receipt.\n" +
                             "- For refunds or cancellations, our policies are available at our office, just visit our branch!.\n\n" +
-                            "We sincerely appreciate your trust in us and look forward to providing the best care for your pet.\n\n" +
+                            "We sincerely appreciate your trust in us and look forward to providing the best care \nfor your pet.\n\n" +
                             "Warm Regards,\n" +
                             "The PAWFECTCare Team\n" +
                             "-----------------------------------------------------------------------------------------";
@@ -687,9 +720,9 @@ public class PaymentController {
                             "Service Name: " + serviceName + "\n" +
                             "Receptionist: " + employeeName + "\n" +
                             "Amount Paid: " + amountPaid + "\n" +
-                            "Remaining Amount: " + remainingAmount + "\n" +
-                            "Payment Status: " + paymentStatus + "\n" +
-                            "Total Cost: " + totalCost + "\n\n" +
+                            "Total Cost: " + totalCost + "\n" +
+                            "Remaining Amount To Pay: " + remainingAmount + "\n" +
+                            "Payment Status: " + paymentStatus + "\n\n" +
                             reminderMessage;
 
             // Create a PrinterJob instance and set up the print settings
@@ -743,6 +776,70 @@ public class PaymentController {
             switchToRecords();
         } else if (currentPage == AppState.Page.REPORTS) {
             switchToReports();
+        }
+    }
+
+    public void refundPayment() throws IOException {
+        String paymentID = paymentIDField.getText();
+        String refundDate = this.refundDate.getValue().toString();
+        String refundAmount = refundAmountField.getText();
+        String reason = reasonField.getText();
+
+        // Validate input fields
+        if (paymentID.isEmpty() || refundDate.isEmpty() || refundAmount.isEmpty() || reason.isEmpty()) {
+            Alerts.showAlert("Error", "All fields must be filled in before processing the refund.");
+            return;
+        }
+
+        if (Double.parseDouble(refundAmount) <= 0) {
+            Alerts.showAlert("Error", "You can't refund a non-existing amount.");
+            return;
+        }
+
+        try {
+            // Step 1: Insert refund record into Refunds table
+            String insertQuery = "INSERT INTO Refunds (PaymentID, RefundDate, RefundAmount, Reason) VALUES (?, ?, ?, ?)";
+            String updateQuery = "UPDATE Payments SET Status = ? WHERE PaymentID = ?";
+
+            try (Connection connection = DriverManager.getConnection(url, user, password);
+                 PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
+                 PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
+
+                // Prepare and execute insert query
+                insertStmt.setInt(1, Integer.parseInt(paymentID)); // Ensure paymentID is an integer
+                insertStmt.setDate(2, Date.valueOf(refundDate));
+                insertStmt.setDouble(3, Double.parseDouble(refundAmount));
+                insertStmt.setString(4, reason);
+
+                if(!(Alerts.showConfirmationDialog("Confirmation","Are you sure to refund payment?"))){
+                    return;
+                }
+                int rowsInserted = insertStmt.executeUpdate();
+
+                // Check if the refund was successfully inserted
+                if (rowsInserted > 0) {
+                    System.out.println("Refund record successfully added.");
+
+                    // Step 2: Update the payment status in Payments table
+                    updateStmt.setString(1, "Refunded"); // Set status to 'Refunded'
+                    updateStmt.setInt(2, Integer.parseInt(paymentID));
+                    int rowsUpdated = updateStmt.executeUpdate();
+
+                    if (rowsUpdated > 0) {
+                        Alerts.showSuccessDialog("Success", "Refund successfully processed, and payment status updated.");
+                        Main.switchSceneWithFade("scenes/reportsAdmin");
+                    } else {
+                        Alerts.showAlert("Warning", "Refund record added, but payment status was not updated.");
+                    }
+                } else {
+                    Alerts.showAlert("Error", "Refund record could not be added.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Alerts.showAlert("Error", "An error occurred while processing the refund: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            Alerts.showAlert("Error", "Payment ID and Refund Amount must be valid numbers.");
         }
     }
 

@@ -145,7 +145,7 @@
                   <Font name="Segoe UI Bold" size="24.0" />
                </font>
             </Label>
-            <TextField editable="false" layoutX="256.0" layoutY="234.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
+            <TextField fx:id="paymentIDField" editable="false" layoutX="256.0" layoutY="234.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
@@ -162,7 +162,7 @@
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <Button alignment="CENTER" graphicTextGap="0.0" layoutX="348.0" layoutY="618.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="184.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Refund">
+            <Button alignment="CENTER" graphicTextGap="0.0" layoutX="348.0" layoutY="618.0" mnemonicParsing="false" onAction="#refundPayment" prefHeight="48.0" prefWidth="184.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Refund">
                <font>
                   <Font name="Segoe UI Bold" size="18.0" />
                </font>
@@ -188,7 +188,7 @@
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <DatePicker layoutX="257.0" layoutY="300.0" prefHeight="29.0" prefWidth="252.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-background-color: white;">
+            <DatePicker fx:id="refundDate" editable="false" layoutX="257.0" layoutY="300.0" prefHeight="29.0" prefWidth="252.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-background-color: white; -fx-font-size: 16px;">
                <effect>
                   <DropShadow blurType="GAUSSIAN">
                      <color>
@@ -197,7 +197,7 @@
                   </DropShadow>
                </effect>
             </DatePicker>
-            <TextField editable="false" layoutX="256.0" layoutY="357.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
+            <TextField fx:id="refundAmountField" editable="false" layoutX="256.0" layoutY="357.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
@@ -219,7 +219,7 @@
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <TextArea layoutX="258.0" layoutY="422.0" prefHeight="149.0" prefWidth="477.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: WHITE;" wrapText="true">
+            <TextArea fx:id="reasonField" layoutX="258.0" layoutY="422.0" prefHeight="149.0" prefWidth="477.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: WHITE;" wrapText="true">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>

@@ -164,10 +164,10 @@ public class ReportsPageController {
 
         PaymentRecord.setSelectedPayment(selectedPayment);
         String status = selectedPayment.getStatus();
-        if (!"Fully Paid".equals(status) && !"Partially Paid".equals(status)) {
-            Alerts.showAlert("Invalid Status", "Cannot print the payment with the current status.");
-            return;
-        }
+//        if (!"Full Payment".equals(status) && !"Partial Payment".equals(status)) {
+//            Alerts.showAlert("Invalid Status", "Cannot print the payment with the current status.");
+//            return;
+//        }
 
         // Check service and retrieve the respective ID
         int appointmentID = -1;
@@ -205,6 +205,14 @@ public class ReportsPageController {
 
     @FXML
     void refundPayment() throws IOException{
+        PaymentRecord selectedPayment = PaymentTable.getSelectionModel().getSelectedItem();
+
+        if (selectedPayment == null) {
+            Alerts.showAlert("No Selection", "Please select a payment to refund.");
+            return;
+        }
+
+        PaymentRecord.setSelectedPayment(selectedPayment);
         AppState.getInstance().setCurrentPaymentPage(AppState.Payment.REFUND);
         Main.switchSceneWithFade("scenes/refundPayment");
     }
