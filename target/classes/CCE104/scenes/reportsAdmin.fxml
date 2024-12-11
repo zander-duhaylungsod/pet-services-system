@@ -154,9 +154,9 @@
                            <children>
                               <TableView fx:id="PaymentTable" prefHeight="323.0" prefWidth="783.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
                                  <columns>
-                                    <TableColumn fx:id="paymentIDColumn" editable="false" prefWidth="119.0" text="PAYMENT ID" />
-                                    <TableColumn fx:id="petColumn" editable="false" prefWidth="119.0" text="PET" />
-                                    <TableColumn fx:id="ownerColumn" editable="false" prefWidth="130.66668701171875" text="OWNER" />
+                                    <TableColumn fx:id="paymentIDColumn" editable="false" prefWidth="49.0" text="PAYMENT ID" />
+                                    <TableColumn fx:id="petColumn" editable="false" prefWidth="124.0" text="PET" />
+                                    <TableColumn fx:id="ownerColumn" editable="false" prefWidth="138.0" text="OWNER" />
                                     <TableColumn fx:id="serviceProvidedColumn" editable="false" prefWidth="130.66668701171875" text="SERVICE PAID" />
                                     <TableColumn fx:id="paymentDateColumn" editable="false" prefWidth="130.66668701171875" text="PAYMENT DATE" />
                                     <TableColumn fx:id="amountColumn" editable="false" prefWidth="130.66668701171875" text="AMOUNT" />
@@ -229,13 +229,13 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="178.0" prefWidth="343.0">
                            <children>
-                              <TableView fx:id="reportTable" prefHeight="323.0" prefWidth="783.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
+                              <TableView fx:id="ReportTable" prefHeight="323.0" prefWidth="783.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;">
                                  <columns>
-                                    <TableColumn fx:id="reportIDColumn" editable="false" prefWidth="191.66665649414062" text="REPORT ID" />
-                                    <TableColumn fx:id="titleColumn" editable="false" prefWidth="191.66665649414062" text="TITLE" />
-                                    <TableColumn fx:id="typeColumn" editable="false" prefWidth="95.3333740234375" text="TYPE" />
-                                    <TableColumn fx:id="dateColumn" editable="false" prefWidth="453.6666259765625" text="DATE" />
-                                    <TableColumn fx:id="createdByColumn" editable="false" prefWidth="453.6666259765625" text="CREATED BY" />
+                                    <TableColumn fx:id="reportsIDColumn" editable="false" prefWidth="85.0" text="REPORT ID" />
+                                    <TableColumn fx:id="reportsTitleColumn" editable="false" prefWidth="188.0" text="TITLE" />
+                                    <TableColumn fx:id="reportsTypeColumn" editable="false" prefWidth="165.0" text="TYPE" />
+                                    <TableColumn fx:id="reportsDateColumn" editable="false" prefWidth="152.0" text="DATE" />
+                                    <TableColumn fx:id="reportsCreatedByColumn" editable="false" prefWidth="194.0" text="CREATED BY" />
                                  </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -248,7 +248,7 @@
                                     </DropShadow>
                                  </effect>
                               </TableView>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="235.0" layoutY="342.0" mnemonicParsing="false" onAction="#addReport" prefHeight="48.0" prefWidth="134.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add Report">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="51.0" layoutY="342.0" mnemonicParsing="false" onAction="#addReport" prefHeight="48.0" prefWidth="134.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add Report">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -272,7 +272,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="51.0" layoutY="342.0" mnemonicParsing="false" onAction="#viewReport" prefHeight="48.0" prefWidth="134.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="View Report">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="416.0" layoutY="342.0" mnemonicParsing="false" onAction="#viewReport" prefHeight="48.0" prefWidth="134.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="View Report">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -284,7 +284,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="427.0" layoutY="343.0" mnemonicParsing="false" onAction="#editReport" prefHeight="48.0" prefWidth="121.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit Report">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="235.0" layoutY="343.0" mnemonicParsing="false" onAction="#editReport" prefHeight="48.0" prefWidth="121.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit Report">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>

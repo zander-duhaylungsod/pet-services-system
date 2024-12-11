@@ -142,6 +142,10 @@ public class BoardingController {
             statement.setInt(4, User.getEmployeeID());
             statement.setString(5, status);
 
+            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add boarding?\n Please double check fields."))){
+                return;
+            }
+
             int rowsAffected = statement.executeUpdate();
 
             // Close the connection
@@ -196,6 +200,9 @@ public class BoardingController {
                 statement.setString(5, status);
                 statement.setInt(6, selectedBoardingID);
 
+                if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save boarding changes?\n Please double check fields."))){
+                    return;
+                }
                 int rowsUpdated = statement.executeUpdate();
                 if (rowsUpdated > 0) {
                     Alerts.showSuccessDialog("Success", "Boarding details updated successfully.");

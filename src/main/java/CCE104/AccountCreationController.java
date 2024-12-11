@@ -132,6 +132,10 @@ public class AccountCreationController {
     }
 
     private void saveAccountDetails(Connection connection, int employeeID, String email, String password) throws Exception {
+        if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to create account?\n Please double check fields."))){
+            return;
+        }
+
         String hashedPassword = hashPassword(password); // Hash the password
         String query = "UPDATE Employees SET Email = ?, Password = ? WHERE EmployeeID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {

@@ -81,7 +81,7 @@ public class PaymentController {
 
     ObservableList<String> statusList = FXCollections.observableArrayList("Pending", "Partial Payment", "Full Payment", "Refunded", "Voided");
     ObservableList<String> methodList = FXCollections.observableArrayList("Cash", "GCash", "Credit Card", "Debit Card");
-    
+
     public void initialize() throws IOException {
         AppState appState = AppState.getInstance();
         AppState.Payment currentPaymentPage = appState.getCurrentPaymentPage();
@@ -207,7 +207,7 @@ public class PaymentController {
                 statement.setInt(6, Integer.parseInt(appointmentID));
             }
 
-            if(Double.parseDouble(remainingAmount.getText() ) <= 0){
+            if(Double.parseDouble(remainingAmount.getText() ) < 0){
                 Alerts.showAlert("Overpayment","The payment amount exceeds the total cost, please input the exact required.");
                 return;
             }
@@ -600,7 +600,7 @@ public class PaymentController {
     }
 
 
-        public void savePaymentChanges() throws IOException {
+    public void savePaymentChanges() throws IOException {
         try {
             if (!validatePaymentInputs()) {
                 return;
@@ -632,7 +632,7 @@ public class PaymentController {
                 statement.setString(4, paymentStatus);
                 statement.setInt(5, selectedPaymentID);
 
-                if(Double.parseDouble(remainingAmount.getText() ) <= 0){
+                if(Double.parseDouble(remainingAmount.getText() ) < 0){
                     Alerts.showAlert("Overpayment","The payment amount exceeds the total cost, please input the exact required.");
                     return;
                 }
@@ -645,7 +645,7 @@ public class PaymentController {
                 if (rowsUpdated > 0) {
                     Alerts.showSuccessDialog("Success", "Payment details updated successfully.");
                     clearPaymentFields();
-                    switchToReports();
+                    Main.switchSceneWithFade("scenes/reportsAdmin");
                 } else {
                     Alerts.showErrorDialog("Update Failed", "No changes were made to the payment details.");
                 }

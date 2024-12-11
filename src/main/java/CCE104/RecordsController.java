@@ -407,6 +407,7 @@ public class RecordsController {
                  PreparedStatement stmt = conn.prepareStatement("DELETE FROM Pets WHERE PetID = ?")) {
 
                 stmt.setInt(1, selectedPet.getPetID());
+
                 int rowsAffected = stmt.executeUpdate();
 
                 if (rowsAffected > 0) {
@@ -639,7 +640,7 @@ public class RecordsController {
              PreparedStatement stmt = conn.prepareStatement(
                      "SELECT " +
                              "Pets.PetID, Pets.Name, Pets.Species, Pets.Breed, Pets.Age, " +
-                             "Pets.OwnerID, Owners.FirstName AS OwnerName, Pets.PetNotes " +
+                             "Pets.OwnerID, CONCAT(Owners.FirstName,' ',Owners.LastName) AS OwnerName, Pets.PetNotes " +
                              ", Pets.PetImagePath " +
                              "FROM Pets " +
                              "LEFT JOIN Owners " +

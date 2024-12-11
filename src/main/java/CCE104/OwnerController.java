@@ -93,6 +93,9 @@ public class  OwnerController {
             statement.setString(3, email);
             statement.setString(4, phone);
 
+            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add owner?\n Please double check all details."))){
+                return;
+            }
             int rowsAffected = statement.executeUpdate();
 
             // Close the connection
@@ -142,6 +145,10 @@ public class  OwnerController {
                 stmt.setString(3, email);
                 stmt.setString(4, phone);
                 stmt.setInt(5, selectedOwnerID);
+
+                if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save owner changes?\n Please double check fields."))){
+                    return;
+                }
 
                 int rowsUpdated = stmt.executeUpdate();
                 if (rowsUpdated > 0) {

@@ -78,6 +78,9 @@ public class ServiceController {
             statement.setDouble(2, price);
             statement.setString(3, description);
 
+            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add service?\n Please double check fields."))){
+                return;
+            }
             int rowsAffected = statement.executeUpdate();
 
             // Close the connection
@@ -127,6 +130,9 @@ public class ServiceController {
                 stmt.setString(3, description);
                 stmt.setInt(4, selectedServiceID);
 
+                if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save service changes?\n Please double check fields."))){
+                    return;
+                }
                 int rowsUpdated = stmt.executeUpdate();
                 if (rowsUpdated > 0) {
                     showSuccessDialog("Success", "Service details updated successfully.");

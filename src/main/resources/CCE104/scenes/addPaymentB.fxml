@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.paint.Color?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
 
@@ -93,53 +92,6 @@
       </Pane>
       <AnchorPane layoutX="251.0" layoutY="15.0" prefHeight="688.0" prefWidth="878.0">
          <children>
-            <Label layoutX="51.0" layoutY="44.0" prefWidth="151.0" text="Total Pets Registered:">
-               <font>
-                  <Font name="Segoe UI" size="15.0" />
-               </font>
-            </Label>
-            <Button alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="49.0" layoutY="72.0" mnemonicParsing="false" onAction="#switchToRecords" prefHeight="89.0" prefWidth="110.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px;" text="0">
-               <font>
-                  <Font name="Segoe UI Bold" size="29.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="37.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/totalpetsIcon.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <effect>
-                  <DropShadow blurType="GAUSSIAN" height="71.15" offsetX="8.0" offsetY="8.0" radius="33.9425" spread="0.28" width="66.62">
-                     <color>
-                        <Color red="0.9210526347160339" green="0.9125243425369263" blue="0.9125243425369263" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </Button>
-            <TextField fx:id="searchField" layoutX="281.0" layoutY="35.0" onKeyTyped="#searchFunction" prefHeight="38.0" prefWidth="321.0" promptText="Search pets, owners, or services " style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
-               <font>
-                  <Font name="Segoe UI" size="15.0" />
-               </font>
-               <effect>
-                  <DropShadow blurType="GAUSSIAN" height="49.83" offsetX="8.0" offsetY="8.0" radius="27.345" spread="0.1" width="61.55">
-                     <color>
-                        <Color red="0.9210526347160339" green="0.9210526347160339" blue="0.9210526347160339" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </TextField>
-            <ImageView fitHeight="29.0" fitWidth="33.0" layoutX="561.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/searchicon.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="employeeName" layoutX="722.0" layoutY="51.0" prefHeight="19.0" prefWidth="121.0" text="Employee Name">
-               <font>
-                  <Font name="Segoe UI" size="15.0" />
-               </font>
-            </Label>
-            <Circle fill="#b2f0ff" layoutX="697.0" layoutY="62.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
             <Label layoutX="359.0" layoutY="147.0" prefHeight="29.0" prefWidth="189.0" text="ADD PAYMENT" textFill="#097478">
                <font>
                   <Font name="Segoe UI Bold" size="24.0" />
@@ -271,5 +223,10 @@
             <Font name="Segoe UI Emoji" size="16.0" />
          </font>
       </Label>
+      <ImageView fitHeight="149.0" fitWidth="142.0" layoutX="626.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/paymentPNG.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

@@ -166,6 +166,9 @@ public class AppointmentController {
             statement.setInt(5, employeeID);
             statement.setString(6, status);
 
+            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add appointment?\n Please double check fields."))){
+                return;
+            }
             int rowsAffected = statement.executeUpdate();
 
             // Close the connection
@@ -219,6 +222,10 @@ public class AppointmentController {
                 statement.setInt(5, employeeID);
                 statement.setString(6, status);
                 statement.setInt(7, selectedAppointmentID);
+
+                if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save appointment changes?\n Please double check fields."))){
+                    return;
+                }
 
                 int rowsUpdated = statement.executeUpdate();
                 if (rowsUpdated > 0) {

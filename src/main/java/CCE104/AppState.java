@@ -71,6 +71,13 @@ public class AppState {
         REFUND
     }
 
+    public enum Report {
+        ADD,
+        EDIT,
+        VIEW,
+        DELETE
+    }
+
     // Current active states
     private Page currentPage;
     private Pet currentPetPage;
@@ -80,6 +87,7 @@ public class AppState {
     private Boarding currentBoardingPage;
     private Employee currentEmployeePage;
     private Payment currentPaymentPage;
+    private Report currentReportPage;
 
     // Private constructor to prevent instantiation
     private AppState() {
@@ -91,6 +99,7 @@ public class AppState {
         currentBoardingPage = Boarding.ADD;
         currentEmployeePage = Employee.ADD;
         currentPaymentPage = Payment.PAYMENTA;
+        currentReportPage = Report.ADD;
     }
 
     // Getter for current page
@@ -108,6 +117,7 @@ public class AppState {
     public Boarding getCurrentBoardingPage() { return currentBoardingPage; }
     public Employee getCurrentEmployeePage() { return currentEmployeePage; }
     public Payment getCurrentPaymentPage() { return currentPaymentPage; }
+    public Report getCurrentReportPage() { return currentReportPage; }
     public int getCurrentTabIndex() {
         return currentTabIndex;
     }
@@ -127,6 +137,7 @@ public class AppState {
     public void setCurrentBoardingPage(Boarding page) { currentBoardingPage = page; }
     public void setCurrentEmployeePage(Employee page) { currentEmployeePage = page; }
     public void setCurrentPaymentPage(Payment page) { currentPaymentPage = page; }
+    public void setCurrentReportPage(Report page) { currentReportPage = page; }
     public void setCurrentTabIndex(int index) {
         this.currentTabIndex = index;
     }

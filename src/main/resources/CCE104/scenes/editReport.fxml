@@ -99,12 +99,12 @@
                </font>
             </Label>
             <Circle fill="#b2f0ff" layoutX="697.0" layoutY="62.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
-            <Label layoutX="346.0" layoutY="42.0" prefHeight="29.0" prefWidth="161.0" text="ADD REPORT" textFill="#097478">
+            <Label layoutX="346.0" layoutY="42.0" prefHeight="29.0" prefWidth="161.0" text="EDIT REPORT" textFill="#097478">
                <font>
                   <Font name="Segoe UI Bold" size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="employeeID" layoutX="239.0" layoutY="95.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
+            <TextField fx:id="employeeIDField" layoutX="239.0" layoutY="95.0" prefHeight="39.0" prefWidth="344.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
@@ -121,7 +121,7 @@
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <Button alignment="CENTER" graphicTextGap="0.0" layoutX="340.0" layoutY="618.0" mnemonicParsing="false" onAction="#addReport" prefHeight="48.0" prefWidth="169.0" style="-fx-background-radius: 20px;" stylesheets="@../styles/general.css" text="Add Report">
+            <Button alignment="CENTER" graphicTextGap="0.0" layoutX="340.0" layoutY="618.0" mnemonicParsing="false" onAction="#saveReportChanges" prefHeight="48.0" prefWidth="169.0" style="-fx-background-radius: 20px;" stylesheets="@../styles/general.css" text="Save Changes">
                <font>
                   <Font name="Segoe UI Bold" size="18.0" />
                </font>
@@ -160,7 +160,7 @@
                   </DropShadow>
                </effect>
             </ComboBox>
-            <TextField fx:id="reportTitle" layoutX="238.0" layoutY="208.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
+            <TextField fx:id="reportTitleField" layoutX="238.0" layoutY="208.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
@@ -177,7 +177,7 @@
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <HTMLEditor fx:id="reportContent" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" layoutX="191.0" layoutY="278.0" prefHeight="292.0" prefWidth="607.0" />
+            <HTMLEditor fx:id="reportContentEditor" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" layoutX="191.0" layoutY="278.0" prefHeight="292.0" prefWidth="607.0" />
             <Label layoutX="93.0" layoutY="274.0" prefHeight="53.0" prefWidth="113.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Content:">
                <font>
                   <Font name="Segoe UI Emoji" size="19.0" />

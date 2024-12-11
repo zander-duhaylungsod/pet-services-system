@@ -95,10 +95,10 @@ CREATE TABLE Reports (
     ReportID INT AUTO_INCREMENT PRIMARY KEY,
     ReportTitle VARCHAR(100),
     ReportType VARCHAR(50) NOT NULL,
-    GeneratedDate DATETIME NOT NULL,
-    Content TEXT,
-    CreatedBy INT,
-    FOREIGN KEY (CreatedBy) REFERENCES Employees(EmployeeID) ON DELETE SET NULL
+    ReportDate DATETIME NOT NULL,
+    Content TEXT NOT NULL,
+    EmployeeID INT,
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL
 );
 
 CREATE TABLE Refunds (

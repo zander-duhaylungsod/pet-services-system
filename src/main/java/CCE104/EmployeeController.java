@@ -94,6 +94,10 @@ public class EmployeeController {
             statement.setString(3, phone);
             statement.setString(4, role);
 
+            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add employee?\n Please double check all details."))){
+                return;
+            }
+
             int rowsAffected = statement.executeUpdate();
 
             // Close the connection
@@ -150,6 +154,9 @@ public class EmployeeController {
             statement.setString(5, email);
             statement.setInt(6, selectedEmployeeID);
 
+            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save employee changes?\n Please double check fields."))){
+                return;
+            }
             int rowsAffected = statement.executeUpdate();
 
             // Close the connection

@@ -44,7 +44,7 @@ public class User {
     }
 
     // Method to fetch employee's name and role based on the employeeID
-    private static void fetchEmployeeNameAndRole() {
+    public static void fetchEmployeeNameAndRole() {
         String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
         String dbUser = "root";
         String dbPassword = "";  // Your database password

@@ -82,7 +82,7 @@ VALUES
     ('2024-12-16', '2024-12-18', 3, 4, 'Cancelled'),
     ('2024-12-19', '2024-12-20', 4, 1, 'Pending');
 
-INSERT INTO Reports (ReportTitle, ReportType, GeneratedDate, Content, CreatedBy)
+INSERT INTO Reports (ReportTitle, ReportType, ReportDate, Content, EmployeeID)
 VALUES
     ('Monthly Sales Report', 'Sales', '2024-12-01 10:00:00', 'This report covers the sales for November 2024.', 1),
     ('Employee Performance Review', 'HR', '2024-12-01 11:00:00', 'Performance evaluation for all staff.', 2),
