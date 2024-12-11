@@ -3,15 +3,13 @@ package CCE104;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
 public class ReportsPageController {
 
@@ -59,6 +57,10 @@ public class ReportsPageController {
     private TextField searchField;
     @FXML
     private TableColumn<?, ?> serviceProvidedColumn;
+    @FXML
+    private BarChart<String, Number> revenueBarChart;
+    @FXML
+    private PieChart servicePieChart;
 
     private ObservableList<PaymentRecord> paymentList = FXCollections.observableArrayList();
     private ObservableList<ReportRecord> reportList = FXCollections.observableArrayList();
@@ -88,6 +90,7 @@ public class ReportsPageController {
         //load Data
         loadPayments();
         loadReports();
+        loadAnalyticsCharts();
 
         //bind data to table
         PaymentTable.setItems(paymentList);
@@ -379,6 +382,82 @@ public class ReportsPageController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void loadAnalyticsCharts() {
+        // Set up the axes
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+
+        xAxis.setLabel("Month");
+        yAxis.setLabel("Revenue");
+
+        // Create series for appointment, boarding, and total revenues
+        XYChart.Series<String, Number> appointmentSeries = new XYChart.Series<>();
+        appointmentSeries.setName("Appointment Revenue");
+
+        XYChart.Series<String, Number> boardingSeries = new XYChart.Series<>();
+        boardingSeries.setName("Boarding Revenue");
+
+        XYChart.Series<String, Number> totalSeries = new XYChart.Series<>();
+        totalSeries.setName("Total Revenue");
+
+        // SQL query for fetching detailed revenue data
+        String query =
+                "SELECT " +
+                        "    MONTHNAME(p.PaymentDate) AS month_name, " +
+                        "    SUM(CASE WHEN p.AppointmentID IS NOT NULL THEN p.Amount ELSE 0 END) AS appointment_revenue, " +
+                        "    SUM(CASE WHEN p.ReservationID IS NOT NULL THEN p.Amount ELSE 0 END) AS boarding_revenue, " +
+                        "    SUM(p.Amount) AS total_revenue " +
+                        "FROM " +
+                        "    Payments p " +
+                        "GROUP BY " +
+                        "    MONTHNAME(p.PaymentDate), MONTH(p.PaymentDate) " +
+                        "ORDER BY " +
+                        "    MONTH(p.PaymentDate);";
+
+
+        try (Connection conn = connect(); // Replace with your connection method
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            // Populate the BarChart series with data
+            while (rs.next()) {
+                String monthName = rs.getString("month_name");
+                double appointmentRevenue = rs.getDouble("appointment_revenue");
+                double boardingRevenue = rs.getDouble("boarding_revenue");
+                double totalRevenue = rs.getDouble("total_revenue");
+
+                // Add data points to each series
+                appointmentSeries.getData().add(new XYChart.Data<>(monthName, appointmentRevenue));
+                boardingSeries.getData().add(new XYChart.Data<>(monthName, boardingRevenue));
+                totalSeries.getData().add(new XYChart.Data<>(monthName, totalRevenue));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Clear previous data and add the new series to the BarChart
+        revenueBarChart.getData().clear();
+        revenueBarChart.getData().addAll(appointmentSeries, boardingSeries, totalSeries);
+
+        // Service Usage Pie Chart Data
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
+        String query2 = "SELECT ServiceName, COUNT(*) AS usageCount FROM Services JOIN Appointments ON Services.ServiceID = Appointments.ServiceID GROUP BY ServiceName";
+        try (Connection conn = connect();
+             PreparedStatement stmt2 = conn.prepareStatement(query2)) {
+            ResultSet rs = stmt2.executeQuery();
+
+            while (rs.next()) {
+                pieChartData.add(new PieChart.Data(rs.getString("ServiceName"), rs.getInt("usageCount")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        servicePieChart.setData(pieChartData);
     }
 
     //table dependencies & database functions

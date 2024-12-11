@@ -76,7 +76,6 @@ CREATE TABLE Payments (
       PaymentID INT AUTO_INCREMENT PRIMARY KEY,
       Amount DECIMAL(10, 2) NOT NULL,
       PaymentDate DATE NOT NULL,
-      PaymentType ENUM('Appointment', 'Reservation') NOT NULL,
       Method VARCHAR(50),
       AppointmentID INT,
       ReservationID INT,
