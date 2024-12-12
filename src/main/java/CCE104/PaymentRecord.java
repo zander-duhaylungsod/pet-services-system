@@ -87,42 +87,6 @@ public class PaymentRecord {
 
     public String getOwnerName() {
         return ownerName;
-//        String queryForAppointment = "SELECT OwnerName FROM Appointments WHERE AppointmentID = ?";
-//        String queryForReservation = "SELECT OwnerName FROM Reservations WHERE ReservationID = ?";
-//
-//        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-//            if (appointmentID != 0) {
-//                try (PreparedStatement stmt = connection.prepareStatement(queryForAppointment)) {
-//                    stmt.setInt(1, appointmentID);
-//                    try (ResultSet rs = stmt.executeQuery()) {
-//                        if (rs.next()) {
-//                            ownerName = rs.getString("OwnerName");
-//                            return ownerName;
-//                        } else {
-//                            Alerts.showAlert("Error", "No matching appointment found for the given AppointmentID.");
-//                        }
-//                    }
-//                }
-//            } else if (reservationID != 0) {
-//                try (PreparedStatement stmt = connection.prepareStatement(queryForReservation)) {
-//                    stmt.setInt(1, reservationID);
-//                    try (ResultSet rs = stmt.executeQuery()) {
-//                        if (rs.next()) {
-//                            ownerName = rs.getString("OwnerName");
-//                            return ownerName;
-//                        } else {
-//                            Alerts.showAlert("Error", "No matching reservation found for the given ReservationID.");
-//                        }
-//                    }
-//                }
-//            } else {
-//                Alerts.showAlert("Error", "Neither AppointmentID nor ReservationID is set for this payment.");
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            Alerts.showAlert("Error", "An error occurred while retrieving the OwnerName.");
-//        }
-//        return null;
     }
 
     public void setOwnerName(String ownerName) {

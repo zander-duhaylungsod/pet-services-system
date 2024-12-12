@@ -126,7 +126,7 @@ public class PetController {
             statement.setString(6, notes);
             statement.setString(7, petImagePath);
 
-            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add pet?\n Please double check fields."))){
+            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add pet? Please double check fields."))){
                 return;
             }
 
@@ -320,7 +320,7 @@ public class PetController {
                 stmt.setString(7, path);
                 stmt.setInt(8, selectedPetID);
 
-                if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save pet changes?\n Please double check fields."))){
+                if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save pet changes? Please double check fields."))){
                     return;
                 }
 

@@ -81,7 +81,7 @@ CREATE TABLE Payments (
       ReservationID INT,
       Status VARCHAR(50) DEFAULT 'Pending',
       FOREIGN KEY (AppointmentID) REFERENCES Appointments(AppointmentID) ON DELETE SET NULL,
-      FOREIGN KEY (ReservationID) REFERENCES BoardingReservations(ReservationID) ON DELETE SET NULL,
+      FOREIGN KEY (ReservationID) REFERENCES BoardingReservations(ReservationID) ON DELETE SET NULL
 );
 
 -- ALTER TABLE Payments

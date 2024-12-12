@@ -2,6 +2,8 @@ package CCE104;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -79,6 +81,8 @@ public class RecordsController {
     @FXML
     private Button petEditBtn;
     @FXML
+    private Button petCounter;
+    @FXML
     private TableColumn<?, ?> recordsDescriptionColumn;
     @FXML
     private TableColumn<?, ?> recordsEmployeeBranchColumn;
@@ -124,6 +128,8 @@ public class RecordsController {
     private Tab serviceTab;
     @FXML
     private TabPane recordsTabPane;
+    @FXML
+    private TextField searchField;
 
     private ObservableList<PetRecord> petList = FXCollections.observableArrayList();
     private ObservableList<OwnerRecord> ownerList = FXCollections.observableArrayList();
@@ -134,6 +140,8 @@ public class RecordsController {
 
     @FXML
     public void initialize() {
+        petCounter.setText(PetRecord.getInstance().getPetCount());
+
         PetRecord.getInstance().setRecordsController(this);
         OwnerRecord.getInstance().setRecordsController(this);
         ServiceRecord.getInstance().setRecordsController(this);
@@ -400,7 +408,7 @@ public class RecordsController {
             return;
         }
 
-        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected pet? \nThis will delete associated records.");
+        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected pet?\nThis will delete associated records.");
 
         if(confirm) {
             try (Connection conn = connect();
@@ -434,7 +442,7 @@ public class RecordsController {
         }
 
         // Confirm deletion with the user
-        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected owner? \nThis will delete associated records.");
+        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected owner?\nThis will delete associated records.");
 
         if(confirm) {
             try (Connection conn = connect();
@@ -467,7 +475,7 @@ public class RecordsController {
         }
 
         // Confirm deletion with the user
-        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected service? \nThis will delete associated records.");
+        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected service?\nThis will delete associated records.");
 
         // Delete the pet from the database
         if(confirm) {
@@ -501,7 +509,7 @@ public class RecordsController {
         }
 
         // Confirm deletion with the user
-        Boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected appointment? \nThis will affect associated records.");
+        Boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected appointment?\nThis will affect associated records.");
 
         if(confirm) {
             try (Connection conn = connect();
@@ -534,7 +542,7 @@ public class RecordsController {
         }
 
         // Confirm deletion with the user
-        Boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected reservation? \nThis will affect associated records.");
+        Boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected reservation?\nThis will affect associated records.");
 
         if(confirm) {
             try (Connection conn = connect();
@@ -566,7 +574,7 @@ public class RecordsController {
             return;
         }
 
-        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected employee? \nThis will delete associated records.");
+        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected employee?\nThis will delete associated records.");
 
         if(confirm) {
             try (Connection conn = connect();
@@ -587,11 +595,6 @@ public class RecordsController {
                 showErrorDialog("Error", "An error occurred while deleting the employee record.");
             }
         }
-    }
-
-    @FXML
-    void searchFunction(KeyEvent event) {
-        //add search function here
     }
 
     //table dependencies & database functions
@@ -804,6 +807,96 @@ public class RecordsController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void searchFunction(KeyEvent event) {
+        // Get the search text and convert to lowercase for case-insensitive search
+        String searchText = searchField.getText().toLowerCase().trim();
+
+        // Create filtered lists for each type of record
+        FilteredList<PetRecord> filteredPets = new FilteredList<>(petList, p -> true);
+        FilteredList<OwnerRecord> filteredOwners = new FilteredList<>(ownerList, p -> true);
+        FilteredList<ServiceRecord> filteredServices = new FilteredList<>(serviceList, p -> true);
+        FilteredList<AppointmentRecord> filteredAppointments = new FilteredList<>(appointmentList, p -> true);
+        FilteredList<BoardingRecord> filteredBoarding = new FilteredList<>(boardingList, p -> true);
+        FilteredList<EmployeeRecord> filteredEmployees = new FilteredList<>(employeeList, p -> true);
+
+        // Predicates for filtering each type of record
+        filteredPets.setPredicate(pet -> {
+            if (searchText.isEmpty()) return true;
+            return pet.getName().toLowerCase().contains(searchText) ||
+                    pet.getSpecies().toLowerCase().contains(searchText) ||
+                    pet.getBreed().toLowerCase().contains(searchText) ||
+                    pet.getOwnerName().toLowerCase().contains(searchText) ||
+                    String.valueOf(pet.getPetAge()).contains(searchText);
+        });
+
+        filteredOwners.setPredicate(owner -> {
+            if (searchText.isEmpty()) return true;
+            return owner.getFirstName().toLowerCase().contains(searchText) ||
+                    owner.getLastName().toLowerCase().contains(searchText) ||
+                    owner.getEmail().toLowerCase().contains(searchText) ||
+                    owner.getPhone().toLowerCase().contains(searchText);
+        });
+
+        filteredServices.setPredicate(service -> {
+            if (searchText.isEmpty()) return true;
+            return service.getServiceName().toLowerCase().contains(searchText) ||
+                    service.getDescription().toLowerCase().contains(searchText) ||
+                    String.valueOf(service.getPrice()).contains(searchText);
+        });
+
+        filteredAppointments.setPredicate(appointment -> {
+            if (searchText.isEmpty()) return true;
+            return appointment.getPetName().toLowerCase().contains(searchText) ||
+                    appointment.getOwnerName().toLowerCase().contains(searchText) ||
+                    appointment.getServiceName().toLowerCase().contains(searchText) ||
+                    appointment.getDate().toString().contains(searchText) ||
+                    appointment.getTime().toString().contains(searchText) ||
+                    appointment.getStatus().toLowerCase().contains(searchText);
+        });
+
+        filteredBoarding.setPredicate(boarding -> {
+            if (searchText.isEmpty()) return true;
+            return boarding.getPetName().toLowerCase().contains(searchText) ||
+                    boarding.getOwnerName().toLowerCase().contains(searchText) ||
+                    boarding.getStartDate().toString().contains(searchText) ||
+                    boarding.getEndDate().toString().contains(searchText) ||
+                    boarding.getStatus().toLowerCase().contains(searchText);
+        });
+
+        filteredEmployees.setPredicate(employee -> {
+            if (searchText.isEmpty()) return true;
+            return employee.getFirstName().toLowerCase().contains(searchText) ||
+                    employee.getLastName().toLowerCase().contains(searchText) ||
+                    employee.getPhone().toLowerCase().contains(searchText) ||
+                    employee.getRole().toLowerCase().contains(searchText);
+        });
+
+        // Create sorted lists to maintain order
+        SortedList<PetRecord> sortedPets = new SortedList<>(filteredPets);
+        SortedList<OwnerRecord> sortedOwners = new SortedList<>(filteredOwners);
+        SortedList<ServiceRecord> sortedServices = new SortedList<>(filteredServices);
+        SortedList<AppointmentRecord> sortedAppointments = new SortedList<>(filteredAppointments);
+        SortedList<BoardingRecord> sortedBoarding = new SortedList<>(filteredBoarding);
+        SortedList<EmployeeRecord> sortedEmployees = new SortedList<>(filteredEmployees);
+
+        // Bind the sorted lists to their respective table views
+        PetTable.setItems(sortedPets);
+        OwnerTable.setItems(sortedOwners);
+        ServiceTable.setItems(sortedServices);
+        AppointmentTable.setItems(sortedAppointments);
+        BoardingTable.setItems(sortedBoarding);
+        EmployeeTable.setItems(sortedEmployees);
+
+        // Bind comparators if you want to maintain table sorting
+        sortedPets.comparatorProperty().bind(PetTable.comparatorProperty());
+        sortedOwners.comparatorProperty().bind(OwnerTable.comparatorProperty());
+        sortedServices.comparatorProperty().bind(ServiceTable.comparatorProperty());
+        sortedAppointments.comparatorProperty().bind(AppointmentTable.comparatorProperty());
+        sortedBoarding.comparatorProperty().bind(BoardingTable.comparatorProperty());
+        sortedEmployees.comparatorProperty().bind(EmployeeTable.comparatorProperty());
     }
 
     //transitions and effects

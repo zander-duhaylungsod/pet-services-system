@@ -2,6 +2,8 @@ package CCE104;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
@@ -483,7 +485,54 @@ public class ReportsPageController {
 
     @FXML
     public void searchFunction(KeyEvent event) {
-        //add search function here
+        // Get the search text and convert to lowercase for case-insensitive search
+        String searchText = searchField.getText().toLowerCase().trim();
+
+        // Create filtered lists for Payments and Reports
+        FilteredList<PaymentRecord> filteredPayments = new FilteredList<>(paymentList, p -> true);
+        FilteredList<ReportRecord> filteredReports = new FilteredList<>(reportList, p -> true);
+
+        // Predicate for filtering payments
+        filteredPayments.setPredicate(payment -> {
+            // If search text is empty, show all items
+            if (searchText.isEmpty()) {
+                return true;
+            }
+
+            // Check if search text matches any of the payment fields
+            return payment.getPetName().toLowerCase().contains(searchText) ||
+                    payment.getOwnerName().toLowerCase().contains(searchText) ||
+                    payment.getService().toLowerCase().contains(searchText) ||
+                    payment.getPaymentDate().toString().contains(searchText) ||
+                    String.valueOf(payment.getAmount()).contains(searchText) ||
+                    payment.getStatus().toLowerCase().contains(searchText);
+        });
+
+        // Predicate for filtering reports
+        filteredReports.setPredicate(report -> {
+            // If search text is empty, show all items
+            if (searchText.isEmpty()) {
+                return true;
+            }
+
+            // Check if search text matches any of the report fields
+            return report.getReportTitle().toLowerCase().contains(searchText) ||
+                    report.getReportType().toLowerCase().contains(searchText) ||
+                    report.getReportDate().toLowerCase().contains(searchText) ||
+                    report.getEmployeeName().toLowerCase().contains(searchText);
+        });
+
+        // Create sorted lists to maintain order
+        SortedList<PaymentRecord> sortedPayments = new SortedList<>(filteredPayments);
+        SortedList<ReportRecord> sortedReports = new SortedList<>(filteredReports);
+
+        // Bind the sorted lists to their respective table views
+        PaymentTable.setItems(sortedPayments);
+        ReportTable.setItems(sortedReports);
+
+        // Bind comparators if you want to maintain table sorting
+        sortedPayments.comparatorProperty().bind(PaymentTable.comparatorProperty());
+        sortedReports.comparatorProperty().bind(ReportTable.comparatorProperty());
     }
 
     public void switchToDashboard () throws IOException {

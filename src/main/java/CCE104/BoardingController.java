@@ -142,7 +142,7 @@ public class BoardingController {
             statement.setInt(4, User.getEmployeeID());
             statement.setString(5, status);
 
-            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add boarding?\n Please double check fields."))){
+            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add boarding? Please double check fields."))){
                 return;
             }
 
@@ -200,7 +200,7 @@ public class BoardingController {
                 statement.setString(5, status);
                 statement.setInt(6, selectedBoardingID);
 
-                if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save boarding changes?\n Please double check fields."))){
+                if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save boarding changes? Please double check fields."))){
                     return;
                 }
                 int rowsUpdated = statement.executeUpdate();

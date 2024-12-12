@@ -206,7 +206,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 105px; -fx-pref-height: 40px;" text="Reports">
+                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 95px; -fx-pref-height: 40px;" text="Reports">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="178.0" prefWidth="343.0">
                            <children>
@@ -281,7 +281,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 95px; -fx-pref-height: 40px;" text="Analytics">
+                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 105px; -fx-pref-height: 40px;" text="Analytics">
                      <content>
                         <ScrollPane>
                            <content>

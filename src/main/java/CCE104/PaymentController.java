@@ -690,7 +690,7 @@ public class PaymentController {
             String paymentDate = this.paymentDateField.getText();
             String paymentStatus = selectedPayment.getStatus();
             double amountPaid = selectedPayment.getAmount();
-            double remainingAmount = selectedPayment.getRemainingAmount();
+            double remainingAmount = totalCost - amountPaid;
 
             // Create the printable content
             String reminderMessage =

@@ -93,7 +93,7 @@ public class  OwnerController {
             statement.setString(3, email);
             statement.setString(4, phone);
 
-            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add owner?\n Please double check all details."))){
+            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add owner? Please double check all details."))){
                 return;
             }
             int rowsAffected = statement.executeUpdate();
@@ -146,7 +146,7 @@ public class  OwnerController {
                 stmt.setString(4, phone);
                 stmt.setInt(5, selectedOwnerID);
 
-                if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save owner changes?\n Please double check fields."))){
+                if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save owner changes? Please double check fields."))){
                     return;
                 }
 

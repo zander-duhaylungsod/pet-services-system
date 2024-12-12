@@ -101,7 +101,7 @@
                   <Font name="Segoe UI" size="15.0" />
                </font>
             </Label>
-            <Button alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="49.0" layoutY="72.0" mnemonicParsing="false" onAction="#switchToRecords" prefHeight="89.0" prefWidth="110.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px;" text="0">
+            <Button fx:id="petCounter" alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="49.0" layoutY="72.0" mnemonicParsing="false" onAction="#switchToRecords" prefHeight="89.0" prefWidth="110.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px;" text="0">
                <font>
                   <Font name="Segoe UI Bold" size="29.0" />
                </font>
@@ -120,7 +120,7 @@
                   </DropShadow>
                </effect>
             </Button>
-            <TextField layoutX="281.0" layoutY="35.0" onKeyTyped="#searchFunction" prefHeight="38.0" prefWidth="321.0" promptText="Search pets, owners, or services " style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
+            <TextField fx:id="searchField" layoutX="281.0" layoutY="35.0" onKeyTyped="#searchFunction" prefHeight="38.0" prefWidth="321.0" promptText="Search pets, owners, or services " style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="15.0" />
                </font>
@@ -194,12 +194,12 @@
                                  <content>
                                     <TableView fx:id="PetTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
-                                          <TableColumn fx:id="recordsPetIDColumn" editable="false" prefWidth="82.0" text="PET ID" />
-                                          <TableColumn fx:id="recordsPetNameColumn" editable="false" prefWidth="258.33331298828125" text="PET" />
-                                          <TableColumn fx:id="recordsPetOwnerIDColumn" editable="false" prefWidth="169.6666259765625" text="OWNER ID" />
-                                          <TableColumn fx:id="recordsPetOwnerNameColumn" editable="false" prefWidth="121.3333740234375" text="OWNER" />
-                                          <TableColumn fx:id="recordsPetSpeciesColumn" editable="false" prefWidth="264.66668701171875" text="SPECIES" />
-                                          <TableColumn fx:id="recordsPetBreedColumn" editable="false" prefWidth="264.66668701171875" text="Breed" />
+                                          <TableColumn fx:id="recordsPetIDColumn" editable="false" prefWidth="60.666656494140625" text="PET ID" />
+                                          <TableColumn fx:id="recordsPetNameColumn" editable="false" prefWidth="162.33334350585938" text="PET" />
+                                          <TableColumn fx:id="recordsPetOwnerIDColumn" editable="false" prefWidth="71.3333740234375" text="OWNER ID" />
+                                          <TableColumn fx:id="recordsPetOwnerNameColumn" editable="false" prefWidth="185.66668701171875" text="OWNER" />
+                                          <TableColumn fx:id="recordsPetSpeciesColumn" editable="false" prefWidth="110.0" text="SPECIES" />
+                                          <TableColumn fx:id="recordsPetBreedColumn" editable="false" prefWidth="181.0" text="Breed" />
                                        </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -281,8 +281,8 @@
                                  <content>
                                     <TableView fx:id="OwnerTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
-                                          <TableColumn fx:id="recordsOwnerIDColumn" editable="false" prefWidth="121.33331298828125" text="OWNER ID" />
-                                          <TableColumn fx:id="recordsOwnerFirstNameColumn" editable="false" prefWidth="264.66668701171875" text="FIRST NAME" />
+                                          <TableColumn fx:id="recordsOwnerIDColumn" editable="false" prefWidth="75.66665649414062" text="OWNER ID" />
+                                          <TableColumn fx:id="recordsOwnerFirstNameColumn" editable="false" prefWidth="169.33334350585938" text="FIRST NAME" />
                                           <TableColumn fx:id="recordsOwnerLastName" editable="false" prefWidth="264.66668701171875" text="LAST NAME" />
                                           <TableColumn fx:id="recordsOwnerEmailColumn" editable="false" prefWidth="264.66668701171875" text="EMAIL" />
                                           <TableColumn fx:id="recordsOwnerPhoneColumn" editable="false" prefWidth="264.66668701171875" text="PHONE" />
@@ -458,13 +458,13 @@
                                  <content>
                                     <TableView fx:id="AppointmentTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
-                                          <TableColumn fx:id="recordsAppointmentIDColumn" editable="false" prefWidth="119.0" text="APPOINTMENT ID" />
-                                          <TableColumn fx:id="recordsAppointmentPetNameColumn" editable="false" prefWidth="119.0" text="PET" />
-                                          <TableColumn fx:id="recordsAppointmentOwnerNameColumn" editable="false" prefWidth="130.66668701171875" text="OWNER" />
-                                          <TableColumn fx:id="recordsAppointmentDateColumn" editable="false" prefWidth="173.33331298828125" text="DATE" />
-                                          <TableColumn fx:id="recordsAppointmentTimeColumn" editable="false" prefWidth="173.33331298828125" text="TIME" />
-                                          <TableColumn fx:id="recordsAppointmentServiceColumn" editable="false" prefWidth="173.33331298828125" text="SERVICE" />
-                                          <TableColumn fx:id="recordsAppointmentStatusColumn" editable="false" prefWidth="173.33331298828125" text="STATUS" />
+                                          <TableColumn fx:id="recordsAppointmentIDColumn" editable="false" prefWidth="60.33331298828125" text="APPOINTMENT ID" />
+                                          <TableColumn fx:id="recordsAppointmentPetNameColumn" editable="false" prefWidth="90.0" text="PET" />
+                                          <TableColumn fx:id="recordsAppointmentOwnerNameColumn" editable="false" prefWidth="102.99996948242188" text="OWNER" />
+                                          <TableColumn fx:id="recordsAppointmentDateColumn" editable="false" prefWidth="121.33331298828125" text="DATE" />
+                                          <TableColumn fx:id="recordsAppointmentTimeColumn" editable="false" prefWidth="109.3333740234375" text="TIME" />
+                                          <TableColumn fx:id="recordsAppointmentServiceColumn" editable="false" prefWidth="156.6666259765625" text="SERVICE" />
+                                          <TableColumn fx:id="recordsAppointmentStatusColumn" editable="false" prefWidth="134.33331298828125" text="STATUS" />
                                        </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -633,8 +633,8 @@
                                  <content>
                                     <TableView fx:id="EmployeeTable" prefHeight="323.0" prefWidth="748.0" style="-fx-background-color: WHITE; -fx-background-radius: 20px; -fx-border-radius: 20px;" stylesheets="@../styles/general.css">
                                        <columns>
-                                          <TableColumn fx:id="recordsEmployeeIDColumn" editable="false" prefWidth="79.33331298828125" text="EMPLOYEE ID" />
-                                          <TableColumn fx:id="recordsEmployeeFirstNameColumn" editable="false" prefWidth="130.66665649414062" text="FIRST NAME" />
+                                          <TableColumn fx:id="recordsEmployeeIDColumn" editable="false" prefWidth="61.0" text="EMPLOYEE ID" />
+                                          <TableColumn fx:id="recordsEmployeeFirstNameColumn" editable="false" prefWidth="184.0" text="FIRST NAME" />
                                           <TableColumn fx:id="recordsEmployeeLastNameColumn" editable="false" prefWidth="144.33334350585938" text="LAST NAME" />
                                           <TableColumn fx:id="recordsEmployeePhoneColumn" editable="false" prefWidth="178.3333740234375" text="PHONE" />
                                           <TableColumn fx:id="recordsEmployeeRoleColumn" editable="false" prefWidth="107.0" text="ROLE" />

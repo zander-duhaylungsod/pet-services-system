@@ -166,7 +166,7 @@ public class AppointmentController {
             statement.setInt(5, employeeID);
             statement.setString(6, status);
 
-            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add appointment?\n Please double check fields."))){
+            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add appointment? Please double check fields."))){
                 return;
             }
             int rowsAffected = statement.executeUpdate();
@@ -223,7 +223,7 @@ public class AppointmentController {
                 statement.setString(6, status);
                 statement.setInt(7, selectedAppointmentID);
 
-                if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save appointment changes?\n Please double check fields."))){
+                if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save appointment changes? Please double check fields."))){
                     return;
                 }
 

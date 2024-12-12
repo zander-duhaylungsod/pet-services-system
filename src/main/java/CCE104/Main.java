@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -19,7 +20,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("scenes/dashboardAdmin"));
+        scene = new Scene(loadFXML("scenes/signIn"));
         stage.setScene(scene);
         stage.show();
     }
@@ -46,6 +47,19 @@ public class Main extends Application {
         });
 
         fadeOut.play();
+    }
+
+    public static void showPopup(String fxmlPath, String title) {
+        try {
+            Parent newRoot = loadFXML(fxmlPath);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle(title);
+            stage.setScene(new Scene(newRoot));
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     static void switchScene(String fxml) throws IOException {

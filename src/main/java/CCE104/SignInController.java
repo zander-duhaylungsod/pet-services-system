@@ -41,9 +41,6 @@ public class SignInController {
 
         // Configure toggle button for password visibility
         showPasswordBtn.setOnAction(event -> togglePasswordVisibility());
-
-        // Configure forgot password hyperlink action
-        forgotPasswordLink.setOnAction(event -> handleForgotPassword());
     }
 
     private void handleSignIn() {
@@ -96,7 +93,7 @@ public class SignInController {
     }
 
     // Method to retrieve the role from the database
-    private String getEmployeeRoleFromDatabase(Connection connection, String identifier) throws Exception {
+    public static String getEmployeeRoleFromDatabase(Connection connection, String identifier) throws Exception {
         String query = "SELECT Role FROM Employees WHERE (Email = ? OR EmployeeID = ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, identifier); // Email
@@ -112,7 +109,7 @@ public class SignInController {
     }
 
 
-    private boolean authenticateUser(Connection connection, String identifier, String password) throws Exception {
+    public static boolean authenticateUser(Connection connection, String identifier, String password) throws Exception {
         String query = "SELECT * FROM Employees WHERE (Email = ? OR EmployeeID = ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, identifier); // Email
@@ -147,10 +144,10 @@ public class SignInController {
         }
     }
 
-    private void handleForgotPassword() {
-        // Implement the forgot password functionality
-        // This can redirect the user to a password recovery screen or process
-        showAlert(AlertType.INFORMATION, "Forgot Password", "Password recovery process will be implemented here.");
+    @FXML
+    private void handleForgotPassword() throws IOException {
+        AppState.getInstance().setCurrentEmployeePage(AppState.Employee.RESET);
+        PopUpSwitcher.showPopup("scenes/resetApprovalPopUp","Reset Approval", true, 0.3);
     }
 
     private void showAlert(AlertType type, String title, String message) {
