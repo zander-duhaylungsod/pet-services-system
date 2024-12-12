@@ -115,7 +115,7 @@ public class SignInController {
     }
 
     public static String getEmployeeNameFromDatabase(Connection connection, String identifier) throws Exception {
-        String query = "SELECT CONCAT(FirstName, '', LastName) AS EmployeeName FROM Employees WHERE (Email = ? OR EmployeeID = ?)";
+        String query = "SELECT CONCAT(FirstName, ' ', LastName) AS EmployeeName FROM Employees WHERE (Email = ? OR EmployeeID = ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, identifier); // Email
             stmt.setString(2, identifier); // Employee ID
