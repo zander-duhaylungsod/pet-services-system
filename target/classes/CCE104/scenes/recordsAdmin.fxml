@@ -137,17 +137,6 @@
                   <Image url="@../images/searchicon.png" />
                </image>
             </ImageView>
-            <Label layoutX="725.0" layoutY="43.0" prefHeight="19.0" prefWidth="121.0" text="Employee Name">
-               <font>
-                  <Font name="Segoe UI" size="15.0" />
-               </font>
-            </Label>
-            <Label layoutX="725.0" layoutY="66.0" prefHeight="19.0" prefWidth="121.0" text="Position">
-               <font>
-                  <Font name="Segoe UI Italic" size="15.0" />
-               </font>
-            </Label>
-            <Circle fill="#b2f0ff" layoutX="697.0" layoutY="62.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
             <TabPane fx:id="recordsTabPane" layoutX="38.0" layoutY="190.0" prefHeight="457.0" prefWidth="783.0" style="-fx-background-color: white;" stylesheets="@../styles/general.css" tabClosingPolicy="UNAVAILABLE">
                <tabs>
                   <Tab fx:id="petTab" closable="false" style="-fx-font-size: 20px; -fx-pref-width: 70px; -fx-pref-height: 40px;" text="Pets">
@@ -667,5 +656,21 @@
             </TabPane>
          </children>
       </AnchorPane>
+      <Label fx:id="employeeNameLabel" layoutX="945.0" layoutY="53.0" prefHeight="19.0" prefWidth="173.0" text="Employee Name" textFill="#62b5b5">
+         <font>
+            <Font name="Segoe UI Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="employeeRoleLabel" layoutX="945.0" layoutY="72.0" prefHeight="19.0" prefWidth="173.0" text="Position" textFill="#62b5b5">
+         <font>
+            <Font name="Segoe UI Italic" size="13.0" />
+         </font>
+      </Label>
+      <Circle fill="#b2f0ff" layoutX="917.0" layoutY="78.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
+      <Label fx:id="employeeIDLabel" layoutX="945.0" layoutY="90.0" prefHeight="19.0" prefWidth="121.0" text="Employee ID" textFill="#62b5b5">
+         <font>
+            <Font name="Segoe UI Italic" size="13.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

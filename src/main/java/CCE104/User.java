@@ -38,8 +38,11 @@ public class User {
         User.role = role;
     }
 
+    public static void setEmployeeName(String employeeName) {
+        User.employeeName = employeeName;
+    }
+
     public static String getEmployeeName() {
-        fetchEmployeeNameAndRole();
         return employeeName;
     }
 

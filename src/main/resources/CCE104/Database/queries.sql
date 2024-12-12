@@ -17,7 +17,7 @@ CREATE TABLE Employees (
     Role VARCHAR(50)
 );
 -- Roles:
--- 'Admin','Manager', 'Receptionist', 'Groomer', 'Boarding Attendant',
+-- 'Administrator','Manager', 'Receptionist', 'Groomer', 'Boarding Attendant',
 -- 'Veterinarian', 'Pet Trainer',
 -- 'Cleaning Staff'
 

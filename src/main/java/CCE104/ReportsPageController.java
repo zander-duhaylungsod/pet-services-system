@@ -63,6 +63,12 @@ public class ReportsPageController {
     private BarChart<String, Number> revenueBarChart;
     @FXML
     private PieChart servicePieChart;
+    @FXML
+    private Label employeeIDLabel;
+    @FXML
+    private Label employeeNameLabel;
+    @FXML
+    private Label employeeRoleLabel;
 
     private ObservableList<PaymentRecord> paymentList = FXCollections.observableArrayList();
     private ObservableList<ReportRecord> reportList = FXCollections.observableArrayList();
@@ -72,6 +78,9 @@ public class ReportsPageController {
         AppState.getInstance().setCurrentPage(AppState.Page.REPORTS);
 
         PaymentRecord selectedPayment  = PaymentRecord.getSelectedPayment();
+        employeeNameLabel.setText(User.getEmployeeName());
+        employeeIDLabel.setText(String.valueOf(User.getEmployeeID()));
+        employeeRoleLabel.setText(User.getRole());
 
         // Initialize payment table columns
         paymentIDColumn.setCellValueFactory(new PropertyValueFactory<>("paymentID"));
@@ -358,7 +367,7 @@ public class ReportsPageController {
 
     public void loadReports() {
         reportList.clear();
-        String query = "SELECT r.ReportID, r.ReportTitle, r.ReportDate, r.ReportType, e.EmployeeID, CONCAT(e.FirstName, ' ', e.LastName) AS EmployeeName " +
+        String query = "SELECT r.ReportID, r.ReportTitle, r.ReportDate, r.ReportType, e.EmployeeID, CONCAT(e.FirstName,' ', e.LastName) AS EmployeeName " +
                 "FROM Reports r JOIN Employees e ON r.EmployeeID = e.EmployeeID;";
         try (Connection conn = connect();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -404,7 +413,6 @@ public class ReportsPageController {
         XYChart.Series<String, Number> totalSeries = new XYChart.Series<>();
         totalSeries.setName("Total Revenue");
 
-        // SQL query for fetching detailed revenue data
         String query =
                 "SELECT " +
                         "    MONTHNAME(p.PaymentDate) AS month_name, " +
@@ -413,11 +421,12 @@ public class ReportsPageController {
                         "    SUM(p.Amount) AS total_revenue " +
                         "FROM " +
                         "    Payments p " +
+                        "WHERE " +
+                        "    p.Status IN ('Full Payment', 'Partial Payment') " +
                         "GROUP BY " +
                         "    MONTHNAME(p.PaymentDate), MONTH(p.PaymentDate) " +
                         "ORDER BY " +
                         "    MONTH(p.PaymentDate);";
-
 
         try (Connection conn = connect(); // Replace with your connection method
              PreparedStatement stmt = conn.prepareStatement(query);

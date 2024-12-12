@@ -24,10 +24,10 @@ VALUES
 
 INSERT INTO Employees (FirstName, LastName, Phone, Role)
 VALUES
-    ('Zander', 'Duhaylungsod', '09854263832', 'Admin'),
-    ('Nazlah', 'Nanding', '09547812564', 'Admin'),
-    ('John Erold', 'Miano', '09872154654', 'Admin'),
-    ('Jaz Cyrill', 'Samano', '09893154742', 'Admin'),
+    ('Zander', 'Duhaylungsod', '09854263832', 'Administrator'),
+    ('Nazlah', 'Nanding', '09547812564', 'Administrator'),
+    ('John Erold', 'Miano', '09872154654', 'Administrator'),
+    ('Jaz Cyrill', 'Samano', '09893154742', 'Administrator'),
     ('Sarah', 'Carpenter', '09171234567', 'Manager'),
     ('Maria', 'Santos', '09172345678', 'Receptionist'),
     ('Pedro', 'Gomez', '09173456789', 'Groomer'),

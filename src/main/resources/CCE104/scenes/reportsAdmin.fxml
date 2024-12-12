@@ -116,17 +116,6 @@
                   <Image url="@../images/searchicon.png" />
                </image>
             </ImageView>
-            <Label fx:id="employeeName" layoutX="725.0" layoutY="43.0" prefHeight="19.0" prefWidth="121.0" text="Employee Name">
-               <font>
-                  <Font name="Segoe UI" size="15.0" />
-               </font>
-            </Label>
-            <Label fx:id="employeeRole" layoutX="725.0" layoutY="66.0" prefHeight="19.0" prefWidth="121.0" text="Position">
-               <font>
-                  <Font name="Segoe UI Italic" size="15.0" />
-               </font>
-            </Label>
-            <Circle fill="#b2f0ff" layoutX="697.0" layoutY="62.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
             <TabPane fx:id="reportsTabPane" layoutX="38.0" layoutY="104.0" prefHeight="543.0" prefWidth="783.0" style="-fx-background-color: white;" stylesheets="@../styles/general.css" tabClosingPolicy="UNAVAILABLE">
                <tabs>
                   <Tab style="-fx-font-size: 20px; -fx-pref-width: 115px; -fx-pref-height: 40px;" text="Payments">
@@ -287,7 +276,7 @@
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="824.0" prefWidth="791.0" style="-fx-background-color: WHITE;">
                                  <children>
-                                    <BarChart fx:id="revenueBarChart" layoutX="29.0" layoutY="20.0" prefHeight="377.0" prefWidth="719.0">
+                                    <BarChart fx:id="revenueBarChart" layoutX="29.0" layoutY="20.0" prefHeight="377.0" prefWidth="719.0" title="Total Revenue Per Month">
                                       <xAxis>
                                         <CategoryAxis side="BOTTOM" />
                                       </xAxis>
@@ -295,7 +284,7 @@
                                         <NumberAxis side="LEFT" />
                                       </yAxis>
                                     </BarChart>
-                                    <PieChart fx:id="servicePieChart" layoutX="33.0" layoutY="404.0" prefHeight="396.0" prefWidth="737.0" />
+                                    <PieChart fx:id="servicePieChart" layoutX="33.0" layoutY="404.0" prefHeight="396.0" prefWidth="737.0" title="Popular Services" />
                                  </children>
                               </AnchorPane>
                            </content>
@@ -313,5 +302,21 @@
             </TabPane>
          </children>
       </AnchorPane>
+      <Label fx:id="employeeNameLabel" layoutX="953.0" layoutY="42.0" prefHeight="19.0" prefWidth="173.0" text="Employee Name" textFill="#62b5b5">
+         <font>
+            <Font name="Segoe UI Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="employeeRoleLabel" layoutX="953.0" layoutY="61.0" prefHeight="19.0" prefWidth="173.0" text="Position" textFill="#62b5b5">
+         <font>
+            <Font name="Segoe UI Italic" size="13.0" />
+         </font>
+      </Label>
+      <Circle fill="#b2f0ff" layoutX="925.0" layoutY="67.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
+      <Label fx:id="employeeIDLabel" layoutX="953.0" layoutY="79.0" prefHeight="19.0" prefWidth="121.0" text="Employee ID" textFill="#62b5b5">
+         <font>
+            <Font name="Segoe UI Italic" size="13.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

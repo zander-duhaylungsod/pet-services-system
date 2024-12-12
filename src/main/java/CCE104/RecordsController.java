@@ -130,6 +130,12 @@ public class RecordsController {
     private TabPane recordsTabPane;
     @FXML
     private TextField searchField;
+    @FXML
+    private Label employeeIDLabel;
+    @FXML
+    private Label employeeNameLabel;
+    @FXML
+    private Label employeeRoleLabel;
 
     private ObservableList<PetRecord> petList = FXCollections.observableArrayList();
     private ObservableList<OwnerRecord> ownerList = FXCollections.observableArrayList();
@@ -141,6 +147,9 @@ public class RecordsController {
     @FXML
     public void initialize() {
         petCounter.setText(PetRecord.getInstance().getPetCount());
+        employeeNameLabel.setText(User.getEmployeeName());
+        employeeIDLabel.setText(String.valueOf(User.getEmployeeID()));
+        employeeRoleLabel.setText(User.getRole());
 
         PetRecord.getInstance().setRecordsController(this);
         OwnerRecord.getInstance().setRecordsController(this);

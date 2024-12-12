@@ -117,7 +117,7 @@
                   </DropShadow>
                </effect>
             </Button>
-            <TextField fx:id="searchField" layoutX="281.0" layoutY="35.0" onKeyPressed="#searchFunction" prefHeight="38.0" prefWidth="321.0" promptText="Search pets, owners, or services " style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
+            <TextField fx:id="searchField" layoutX="281.0" layoutY="35.0" onKeyPressed="#searchFunction" prefHeight="38.0" prefWidth="321.0" promptText="Search upcoming bookings" style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="15.0" />
                </font>
@@ -134,17 +134,17 @@
                   <Image url="@../images/searchicon.png" />
                </image>
             </ImageView>
-            <Label layoutX="725.0" layoutY="43.0" prefHeight="19.0" prefWidth="121.0" text="Employee Name">
+            <Label fx:id="employeeNameLabel" layoutX="700.0" layoutY="43.0" prefHeight="19.0" prefWidth="173.0" text="Employee Name" textFill="#62b5b5">
                <font>
-                  <Font name="Segoe UI" size="15.0" />
+                  <Font name="Segoe UI Bold" size="13.0" />
                </font>
             </Label>
-            <Label layoutX="725.0" layoutY="66.0" prefHeight="19.0" prefWidth="121.0" text="Position">
+            <Label fx:id="employeeRoleLabel" layoutX="700.0" layoutY="62.0" prefHeight="19.0" prefWidth="173.0" text="Position" textFill="#62b5b5">
                <font>
-                  <Font name="Segoe UI Italic" size="15.0" />
+                  <Font name="Segoe UI Italic" size="13.0" />
                </font>
             </Label>
-            <Circle fill="#b2f0ff" layoutX="697.0" layoutY="62.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
+            <Circle fill="#b2f0ff" layoutX="672.0" layoutY="68.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
             <Button fx:id="addPetBtn" alignment="BOTTOM_CENTER" graphicTextGap="0.0" layoutX="55.0" layoutY="194.0" mnemonicParsing="false" onAction="#addPet" prefHeight="48.0" prefWidth="169.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add Pet">
                <font>
                   <Font name="Segoe UI Bold" size="18.0" />
@@ -269,6 +269,11 @@
                   </DropShadow>
                </effect>
             </ScrollPane>
+            <Label fx:id="employeeIDLabel" layoutX="700.0" layoutY="80.0" prefHeight="19.0" prefWidth="121.0" text="Employee ID" textFill="#62b5b5">
+               <font>
+                  <Font name="Segoe UI Italic" size="13.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

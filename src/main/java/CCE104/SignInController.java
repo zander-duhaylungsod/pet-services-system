@@ -49,7 +49,7 @@ public class SignInController {
 
         // Validate input
         if (identifier.isEmpty() || password.isEmpty()) {
-            showAlert(AlertType.ERROR, "Error", "Employee ID/Email and Password are required!");
+            Alerts.showErrorDialog("Error", "Employee ID/Email and Password are required!" );
             return;
         }
 
@@ -61,18 +61,24 @@ public class SignInController {
                 // Retrieve and store the employeeID, email, and role in the User model
                 int employeeID = getEmployeeIDFromDatabase(connection, identifier);
                 String role = getEmployeeRoleFromDatabase(connection, identifier);
+                String employeeName = getEmployeeNameFromDatabase(connection, identifier);
                 User.setEmployeeID(employeeID);
-                User.setEmail(identifier);  // Store email
-                User.setRole(role);         // Store role
+                User.setRole(role);
+                User.setEmployeeName(employeeName);
 
                 // Switch to the dashboard
-                Main.switchSceneWithFade("scenes/dashboardAdmin");
+                assert role != null;
+                if(role.equalsIgnoreCase("Administrator") || role.equalsIgnoreCase("Manager")){
+                    Main.switchSceneWithFade("scenes/dashboardAdmin");
+                } else {
+                    Main.switchSceneWithFade("scenes/dashboardEmployee");
+                }
             } else {
-                showAlert(AlertType.ERROR, "Error", "Invalid Employee ID/Email or password!");
+                Alerts.showErrorDialog("Error", "Invalid Employee ID/Email or password!" );
             }
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(AlertType.ERROR, "Error", "Failed to sign in: " + e.getMessage());
+            Alerts.showErrorDialog("Error", "Failed to sign in, please make sure you have a registered account." );
         }
     }
 
@@ -102,6 +108,21 @@ public class SignInController {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getString("Role"); // Retrieve the Role
+                }
+            }
+        }
+        return null; // Return null if role is not found
+    }
+
+    public static String getEmployeeNameFromDatabase(Connection connection, String identifier) throws Exception {
+        String query = "SELECT CONCAT(FirstName, '', LastName) AS EmployeeName FROM Employees WHERE (Email = ? OR EmployeeID = ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, identifier); // Email
+            stmt.setString(2, identifier); // Employee ID
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("EmployeeName"); // Retrieve the Role
                 }
             }
         }
