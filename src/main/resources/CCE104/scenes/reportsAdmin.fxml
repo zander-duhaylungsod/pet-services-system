@@ -274,7 +274,7 @@
                      <content>
                         <ScrollPane>
                            <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="824.0" prefWidth="791.0" style="-fx-background-color: WHITE;">
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="860.0" prefWidth="791.0" style="-fx-background-color: WHITE;">
                                  <children>
                                     <BarChart fx:id="revenueBarChart" layoutX="29.0" layoutY="20.0" prefHeight="377.0" prefWidth="719.0" title="Total Revenue Per Month">
                                       <xAxis>
@@ -284,7 +284,7 @@
                                         <NumberAxis side="LEFT" />
                                       </yAxis>
                                     </BarChart>
-                                    <PieChart fx:id="servicePieChart" layoutX="33.0" layoutY="404.0" prefHeight="396.0" prefWidth="737.0" title="Popular Services" />
+                                    <PieChart fx:id="servicePieChart" layoutX="33.0" layoutY="436.0" prefHeight="396.0" prefWidth="737.0" title="Popular Services" />
                                  </children>
                               </AnchorPane>
                            </content>
