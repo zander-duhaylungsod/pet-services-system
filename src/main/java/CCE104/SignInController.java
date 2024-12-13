@@ -69,9 +69,11 @@ public class SignInController {
                 // Switch to the dashboard
                 assert role != null;
                 if(role.equalsIgnoreCase("Administrator") || role.equalsIgnoreCase("Manager")){
-                    Main.switchSceneWithFade("scenes/dashboardAdmin");
+                    AppState.getInstance().setCurrentLevelPage(AppState.Level.ADMIN);
+                    NavigationController.switchToDashboardWithFade();
                 } else {
-                    Main.switchSceneWithFade("scenes/dashboardEmployee");
+                    AppState.getInstance().setCurrentLevelPage(AppState.Level.EMPLOYEE);
+                    NavigationController.switchToDashboardWithFade();
                 }
             } else {
                 Alerts.showErrorDialog("Error", "Invalid Employee ID/Email or password!" );

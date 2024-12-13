@@ -180,7 +180,7 @@ public class EmployeeController {
 
             if (rowsAffected > 0) {
                 Alerts.showSuccessDialog("Success", "Changes saved successfully.");
-                Main.switchSceneWithFade("scenes/recordsAdmin");
+                NavigationController.switchToRecordsWithFade();
             } else {
                 Alerts.showAlert("Error","Failed to save changes.");
             }
@@ -419,18 +419,20 @@ public class EmployeeController {
         Main.switchSceneWithFade("scenes/signIn");
     }
 
+    @FXML
     public void switchToDashboard () throws IOException {
-        Main.switchScene("scenes/dashboardAdmin");
+        NavigationController.switchToDashboard();
     }
 
     @FXML
     public void switchToRecords () throws IOException {
-        Main.switchScene("scenes/recordsAdmin");
+        NavigationController.switchToRecords();
     }
 
     @FXML
     public void switchToReports () throws IOException {
-        Main.switchScene("scenes/reportsAdmin");
+        NavigationController.switchToReports();
+
     }
 
     @FXML

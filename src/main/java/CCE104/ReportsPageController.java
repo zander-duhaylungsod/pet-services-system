@@ -544,18 +544,25 @@ public class ReportsPageController {
         sortedReports.comparatorProperty().bind(ReportTable.comparatorProperty());
     }
 
+    public void onlyAuthorizedAlert () {
+        int currentIndex = AppState.getInstance().getCurrentTabIndex();
+        if (currentIndex == 1 || currentIndex == 2) {
+            Alerts.showAlert("Unauthorized Access", "You are not authorized to access this page.");
+        }
+    }
+
     public void switchToDashboard () throws IOException {
-        Main.switchScene("scenes/dashboardAdmin");
+        NavigationController.switchToDashboard();
     }
 
     @FXML
     public void switchToRecords () throws IOException {
-        Main.switchScene("scenes/recordsAdmin");
+        NavigationController.switchToRecords();
     }
 
     @FXML
     public void switchToReports () throws IOException {
-        Main.switchScene("scenes/reportsAdmin");
+        NavigationController.switchToReports();
     }
 
     @FXML

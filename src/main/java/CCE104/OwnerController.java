@@ -153,7 +153,7 @@ public class  OwnerController {
                 int rowsUpdated = stmt.executeUpdate();
                 if (rowsUpdated > 0) {
                     showSuccessDialog("Success", "Owner details updated successfully.");
-                    Main.switchSceneWithFade("scenes/recordsAdmin");
+                    NavigationController.switchToRecordsWithFade();
                 } else {
                     showErrorDialog("Update Failed", "No changes were made to the owner details.");
                 }
@@ -232,17 +232,17 @@ public class  OwnerController {
     }
 
     public void switchToDashboard () throws IOException {
-        Main.switchScene("scenes/dashboardAdmin");
+        NavigationController.switchToDashboard();
     }
 
     @FXML
     public void switchToRecords () throws IOException {
-        Main.switchScene("scenes/recordsAdmin");
+        NavigationController.switchToRecords();
     }
 
     @FXML
     public void switchToReports () throws IOException {
-        Main.switchScene("scenes/reportsAdmin");
+        NavigationController.switchToReports();
     }
 
     @FXML

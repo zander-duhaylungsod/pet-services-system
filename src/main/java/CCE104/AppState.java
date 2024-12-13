@@ -78,6 +78,11 @@ public class AppState {
         DELETE
     }
 
+    public enum Level {
+        ADMIN,
+        EMPLOYEE
+    }
+
     // Current active states
     private Page currentPage;
     private Pet currentPetPage;
@@ -88,10 +93,11 @@ public class AppState {
     private Employee currentEmployeePage;
     private Payment currentPaymentPage;
     private Report currentReportPage;
+    private Level currentLevelPage;
 
     // Private constructor to prevent instantiation
     private AppState() {
-        currentPage = Page.DASHBOARD; // Default to dashboard
+        currentPage = Page.DASHBOARD;
         currentPetPage = Pet.ADD;
         currentOwnerPage = Owner.ADD;
         currentServicePage = Service.ADD;
@@ -100,6 +106,7 @@ public class AppState {
         currentEmployeePage = Employee.ADD;
         currentPaymentPage = Payment.PAYMENTA;
         currentReportPage = Report.ADD;
+        currentLevelPage = Level.EMPLOYEE;
     }
 
     // Getter for current page
@@ -118,6 +125,7 @@ public class AppState {
     public Employee getCurrentEmployeePage() { return currentEmployeePage; }
     public Payment getCurrentPaymentPage() { return currentPaymentPage; }
     public Report getCurrentReportPage() { return currentReportPage; }
+    public Level getCurrentLevelPage() { return currentLevelPage; }
     public int getCurrentTabIndex() {
         return currentTabIndex;
     }
@@ -138,6 +146,7 @@ public class AppState {
     public void setCurrentEmployeePage(Employee page) { currentEmployeePage = page; }
     public void setCurrentPaymentPage(Payment page) { currentPaymentPage = page; }
     public void setCurrentReportPage(Report page) { currentReportPage = page; }
+    public void setCurrentLevelPage(Level level) { currentLevelPage = level; }
     public void setCurrentTabIndex(int index) {
         this.currentTabIndex = index;
     }

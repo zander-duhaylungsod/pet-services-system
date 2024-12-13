@@ -645,7 +645,7 @@ public class PaymentController {
                 if (rowsUpdated > 0) {
                     Alerts.showSuccessDialog("Success", "Payment details updated successfully.");
                     clearPaymentFields();
-                    Main.switchSceneWithFade("scenes/reportsAdmin");
+                    NavigationController.switchToReportsWithFade();
                 } else {
                     Alerts.showErrorDialog("Update Failed", "No changes were made to the payment details.");
                 }
@@ -827,7 +827,7 @@ public class PaymentController {
 
                     if (rowsUpdated > 0) {
                         Alerts.showSuccessDialog("Success", "Refund successfully processed, and payment status updated.");
-                        Main.switchSceneWithFade("scenes/reportsAdmin");
+                        NavigationController.switchToReportsWithFade();
                     } else {
                         Alerts.showAlert("Warning", "Refund record added, but payment status was not updated.");
                     }
@@ -849,17 +849,17 @@ public class PaymentController {
     }
             @FXML
     public void switchToDashboard () throws IOException {
-        Main.switchScene("scenes/dashboardAdmin");
+        NavigationController.switchToDashboard();
     }
 
     @FXML
     public void switchToRecords () throws IOException {
-        Main.switchScene("scenes/recordsAdmin");
+        NavigationController.switchToRecords();
     }
 
     @FXML
     public void switchToReports () throws IOException {
-        Main.switchScene("scenes/reportsAdmin");
+        NavigationController.switchToReports();
     }
 
     @FXML

@@ -144,22 +144,19 @@ public class DashboardController {
     //scene transitions
     @FXML
     public void switchToDashboard () throws IOException {
-        Main.switchScene("scenes/dashboardAdmin");
+        NavigationController.switchToDashboard();
     }
 
     @FXML
     public void switchToRecords () throws IOException {
-        Main.switchScene("scenes/recordsAdmin");
+        NavigationController.switchToRecords();
+
     }
 
     @FXML
     public void switchToReports () throws IOException {
-        Main.switchScene("scenes/reportsAdmin");
-    }
+        NavigationController.switchToReports();
 
-    @FXML
-    public void logOut () throws IOException {
-        Main.switchSceneWithFade("scenes/signIn");
     }
 
     @FXML
@@ -178,6 +175,11 @@ public class DashboardController {
     public void addBoarding () throws IOException {
         AppState.getInstance().setCurrentBoardingPage(AppState.Boarding.ADD);
         Main.switchSceneWithFade("scenes/addBoarding");
+    }
+
+    @FXML
+    public void logOut () throws IOException {
+        Main.switchSceneWithFade("scenes/signIn");
     }
 
     @FXML

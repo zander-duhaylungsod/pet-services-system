@@ -144,7 +144,7 @@
                   <Font name="Segoe UI Italic" size="13.0" />
                </font>
             </Label>
-            <Circle fill="#b2f0ff" layoutX="672.0" layoutY="68.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
+            <Circle fill="#fffdb2" layoutX="672.0" layoutY="68.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
             <Button fx:id="addPetBtn" alignment="BOTTOM_CENTER" graphicTextGap="0.0" layoutX="55.0" layoutY="194.0" mnemonicParsing="false" onAction="#addPet" prefHeight="48.0" prefWidth="169.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add Pet">
                <font>
                   <Font name="Segoe UI Bold" size="18.0" />

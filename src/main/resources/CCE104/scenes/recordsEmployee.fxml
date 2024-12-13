@@ -143,7 +143,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;">
                            <children>
-                              <Button fx:id="petAddBtn" alignment="CENTER" graphicTextGap="0.0" layoutX="99.0" layoutY="354.0" mnemonicParsing="false" onAction="#addPet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add">
+                              <Button fx:id="petAddBtn" alignment="CENTER" graphicTextGap="0.0" layoutX="177.0" layoutY="354.0" mnemonicParsing="false" onAction="#addPet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -155,7 +155,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button fx:id="petEditBtn" alignment="CENTER" graphicTextGap="0.0" layoutX="260.0" layoutY="353.0" mnemonicParsing="false" onAction="#editPet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit">
+                              <Button fx:id="petEditBtn" alignment="CENTER" graphicTextGap="0.0" layoutX="338.0" layoutY="353.0" mnemonicParsing="false" onAction="#editPet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -167,7 +167,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button fx:id="petDeleteBtn" alignment="CENTER" graphicTextGap="0.0" layoutX="577.0" layoutY="354.0" mnemonicParsing="false" onAction="#deletePet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Delete">
+                              <Button fx:id="petDeleteBtn" alignment="CENTER" disable="true" graphicTextGap="0.0" layoutX="577.0" layoutY="354.0" mnemonicParsing="false" onAction="#deletePet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Delete" visible="false">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -210,7 +210,7 @@
                                     </DropShadow>
                                  </effect>
                               </ScrollPane>
-                              <Button fx:id="petViewBtn" alignment="CENTER" graphicTextGap="0.0" layoutX="415.0" layoutY="354.0" mnemonicParsing="false" onAction="#viewPet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="View">
+                              <Button fx:id="petViewBtn" alignment="CENTER" graphicTextGap="0.0" layoutX="493.0" layoutY="354.0" mnemonicParsing="false" onAction="#viewPet" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="View">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -230,7 +230,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;">
                            <children>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="150.0" layoutY="354.0" mnemonicParsing="false" onAction="#addOwner" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="243.0" layoutY="354.0" mnemonicParsing="false" onAction="#addOwner" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -242,7 +242,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="346.0" layoutY="354.0" mnemonicParsing="false" onAction="#editOwner" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="439.0" layoutY="354.0" mnemonicParsing="false" onAction="#editOwner" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -254,7 +254,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button fx:id="deleteOwner" alignment="CENTER" graphicTextGap="0.0" layoutX="530.0" layoutY="354.0" mnemonicParsing="false" onAction="#deleteOwner" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Delete">
+                              <Button fx:id="deleteOwner" alignment="CENTER" disable="true" graphicTextGap="0.0" layoutX="530.0" layoutY="354.0" mnemonicParsing="false" onAction="#deleteOwner" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Delete" visible="false">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -304,7 +304,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="115.0" layoutY="350.0" mnemonicParsing="false" onAction="#addService" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add">
+                              <Button alignment="CENTER" disable="true" graphicTextGap="0.0" layoutX="115.0" layoutY="350.0" mnemonicParsing="false" onAction="#addService" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add" visible="false">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -319,7 +319,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="264.0" layoutY="350.0" mnemonicParsing="false" onAction="#editService" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit">
+                              <Button alignment="CENTER" disable="true" graphicTextGap="0.0" layoutX="264.0" layoutY="350.0" mnemonicParsing="false" onAction="#editService" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit" visible="false">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -334,7 +334,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="566.0" layoutY="350.0" mnemonicParsing="false" onAction="#deleteService" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Delete">
+                              <Button alignment="CENTER" disable="true" graphicTextGap="0.0" layoutX="566.0" layoutY="350.0" mnemonicParsing="false" onAction="#deleteService" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Delete" visible="false">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -377,7 +377,7 @@
                                     </TableView>
                                  </content>
                               </ScrollPane>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="417.0" layoutY="350.0" mnemonicParsing="false" onAction="#viewService" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="View">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="337.0" layoutY="350.0" mnemonicParsing="false" onAction="#viewService" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="View">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -400,7 +400,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="115.0" layoutY="350.0" mnemonicParsing="false" onAction="#addAppointment" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Add">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="203.0" layoutY="350.0" mnemonicParsing="false" onAction="#addAppointment" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Add">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -412,7 +412,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="264.0" layoutY="350.0" mnemonicParsing="false" onAction="#editAppointment" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Edit">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="352.0" layoutY="350.0" mnemonicParsing="false" onAction="#editAppointment" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Edit">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -424,7 +424,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="567.0" layoutY="350.0" mnemonicParsing="false" onAction="#deleteAppointment" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Delete">
+                              <Button alignment="CENTER" disable="true" graphicTextGap="0.0" layoutX="567.0" layoutY="350.0" mnemonicParsing="false" onAction="#deleteAppointment" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Delete" visible="false">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -468,7 +468,7 @@
                                     </TableView>
                                  </content>
                               </ScrollPane>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="417.0" layoutY="350.0" mnemonicParsing="false" onAction="#viewAppointment" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="View">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="505.0" layoutY="350.0" mnemonicParsing="false" onAction="#viewAppointment" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="View">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -488,7 +488,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="115.0" layoutY="350.0" mnemonicParsing="false" onAction="#addBoarding" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Add">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="203.0" layoutY="350.0" mnemonicParsing="false" onAction="#addBoarding" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Add">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -500,7 +500,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="264.0" layoutY="350.0" mnemonicParsing="false" onAction="#editBoarding" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Edit">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="352.0" layoutY="350.0" mnemonicParsing="false" onAction="#editBoarding" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Edit">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -512,7 +512,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="567.0" layoutY="350.0" mnemonicParsing="false" onAction="#deleteBoarding" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Delete">
+                              <Button alignment="CENTER" disable="true" graphicTextGap="0.0" layoutX="567.0" layoutY="350.0" mnemonicParsing="false" onAction="#deleteBoarding" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Delete" visible="false">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -555,7 +555,7 @@
                                     </TableView>
                                  </content>
                               </ScrollPane>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="417.0" layoutY="350.0" mnemonicParsing="false" onAction="#viewBoarding" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="View">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="505.0" layoutY="350.0" mnemonicParsing="false" onAction="#viewBoarding" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="View">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -571,11 +571,11 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="employeeTab" closable="false" style="-fx-font-size: 20px; -fx-pref-width: 135px; -fx-pref-height: 40px;" text="Employees">
+                  <Tab fx:id="employeeTab" closable="false" disable="true" style="-fx-font-size: 20px; -fx-pref-width: 135px; -fx-pref-height: 40px;" text="Employees">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="150.0" layoutY="354.0" mnemonicParsing="false" onAction="#addEmployee" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Add">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="150.0" layoutY="354.0" mnemonicParsing="false" onAction="#addEmployee" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Add" visible="false">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -587,7 +587,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="346.0" layoutY="354.0" mnemonicParsing="false" onAction="#editEmployee" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Edit">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="346.0" layoutY="354.0" mnemonicParsing="false" onAction="#editEmployee" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Edit" visible="false">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -599,7 +599,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="530.0" layoutY="354.0" mnemonicParsing="false" onAction="#deleteEmployee" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Delete">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="530.0" layoutY="354.0" mnemonicParsing="false" onAction="#deleteEmployee" prefHeight="48.0" prefWidth="101.0" style="-fx-background-radius: 20px;" styleClass="addBtn" text="Delete" visible="false">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -666,7 +666,7 @@
             <Font name="Segoe UI Italic" size="13.0" />
          </font>
       </Label>
-      <Circle fill="#fffdb2" layoutX="917.0" layoutY="78.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="#b2fdff" layoutX="917.0" layoutY="78.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
       <Label fx:id="employeeIDLabel" layoutX="945.0" layoutY="90.0" prefHeight="19.0" prefWidth="121.0" text="Employee ID" textFill="#62b5b5">
          <font>
             <Font name="Segoe UI Italic" size="13.0" />

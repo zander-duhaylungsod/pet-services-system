@@ -143,7 +143,7 @@
                                     </DropShadow>
                                  </effect>
                               </TableView>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="195.0" layoutY="431.0" mnemonicParsing="false" onAction="#addPayment" prefHeight="48.0" prefWidth="151.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add Payment">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="370.0" layoutY="431.0" mnemonicParsing="false" onAction="#addPayment" prefHeight="48.0" prefWidth="151.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Add Payment">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -155,7 +155,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="566.0" layoutY="431.0" mnemonicParsing="false" onAction="#refundPayment" prefHeight="48.0" prefWidth="171.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Refund Payment">
+                              <Button alignment="CENTER" disable="true" graphicTextGap="0.0" layoutX="566.0" layoutY="431.0" mnemonicParsing="false" onAction="#refundPayment" prefHeight="48.0" prefWidth="171.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Refund Payment" visible="false">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -167,7 +167,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="381.0" layoutY="432.0" mnemonicParsing="false" onAction="#editPayment" prefHeight="48.0" prefWidth="151.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit Payment">
+                              <Button alignment="CENTER" disable="true" graphicTextGap="0.0" layoutX="381.0" layoutY="432.0" mnemonicParsing="false" onAction="#editPayment" prefHeight="48.0" prefWidth="151.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Edit Payment" visible="false">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -179,7 +179,7 @@
                                     </DropShadow>
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="65.0" layoutY="432.0" mnemonicParsing="false" onAction="#printPayment" prefHeight="48.0" prefWidth="91.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Print">
+                              <Button alignment="CENTER" graphicTextGap="0.0" layoutX="240.0" layoutY="432.0" mnemonicParsing="false" onAction="#printPayment" prefHeight="48.0" prefWidth="91.0" style="-fx-background-radius: 20px;" styleClass="addBtn" stylesheets="@../styles/general.css" text="Print">
                                  <font>
                                     <Font name="Segoe UI Bold" size="18.0" />
                                  </font>
@@ -195,7 +195,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 95px; -fx-pref-height: 40px;" text="Reports">
+                  <Tab disable="true" onSelectionChanged="#onlyAuthorizedAlert" style="-fx-font-size: 20px; -fx-pref-width: 95px; -fx-pref-height: 40px;" text="Reports">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="178.0" prefWidth="343.0">
                            <children>
@@ -270,19 +270,19 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab style="-fx-font-size: 20px; -fx-pref-width: 105px; -fx-pref-height: 40px;" text="Analytics">
+                  <Tab disable="true" onSelectionChanged="#onlyAuthorizedAlert" style="-fx-font-size: 20px; -fx-pref-width: 105px; -fx-pref-height: 40px;" text="Analytics">
                      <content>
                         <ScrollPane>
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="824.0" prefWidth="791.0" style="-fx-background-color: WHITE;">
                                  <children>
                                     <BarChart fx:id="revenueBarChart" layoutX="29.0" layoutY="20.0" prefHeight="377.0" prefWidth="719.0" title="Total Revenue Per Month">
-                                      <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
-                                      </xAxis>
-                                      <yAxis>
-                                        <NumberAxis side="LEFT" />
-                                      </yAxis>
+                                       <xAxis>
+                                          <CategoryAxis side="BOTTOM" />
+                                       </xAxis>
+                                       <yAxis>
+                                          <NumberAxis side="LEFT" />
+                                       </yAxis>
                                     </BarChart>
                                     <PieChart fx:id="servicePieChart" layoutX="33.0" layoutY="404.0" prefHeight="396.0" prefWidth="737.0" title="Popular Services" />
                                  </children>
@@ -312,7 +312,7 @@
             <Font name="Segoe UI Italic" size="13.0" />
          </font>
       </Label>
-      <Circle fill="#fffdb2" layoutX="925.0" layoutY="67.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="#b2fdff" layoutX="925.0" layoutY="67.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
       <Label fx:id="employeeIDLabel" layoutX="953.0" layoutY="79.0" prefHeight="19.0" prefWidth="121.0" text="Employee ID" textFill="#62b5b5">
          <font>
             <Font name="Segoe UI Italic" size="13.0" />

@@ -206,7 +206,7 @@ public class BoardingController {
                 int rowsUpdated = statement.executeUpdate();
                 if (rowsUpdated > 0) {
                     Alerts.showSuccessDialog("Success", "Boarding details updated successfully.");
-                    Main.switchSceneWithFade("scenes/recordsAdmin");
+                    NavigationController.switchToRecordsWithFade();
                 } else {
                     Alerts.showErrorDialog("Update Failed", "No changes were made to the boarding details.");
                 }
@@ -458,30 +458,22 @@ public class BoardingController {
     }
 
     //transitions & effects
-    public void backFunction () throws IOException {
-        AppState.Page currentPage = AppState.getInstance().getCurrentPage();
-
-        if (currentPage == AppState.Page.DASHBOARD) {
-            switchToDashboard();
-        } else if (currentPage == AppState.Page.RECORDS) {
-            switchToRecords();
-        } else if (currentPage == AppState.Page.REPORTS) {
-            switchToReports();
-        }
-    }
-
+    @FXML
     public void switchToDashboard () throws IOException {
-        Main.switchScene("scenes/dashboardAdmin");
+        NavigationController.switchToDashboard();
+
     }
 
     @FXML
     public void switchToRecords () throws IOException {
-        Main.switchScene("scenes/recordsAdmin");
+        NavigationController.switchToRecords();
+
     }
 
     @FXML
     public void switchToReports () throws IOException {
-        Main.switchScene("scenes/reportsAdmin");
+        NavigationController.switchToReports();
+
     }
 
     @FXML
@@ -495,6 +487,18 @@ public class BoardingController {
     }
 
     //effects
+    public void backFunction () throws IOException {
+        AppState.Page currentPage = AppState.getInstance().getCurrentPage();
+
+        if (currentPage == AppState.Page.DASHBOARD) {
+            switchToDashboard();
+        } else if (currentPage == AppState.Page.RECORDS) {
+            switchToRecords();
+        } else if (currentPage == AppState.Page.REPORTS) {
+            switchToReports();
+        }
+    }
+
     @FXML
     public void polygonHover () throws IOException {
         backBtn.setFill(Color.web("#48d1dd"));

@@ -220,7 +220,7 @@ public class ReportsController {
                 if (rowsUpdated > 0) {
                     Alerts.showSuccessDialog("Success", "Report details updated successfully.");
                     clearReportFields();
-                    Main.switchSceneWithFade("scenes/reportsAdmin");
+                    NavigationController.switchToReportsWithFade();
                 } else {
                     Alerts.showErrorDialog("Update Failed", "No changes were made to the report details.");
                 }
@@ -297,97 +297,6 @@ public class ReportsController {
             Alerts.showErrorDialog("Error", "An error occurred while printing the report.");
         }
     }
-
-
-//    public void printReport () throws IOException {
-//        try {
-//            ReportRecord selectedReport = ReportRecord.getSelectedReport();
-//            // Collect all necessary details for the printout
-//            if (selectedReport == null) {
-//                Alerts.showErrorDialog("Error", "No report selected.");
-//                return;
-//            }
-//
-//            // Collect information for the printout
-//            ReportsPageController reportsPageController = ReportRecord.getInstance().getReportsPageController();
-//            Integer selectedReportID = reportsPageController.getSelectedReportID();
-//
-//            String employeeID = employeeIDField.getText();
-//            String reportType = this.reportType.getValue();
-//            String reportTitle = this.reportTitleField.getText();
-//            String reportContent = reportContentEditor.getHtmlText() == null? null:reportContentEditor.getHtmlText();
-//            String reportDate = selectedReport.getReportDate();
-//
-//            String employeeName = selectedReport.getEmployeeName();
-//            String employeeRole = selectedReport.getEmployeeRole();
-//
-//            // Create the printable content
-//            String reminderMessage =
-//                    "\n-------------------------------------- Reminder -----------------------------------\n" +
-//                            "Reminders:\n" +
-//                            "- This report is for internal use only. Ensure its contents are kept confidential \nand not disclosed outside the organization.\n" +
-//                            "- If any amendments are required, please contact the report creator promptly.\n" +
-//                            "- Keep this document archived as it may be referenced for future audits or evaluations.\n\n" +
-//                            "For inquiries or assistance, reach out to the creator directly or contact the administrative \nteam through the provided channels.\n\n" +
-//                            "Thank you for your continued commitment to maintaining high operational standards.\n\n" +
-//                            "Warm Regards,\n" +
-//                            "The PAWFECTCare Administrative Team\n" +
-//                            "-----------------------------------------------------------------------------------------";
-//
-//            String printContent =
-//                    "--------------PAWFECTCare: Pet Grooming and Boarding Services--------------\n" +
-//                    "---------------------------------Report------------------------------------\n" +
-//                            "The following report has been successfully generated as part of the regular operational \nand administrative duties carried out by our dedicated staff:\n\n" +
-//                            "Report Title: " + reportTitle + "\n" +
-//                            "Report Type: " + reportType + "\n" +
-//                            "Created By: " + employeeName + "\n" +
-//                            "Employee ID: " + employeeID + "\n" +
-//                            "Submitted in: " + reportDate + "\n" +
-//                            "Report Content: " + "\n" +
-//                             reportContent + "\n\n" +
-//                            reminderMessage;
-//
-//            // Create a PrinterJob instance and set up the print settings
-//            PrinterJob printerJob = PrinterJob.getPrinterJob();
-//
-//            // Set a print job (we can use a simple text-based print job)
-//            printerJob.setPrintable(new Printable() {
-//                public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-//                    if (pageIndex >= 1) { // Only 1 page to print
-//                        return Printable.NO_SUCH_PAGE;
-//                    }
-//
-//                    // Graphics object used to render the content
-//                    Graphics2D g2d = (Graphics2D) graphics;
-//                    g2d.setFont(new Font("Serif", Font.PLAIN, 12));
-//                    g2d.setColor(java.awt.Color.BLACK);
-//
-//                    // Adjust the page's print area and draw the content
-//                    g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-//
-//                    // Split the content into lines
-//                    String[] lines = printContent.split("\n");
-//                    int yPosition = 100; // Starting y position for the first line
-//
-//                    // Iterate over the lines and print each one
-//                    for (String line : lines) {
-//                        g2d.drawString(line, 100, yPosition); // Print each line at the new y position
-//                        yPosition += 15; // Increment y position for the next line (line height)
-//                    }
-//
-//                    return Printable.PAGE_EXISTS;
-//                }
-//            });
-//
-//            // Show the print dialog to the user
-//            if (printerJob.printDialog()) {
-//                printerJob.print();  // Print the document
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            Alerts.showErrorDialog("Error", "An error occurred while printing payment details.");
-//        }
-//    }
 
     private boolean validateReportInputs() {
         String employeeID = employeeIDField.getText();
@@ -466,17 +375,17 @@ public class ReportsController {
     }
 
     public void switchToDashboard () throws IOException {
-        Main.switchScene("scenes/dashboardAdmin");
+        NavigationController.switchToDashboard();
     }
 
     @FXML
     public void switchToRecords () throws IOException {
-        Main.switchScene("scenes/recordsAdmin");
+        NavigationController.switchToRecords();
     }
 
     @FXML
     public void switchToReports () throws IOException {
-        Main.switchScene("scenes/reportsAdmin");
+        NavigationController.switchToReports();
     }
 
     @FXML

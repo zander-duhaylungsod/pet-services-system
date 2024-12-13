@@ -228,7 +228,7 @@ public class PetController {
 
         // Use project root directory dynamically
         File projectRoot = new File(System.getProperty("user.dir"));
-        File initialDirectory = new File(projectRoot, "src/main/resources/CCE104/images");
+        File initialDirectory = new File(projectRoot, "src/main/resources/CCE104/petImages");
 
         fileChooser.setInitialDirectory(initialDirectory);
         fileChooser.setTitle("Select Pet Image");
@@ -327,7 +327,7 @@ public class PetController {
                 int rowsUpdated = stmt.executeUpdate();
                 if (rowsUpdated > 0) {
                     showSuccessDialog("Success", "Pet details updated successfully.");
-                    Main.switchSceneWithFade("scenes/recordsAdmin");
+                    NavigationController.switchToRecordsWithFade();
                 } else {
                     showErrorDialog("Update Failed", "No changes were made to the pet details.");
                 }
@@ -391,17 +391,17 @@ public class PetController {
 
     //transitions and effects
     public void switchToDashboard () throws IOException {
-        Main.switchScene("scenes/dashboardAdmin");
+        NavigationController.switchToDashboard();
     }
 
     @FXML
     public void switchToRecords () throws IOException {
-        Main.switchScene("scenes/recordsAdmin");
+        NavigationController.switchToRecords();
     }
 
     @FXML
     public void switchToReports () throws IOException {
-        Main.switchScene("scenes/reportsAdmin");
+        NavigationController.switchToReports();
     }
 
     @FXML

@@ -99,7 +99,7 @@
       </Pane>
       <AnchorPane layoutX="244.0" layoutY="12.0" prefHeight="688.0" prefWidth="878.0">
          <children>
-            <TextField fx:id="searchField" layoutX="281.0" layoutY="35.0" onKeyTyped="#searchFunction" prefHeight="38.0" prefWidth="321.0" promptText="Search pets, owners, or services " style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
+            <TextField fx:id="searchField" layoutX="281.0" layoutY="35.0" onKeyTyped="#searchFunction" prefHeight="38.0" prefWidth="321.0" promptText="Search payments or reports" style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="15.0" />
                </font>
@@ -312,7 +312,7 @@
             <Font name="Segoe UI Italic" size="13.0" />
          </font>
       </Label>
-      <Circle fill="#b2f0ff" layoutX="925.0" layoutY="67.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="#fffdb2" layoutX="925.0" layoutY="67.0" radius="14.0" stroke="WHITE" strokeType="INSIDE" />
       <Label fx:id="employeeIDLabel" layoutX="953.0" layoutY="79.0" prefHeight="19.0" prefWidth="121.0" text="Employee ID" textFill="#62b5b5">
          <font>
             <Font name="Segoe UI Italic" size="13.0" />

@@ -910,17 +910,17 @@ public class RecordsController {
 
     //transitions and effects
     public void switchToDashboard () throws IOException {
-        Main.switchScene("scenes/dashboardAdmin");
+        NavigationController.switchToDashboard();
     }
 
     @FXML
     public void switchToRecords () throws IOException {
-        Main.switchScene("scenes/recordsAdmin");
+        NavigationController.switchToRecords();
     }
 
     @FXML
     public void switchToReports () throws IOException {
-        Main.switchScene("scenes/reportsAdmin");
+        NavigationController.switchToReports();
     }
 
     @FXML
@@ -956,6 +956,13 @@ public class RecordsController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    public void onlyAuthorizedAlert () {
+        int currentIndex = AppState.getInstance().getCurrentTabIndex();
+        if (currentIndex == 5) {
+            Alerts.showAlert("Unauthorized Access", "You are not authorized to access this page.");
+        }
     }
 }
 

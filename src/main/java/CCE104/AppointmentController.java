@@ -230,7 +230,7 @@ public class AppointmentController {
                 int rowsUpdated = statement.executeUpdate();
                 if (rowsUpdated > 0) {
                     Alerts.showSuccessDialog("Success", "Appointment details updated successfully.");
-                    Main.switchSceneWithFade("scenes/recordsAdmin");
+                    NavigationController.switchToRecordsWithFade();
                 } else {
                     Alerts.showErrorDialog("Update Failed", "No changes were made to the appointment details.");
                 }
@@ -622,18 +622,21 @@ public class AppointmentController {
         //add search function here
     }
 
+    @FXML
     public void switchToDashboard () throws IOException {
-        Main.switchScene("scenes/dashboardAdmin");
+        NavigationController.switchToDashboard();
     }
 
     @FXML
     public void switchToRecords () throws IOException {
-        Main.switchScene("scenes/recordsAdmin");
+        NavigationController.switchToRecords();
+
     }
 
     @FXML
     public void switchToReports () throws IOException {
-        Main.switchScene("scenes/reportsAdmin");
+        NavigationController.switchToReports();
+
     }
 
     @FXML
