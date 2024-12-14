@@ -1,6 +1,8 @@
 
 # **Pet Appointment and Boarding Management System** 🐶
 
+CCE104 Final Project - Information Management | An Undergraduate Course Requirement
+
 *Pet Appointment and Boarding Management System* is a comprehensive solution designed to streamline and manage the operations of pet services. The system provides functionalities tailored for administrators, managers, and employees, ensuring efficient scheduling, payment processing, and service management. Additionally, it offers insightful analytics and reporting tools to enhance decision-making and operational efficiency.
 
 ## Technical Specifications

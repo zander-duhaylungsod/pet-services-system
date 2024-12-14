@@ -40,7 +40,7 @@
                   <String fx:value="button" />
                </styleClass>
             </Button>
-            <Button fx:id="recordsBtn" layoutY="226.0" mnemonicParsing="false" onAction="#switchToRecords" prefHeight="86.0" prefWidth="201.0" stylesheets="@../styles/general.css" text="Records" textFill="WHITE">
+            <Button fx:id="recordsBtn" layoutY="226.0" mnemonicParsing="false" onAction="#switchToRecords" prefHeight="86.0" prefWidth="201.0" style="-fx-opacity: 50%;" stylesheets="@../styles/general.css" text="Records" textFill="WHITE">
                <font>
                   <Font name="Segoe UI" size="17.0" />
                </font>
@@ -56,7 +56,7 @@
                   <String fx:value="button" />
                </styleClass>
             </Button>
-            <Button fx:id="reportsBtn" layoutY="311.0" mnemonicParsing="false" onAction="#switchToReports" prefHeight="86.0" prefWidth="201.0" style="-fx-opacity: 50%;" stylesheets="@../styles/general.css" text="Reports" textFill="WHITE">
+            <Button fx:id="reportsBtn" layoutY="311.0" mnemonicParsing="false" onAction="#switchToReports" prefHeight="86.0" prefWidth="201.0" stylesheets="@../styles/general.css" text="Reports" textFill="WHITE">
                <font>
                   <Font name="Segoe UI" size="17.0" />
                </font>
@@ -170,10 +170,15 @@
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <HTMLEditor fx:id="reportContentEditor" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" layoutX="191.0" layoutY="278.0" prefHeight="292.0" prefWidth="607.0" />
+            <HTMLEditor fx:id="reportContentEditor" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" layoutX="191.0" layoutY="278.0" onKeyPressed="#showRemainingWords" onKeyReleased="#showRemainingWords" onKeyTyped="#showRemainingWords" prefHeight="292.0" prefWidth="607.0" />
             <Label layoutX="93.0" layoutY="274.0" prefHeight="53.0" prefWidth="113.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Content:">
                <font>
                   <Font name="Segoe UI Emoji" size="19.0" />
+               </font>
+            </Label>
+            <Label fx:id="remainingWordsLabel" layoutX="614.0" layoutY="568.0" prefHeight="53.0" prefWidth="190.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Remaining Words: 250 words" textFill="#a8a8a8">
+               <font>
+                  <Font name="Segoe UI Emoji" size="14.0" />
                </font>
             </Label>
          </children>

@@ -1,8 +1,12 @@
 package CCE104;
 
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
+import javafx.print.PrinterJob;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -14,17 +18,10 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.util.Duration;
 
-import javafx.print.*;
-
-//import java.awt.*;
-//import java.awt.print.PageFormat;
-//import java.awt.print.Printable;
-//import java.awt.print.PrinterException;
-//import java.awt.print.PrinterJob;
 import java.io.IOException;
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -53,7 +50,8 @@ public class ReportsController {
     @FXML
     private Button reportsBtn;
     @FXML
-    private TextField searchField;
+    private Label remainingWordsLabel;
+
     ObservableList<String> reportTypeList = FXCollections.observableArrayList(
             "Monthly Report",
             "Weekly Report",
@@ -103,15 +101,15 @@ public class ReportsController {
             WebEngine webEngine = reportContentView.getEngine();
             String content = selectedReport.getContent();
             System.out.println("HTML Content: " + content);
-                String fullHtmlDocument = "<html><head><style>" +
-                        "body { font-family: Arial, sans-serif; line-height: 1; }" +
-                        "h1, h2 { color: #333; }" +
-                        "p { margin: 0; padding: 0; }" +
-                        "ul { margin: 10px 0; padding-left: 20px; }" +
-                        "</style></head><body>" +
-                        selectedReport.getContent() +
-                        "</body></html>";
-                webEngine.loadContent(fullHtmlDocument);
+            String fullHtmlDocument = "<html><head><style>" +
+                    "body { font-family: Arial, sans-serif; line-height: 1; }" +
+                    "h1, h2 { color: #333; }" +
+                    "p { margin: 0; padding: 0; }" +
+                    "ul { margin: 10px 0; padding-left: 20px; }" +
+                    "</style></head><body contenteditable='false'>" +
+                    selectedReport.getContent() +
+                    "</body></html>";
+            webEngine.loadContent(fullHtmlDocument);
         }
     }
 
@@ -250,8 +248,7 @@ public class ReportsController {
             String reminderMessage =
                     "<p><strong>Reminders:</strong></p>" +
                             "<ul>" +
-                            "<li>This report is for internal use only. Ensure its contents are kept confidential and not disclosed</li>" +
-                            "<li>outside the organization.</li>" +
+                            "<li>This report is for internal use only. Ensure its contents are kept confidential and not disclosed <br>outside the organization.</li>" +
                             "<li>If any amendments are required, please contact the report creator promptly.</li>" +
                             "<li>Keep this document archived as it may be referenced for future audits or evaluations.</li>" +
                             "</ul>" +
@@ -260,7 +257,7 @@ public class ReportsController {
 
             // Combine HTML content for the full report
             String fullReportContent = "<html><head><style>" +
-                    "body { font-family: Arial, sans-serif; line-height: 1.6; font-size: 10pt; }" + // Reduced overall font size
+                    "body { font-family: Times New Roman, Times, serif; line-height: 1.6; font-size: 10pt; width: 505px;}" + // Reduced overall font size
                     "h1 { color: #333; font-size: 12pt; margin-bottom: 10px; }" + // Smaller heading sizes
                     "h2 { color: #333; font-size: 10pt; margin-bottom: 8px; }" +
                     "h3 { color: #333; font-size: 9pt; margin-bottom: 6px; }" +
@@ -280,18 +277,24 @@ public class ReportsController {
 
             // Use WebView to render the HTML
             WebView webView = new WebView();
-            webView.getEngine().loadContent(fullReportContent);
+            WebEngine webEngine = webView.getEngine();
+            webEngine.loadContent(fullReportContent);
 
-            // Print the WebView content
-            PrinterJob printerJob = PrinterJob.createPrinterJob();
-            if (printerJob != null && printerJob.showPrintDialog(null)) {
-                boolean success = printerJob.printPage(webView);
-                if (success) {
-                    printerJob.endJob();
-                } else {
-                    Alerts.showErrorDialog("Error", "Printing failed.");
+            // Allow the content to finish loading before attempting to print
+            webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
+                if (newState == Worker.State.SUCCEEDED) {
+                    // Start the print job after ensuring rendering is done
+                    PrinterJob printerJob = PrinterJob.createPrinterJob();
+                    if (printerJob != null && printerJob.showPrintDialog(null)) {
+                        boolean success = printerJob.printPage(webView);
+                        if (success) {
+                            printerJob.endJob();
+                        } else {
+                            Alerts.showErrorDialog("Error", "Printing failed.");
+                        }
+                    }
                 }
-            }
+            });
         } catch (Exception e) {
             e.printStackTrace();
             Alerts.showErrorDialog("Error", "An error occurred while printing the report.");
@@ -337,7 +340,35 @@ public class ReportsController {
             return false;
         }
 
+        // **New Validation: Check word limit of the content**
+        int wordCount = countWords(reportContent);
+        if (wordCount > 500) {
+            Alerts.showAlert("Validation Error", "Report content exceeds the maximum allowed word limit of 500 words. Current word count: " + wordCount);
+            return false;
+        }
+
         return true;
+    }
+
+    private int countWords(String content) {
+        if (content == null || content.isEmpty()) {
+            return 0; // No words
+        }
+
+        // Strip HTML tags to ensure plain text word count
+        String plainTextContent = content.replaceAll("<[^>]*>", ""); // Remove all HTML tags
+
+        // Split by whitespace and count
+        String[] words = plainTextContent.trim().split("\\s+");
+        return words.length;
+    }
+
+    @FXML
+    private void showRemainingWords(){
+        String reportContent = reportContentEditor.getHtmlText() == null ? null : reportContentEditor.getHtmlText();
+        int wordCount = countWords(reportContent);
+        int remainingWords = 250 - wordCount;
+        remainingWordsLabel.setText("Remaining words: " + remainingWords);
     }
 
     private boolean isEmployeeIDRegistered(int employeeID) {
@@ -410,4 +441,3 @@ public class ReportsController {
         backBtn.setCursor(Cursor.DEFAULT);
     }
 }
-

@@ -273,11 +273,11 @@ public class AppointmentController {
             String reminderMessage =
                     "\n-------------------------------------- Reminder -----------------------------------\n" +
                             "Dear Valued Customer,\n\n" +
-                            "Thank you for choosing PAWFECTCare: Pet Grooming and Boarding Services! We value the trust you place in us to care for your beloved pets.\n\n" +
+                            "Thank you for choosing PAWFECTCare: Pet Grooming and Boarding Services! \nWe value the trust you place in us to care for your beloved pets.\n\n" +
                             "Please keep this appointment confirmation for your reference.\n\n" +
                             "Reminders:\n" +
-                            "- Kindly arrive at least 10 minutes before your scheduled appointment to ensure timely service.\n" +
-                            "- If you need to reschedule or cancel, please notify us at least 24 hours in advance to avoid any inconvenience.\n" +
+                            "- Kindly arrive at least 10 minutes before your scheduled appointment to ensure \ntimely service.\n" +
+                            "- If you need to reschedule or cancel, please notify us at least 24 hours in advance \nto avoid any inconvenience.\n" +
                             "- Ensure that your pet is in good health and up to date with necessary vaccinations.\n\n" +
                             "For further assistance, please contact us at 09651245784.\n\n" +
                             "We look forward to seeing you and your pet soon!\n\n" +
@@ -636,11 +636,10 @@ public class AppointmentController {
     @FXML
     public void switchToReports () throws IOException {
         NavigationController.switchToReports();
-
     }
 
     @FXML
     public void logOut () throws IOException {
-        Main.switchSceneWithFade("scenes/signIn");
+        NavigationController.logOut();
     }
 }

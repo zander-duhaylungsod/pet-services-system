@@ -38,6 +38,7 @@ public class SignInController {
     private void initialize() {
         // Configure sign-in button action
         signInBtn.setOnAction(event -> handleSignIn());
+        showPasswordBtn.setOpacity(0.5); // Reduced opacity when not toggled
 
         // Configure toggle button for password visibility
         showPasswordBtn.setOnAction(event -> togglePasswordVisibility());
@@ -45,7 +46,15 @@ public class SignInController {
 
     private void handleSignIn() {
         String identifier = EmployeeIDEmailField.getText().trim(); // Employee ID or email
-        String password = passwordField.getText().trim();
+        String password = "";
+        if(!(passwordField.isVisible())){
+            passwordField.setText(showPassField.getText());
+            password = passwordField.getText().trim();
+        }
+
+        if(passwordField.isVisible()){
+            password = passwordField.getText().trim();
+        }
 
         // Validate input
         if (identifier.isEmpty() || password.isEmpty()) {

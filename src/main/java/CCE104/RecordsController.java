@@ -925,7 +925,7 @@ public class RecordsController {
 
     @FXML
     public void logOut () throws IOException {
-        Main.switchSceneWithFade("scenes/signIn");
+        NavigationController.logOut();
     }
 
     //alerts

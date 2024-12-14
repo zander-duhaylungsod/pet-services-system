@@ -369,6 +369,7 @@ public class PetController {
 
     @FXML
     public void addOwner () throws IOException {
+        AppState.getInstance().setCurrentOwnerPage(AppState.Owner.ADD);
         Main.switchSceneWithFade("scenes/addOwner");
     }
 
@@ -406,7 +407,7 @@ public class PetController {
 
     @FXML
     public void logOut () throws IOException {
-        Main.switchSceneWithFade("scenes/signIn");
+        NavigationController.logOut();
     }
 
     //effects

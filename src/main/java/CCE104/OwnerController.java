@@ -247,7 +247,7 @@ public class  OwnerController {
 
     @FXML
     public void logOut () throws IOException {
-        Main.switchSceneWithFade("scenes/signIn");
+        NavigationController.logOut();
     }
 
     public void backFunction () throws IOException {

@@ -478,7 +478,7 @@ public class BoardingController {
 
     @FXML
     public void logOut () throws IOException {
-        Main.switchSceneWithFade("scenes/signIn");
+        NavigationController.logOut();
     }
 
     @FXML

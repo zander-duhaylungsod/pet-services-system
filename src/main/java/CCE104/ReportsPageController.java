@@ -190,6 +190,7 @@ public class ReportsPageController {
         }
 
         PaymentRecord.setSelectedPayment(selectedPayment);
+
         String status = selectedPayment.getStatus();
 //        if (!"Full Payment".equals(status) && !"Partial Payment".equals(status)) {
 //            Alerts.showAlert("Invalid Status", "Cannot print the payment with the current status.");
@@ -567,7 +568,7 @@ public class ReportsPageController {
 
     @FXML
     public void logOut () throws IOException {
-        Main.switchSceneWithFade("scenes/signIn");
+        NavigationController.logOut();
     }
 
 }

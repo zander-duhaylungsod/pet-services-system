@@ -61,6 +61,13 @@ public class NavigationController {
     }
 
     @FXML
+    public static void logOut () throws IOException {
+        if((Alerts.showConfirmationDialog("Confirmation", "Are you sure you want to log out?"))){
+            Main.switchSceneWithFade("scenes/signIn");
+        }
+    }
+
+    @FXML
     public void addPet () throws IOException {
         AppState.getInstance().setCurrentPetPage(AppState.Pet.ADD);
         if(AppState.getInstance().getCurrentLevelPage() == AppState.Level.ADMIN) {
