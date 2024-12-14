@@ -1,6 +1,8 @@
 package CCE104;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class EmployeeRecord {
     private int employeeID;
@@ -11,10 +13,13 @@ public class EmployeeRecord {
     private String phone;
     private String role;
 
-    // Database connection information
-    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-    String user = "root";
-    String passwordDB = "";
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(EmployeeRecord.class.getName());
 
     // Constructor
     public EmployeeRecord(int employeeID, String firstName, String lastName, String phone, String role) {
@@ -29,7 +34,6 @@ public class EmployeeRecord {
     public int getEmployeeID() {
         return employeeID;
     }
-
     public void setEmployeeID(int employeeID) {
         this.employeeID = employeeID;
     }
@@ -37,7 +41,6 @@ public class EmployeeRecord {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -45,7 +48,6 @@ public class EmployeeRecord {
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -53,14 +55,12 @@ public class EmployeeRecord {
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
     public String getEmail() {
-        try (Connection connection = DriverManager.getConnection(url, user, passwordDB)) {
-            // SQL query to get the OwnerID by matching ownerFirstName, ownerLastName, and petID
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             String query = "SELECT Email FROM Employees WHERE EmployeeID = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
 
@@ -75,12 +75,11 @@ public class EmployeeRecord {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showAlert("Error", "An error occurred while retrieving the Email.");
         }
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -88,7 +87,6 @@ public class EmployeeRecord {
     public String getPhone() {
         return phone;
     }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -96,7 +94,6 @@ public class EmployeeRecord {
     public String getRole() {
         return role;
     }
-
     public void setRole(String role) {
         this.role = role;
     }
@@ -109,7 +106,6 @@ public class EmployeeRecord {
     public static EmployeeRecord getSelectedEmployee() {
         return selectedEmployee;
     }
-
     public static void setSelectedEmployee(EmployeeRecord employee) {
         selectedEmployee = employee;
     }

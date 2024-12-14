@@ -9,10 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-
 import java.awt.*;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -21,10 +19,9 @@ import java.awt.print.PrinterJob;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PaymentController {
 
@@ -35,8 +32,6 @@ public class PaymentController {
     private Polygon backBtn;
     @FXML
     private Button dashboardBtn;
-    @FXML
-    private Label employeeName;
     @FXML
     private Label remainingAmount;
     @FXML
@@ -71,14 +66,16 @@ public class PaymentController {
     private Button reportsBtn;
     @FXML
     private TextField reservationID;
-    @FXML
-    private TextField searchField;
 
-    // Database credentials
-    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-    String user = "root";
-    String password = "";
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
 
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(PaymentController.class.getName());
+
+    //Observable lists
     ObservableList<String> statusList = FXCollections.observableArrayList("Pending", "Partial Payment", "Full Payment", "Refunded", "Voided");
     ObservableList<String> methodList = FXCollections.observableArrayList("Cash", "GCash", "Credit Card", "Debit Card");
 
@@ -87,12 +84,14 @@ public class PaymentController {
         AppState.Payment currentPaymentPage = appState.getCurrentPaymentPage();
 
         PaymentRecord selectedPayment = PaymentRecord.getSelectedPayment();
+        //if ADD
         if(currentPaymentPage == AppState.Payment.PAYMENTA || currentPaymentPage == AppState.Payment.PAYMENTB){
             paymentStatus.setItems(statusList);
             paymentMethod.setItems(methodList);
             paymentDate.setValue(LocalDate.now());
         }
 
+        //if EDIT
         if(currentPaymentPage == AppState.Payment.EDITA || currentPaymentPage == AppState.Payment.EDITB ){
             paymentStatus.setItems(statusList);
             paymentMethod.setItems(methodList);
@@ -113,6 +112,7 @@ public class PaymentController {
             }
         }
 
+        //if PRINT
         if(currentPaymentPage == AppState.Payment.PRINTA || currentPaymentPage == AppState.Payment.PRINTB){
             petID.setText(String.valueOf(selectedPayment.getPetID()));
             paymentAmount.setText(String.valueOf(selectedPayment.getAmount()));
@@ -123,7 +123,7 @@ public class PaymentController {
             String service = selectedPayment.getService();
 
             if ("Boarding".equalsIgnoreCase(service)) {
-//                System.out.println("ResID: " + selectedPayment.getReservationID());
+                System.out.println("ResID: " + selectedPayment.getReservationID());
                 reservationID.setText(String.valueOf(selectedPayment.getReservationID()));
             } else {
                 appointmentID.setText(String.valueOf(selectedPayment.getAppointmentID()));
@@ -137,7 +137,7 @@ public class PaymentController {
         }
     }
 
-    public void addPayment() throws IOException {
+    public void addPayment() {
         try {
             // Validate inputs
             if(!validatePaymentInputs()){
@@ -150,6 +150,7 @@ public class PaymentController {
             String paymentMethod = this.paymentMethod.getValue();
             String paymentStatus = this.paymentStatus.getValue();
             String reservationID = null;
+
             if (AppState.getInstance().getCurrentPaymentPage() == AppState.Payment.PAYMENTB) {
                 reservationID = this.reservationID.getText().trim();
             }
@@ -158,34 +159,7 @@ public class PaymentController {
                 appointmentID = this.appointmentID.getText().trim();
             }
 
-            Connection connection = DriverManager.getConnection(url, user, password);
-
-            // Check if either reservationID or appointmentID already exists in the Payments table
-//            String checkQuery = "SELECT COUNT(*) FROM Payments WHERE ReservationID = ? OR AppointmentID = ?";
-//            PreparedStatement checkStatement = connection.prepareStatement(checkQuery);
-//
-//            if (reservationID == null) {
-//                checkStatement.setNull(1, Types.INTEGER);
-//            } else {
-//                checkStatement.setInt(1, Integer.parseInt(reservationID));
-//            }
-//
-//            if (appointmentID == null) {
-//                checkStatement.setNull(2, Types.INTEGER);
-//            } else {
-//                checkStatement.setInt(2, Integer.parseInt(appointmentID));
-//            }
-//
-//            ResultSet resultSet = checkStatement.executeQuery();
-//            resultSet.next();
-//            int count = resultSet.getInt(1);
-//
-//            if (count > 0) {
-//                Alerts.showErrorDialog("Error", "A payment with the same ReservationID or AppointmentID already exists.");
-//                checkStatement.close();
-//                connection.close();
-//                return;
-//            }
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             // Insert data into Payments table
             String query = "INSERT INTO Payments (PaymentDate, Amount, Method, Status, ReservationID, AppointmentID) VALUES (?, ?, ?, ?, ?, ?)";
@@ -198,12 +172,14 @@ public class PaymentController {
             if (reservationID == null) {
                 statement.setNull(5, Types.INTEGER);
             } else {
+                //if Boarding
                 statement.setInt(5, Integer.parseInt(reservationID));
             }
 
             if (appointmentID == null) {
                 statement.setNull(6, Types.INTEGER);
             } else {
+                //if Appointment
                 statement.setInt(6, Integer.parseInt(appointmentID));
             }
 
@@ -220,9 +196,6 @@ public class PaymentController {
 
             // Close the statement
             statement.close();
-//            checkStatement.close();
-
-            // Close the connection
             connection.close();
 
             if (rowsAffected > 0) {
@@ -235,7 +208,7 @@ public class PaymentController {
         } catch (IllegalArgumentException e) {
             Alerts.showErrorDialog("Error", "Validation Error: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while adding payment.");
         }
     }
@@ -250,30 +223,27 @@ public class PaymentController {
         String paymentMethod = this.paymentMethod.getValue();
         String paymentStatus = this.paymentStatus.getValue();
         String reservationID = "";
+        String appointmentID = "";
 
         if (currentPaymentPage == AppState.Payment.PAYMENTB || currentPaymentPage == AppState.Payment.EDITB) {
             reservationID = this.reservationID.getText().trim();
         }
-        String appointmentID = "";
         if (currentPaymentPage == AppState.Payment.PAYMENTA || currentPaymentPage == AppState.Payment.EDITA) {
             appointmentID = this.appointmentID.getText().trim();
         }
 
-        // Validate that PetID is not empty
         if (petID.isEmpty()) {
             Alerts.showAlert("Validation Error", "Registered PetID is required.");
             return false;
         }
 
-        // Validate that PetID is a valid integer
         try {
-            Integer.parseInt(petID); // Ensure PetID is a valid number
+            Integer.parseInt(petID);
         } catch (NumberFormatException e) {
             Alerts.showAlert("Validation Error", "Pet ID must be a valid number.");
             return false;
         }
 
-        // Check if PetID is registered in the system
         if (!isPetIDRegistered(petID)) {
             Alerts.showAlert("Validation Error", "The provided PetID is not registered in the system.");
             return false;
@@ -291,37 +261,31 @@ public class PaymentController {
             return false;
         }
 
-        // Validate that a payment amount is entered
         if (paymentAmount.isEmpty()) {
             Alerts.showAlert("Validation Error", "Payment amount is required.");
             return false;
         }
 
-        // Validate that a date is selected
         if (paymentDateL == null) {
             Alerts.showAlert("Validation Error", "Please choose a payment date.");
             return false;
         }
 
-        // Validate that the payment date is not in the future
         if (paymentDateL.isAfter(LocalDate.now())) {
             Alerts.showAlert("Validation Error", "The payment date cannot be in the future.");
             return false;
         }
 
-        // Validate that a payment method is selected
         if (paymentMethod == null) {
             Alerts.showAlert("Validation Error", "Please select a payment method.");
             return false;
         }
 
-        // Validate that a payment status is selected
         if (paymentStatus == null) {
             Alerts.showAlert("Validation Error", "Please set the payment's status.");
             return false;
         }
         
-        // Validate based on Payment Type (Appointment or Boarding)
         if (!appointmentID.isEmpty()) {
             try {
                 Integer.parseInt(appointmentID);
@@ -329,7 +293,6 @@ public class PaymentController {
                 Alerts.showAlert("Validation Error", "Appointment ID must be a valid number.");
                 return false;
             }
-            // Additional validation logic for appointments can be added here
         } else if (!reservationID.isEmpty()) {
             try {
                 Integer.parseInt(reservationID);
@@ -337,7 +300,6 @@ public class PaymentController {
                 Alerts.showAlert("Validation Error", "Reservation ID must be a valid number.");
                 return false;
             }
-            // Additional validation logic for boarding can be added here
         } else {
             Alerts.showAlert("Validation Error", "Either Appointment ID or Reservation ID must be provided.");
             return false;
@@ -346,12 +308,9 @@ public class PaymentController {
     }
 
     private boolean isPetIDRegistered(String petID) {
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = "";
         String query = "SELECT COUNT(*) FROM Pets WHERE PetID = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, petID);
@@ -361,22 +320,17 @@ public class PaymentController {
                 int count = resultSet.getInt(1);
                 return count > 0; // If count is greater than 0, the PetID exists
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showAlert("Error", "Failed to validate PetID.");
         }
-
         return false; // If something goes wrong or PetID is not found
     }
 
     private boolean isPetIDandReservationIDMatching(String petID, String reservationID) {
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = "";
         String query = "SELECT COUNT(*) FROM BoardingReservations WHERE PetID = ? AND ReservationID = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, petID);
@@ -389,20 +343,16 @@ public class PaymentController {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showAlert("Error", "Failed to validate PetID and ReservationID.");
         }
-
         return false; // If something goes wrong or no matching reservation is found
     }
 
     private boolean isPetIDandAppointmentIDMatching(String petID, String appointmentID) {
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = "";
         String query = "SELECT COUNT(*) FROM Appointments WHERE PetID = ? AND AppointmentID = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, petID);
@@ -415,7 +365,7 @@ public class PaymentController {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showAlert("Error", "Failed to validate PetID and AppointmentID.");
         }
 
@@ -442,20 +392,16 @@ public class PaymentController {
     public static double fetchServicePriceByAppointment(int appointmentID) {
         String queryServiceID = "SELECT ServiceID FROM Appointments WHERE AppointmentID = ?";
         String queryServicePrice = "SELECT Price FROM Services WHERE ServiceID = ?";
-        Double totalCost = 0.0;
+        double totalCost = 0.0;
 
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = "";
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-
-            // Step 1: Get the ServiceID from the AppointmentID
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            //Get the ServiceID from the AppointmentID
             try (PreparedStatement stmtServiceID = connection.prepareStatement(queryServiceID)) {
                 stmtServiceID.setInt(1, appointmentID);
                 try (ResultSet rsServiceID = stmtServiceID.executeQuery()) {
                     if (rsServiceID.next()) {
                         int serviceID = rsServiceID.getInt("ServiceID");
-                        // Step 2: Get the Price from the ServiceID
+                        //Get the Price from the ServiceID
                         try (PreparedStatement stmtServicePrice = connection.prepareStatement(queryServicePrice)) {
                             stmtServicePrice.setInt(1, serviceID);
                             try (ResultSet rsServicePrice = stmtServicePrice.executeQuery()) {
@@ -474,7 +420,7 @@ public class PaymentController {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             totalCost = 0.0; // Set default to 0 if an error occurs
         }
         return totalCost;
@@ -485,13 +431,10 @@ public class PaymentController {
         double costPerDay = 1000;
         double totalCosts = 0.0;
 
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = "";
         System.out.println("Attempting to find reservation with ID: " + reservationID);
 
         // Existing code continues...
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
             stmt.setInt(1, reservationID);
@@ -514,7 +457,7 @@ public class PaymentController {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showAlert("Error", "An error occurred while retrieving reservation details.");
         }
         return totalCosts;
@@ -535,7 +478,6 @@ public class PaymentController {
             System.out.println("Reservation ID: " + reservationID);
             totalCost = calculateTotalCost(reservationID);
             paymentAmount += fetchTotalPaidByReservation(reservationID);
-
         }
 
         return totalCost - paymentAmount;
@@ -543,12 +485,9 @@ public class PaymentController {
 
     public static double fetchTotalPaidByAppointment(int appointmentID) {
         double totalPaid = 0.0;
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = "";
 
         try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             String query = "SELECT SUM(Amount) AS TotalPaid FROM Payments WHERE AppointmentID = ? " +
                     "AND (Status = 'Partial Payment' OR Status = 'Full Payment');";
             PreparedStatement stmt = connection.prepareStatement(query);
@@ -562,7 +501,7 @@ public class PaymentController {
             rs.close();
             stmt.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
         }
 
         return totalPaid;
@@ -570,14 +509,11 @@ public class PaymentController {
 
     public static double fetchTotalPaidByReservation(int reservationID) {
         double totalPaid = 0.0;
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = "";
 
         try {
             String query = "SELECT SUM(Amount) AS TotalPaid FROM Payments WHERE ReservationID = ?" +
                     "AND (Status = 'Partial Payment' OR Status = 'Full Payment');";
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setInt(1, reservationID);
             ResultSet rs = stmt.executeQuery();
@@ -588,9 +524,8 @@ public class PaymentController {
             rs.close();
             stmt.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
         }
-
         return totalPaid;
     }
 
@@ -599,19 +534,14 @@ public class PaymentController {
             this.remainingAmount.setText(String.format("%.2f", remainingAmount));
     }
 
-
     public void savePaymentChanges() throws IOException {
         try {
             if (!validatePaymentInputs()) {
                 return;
             }
 
-            AppState appState = AppState.getInstance();
-            AppState.Payment currentPaymentPage = appState.getCurrentPaymentPage();
-
             String paymentAmount = this.paymentAmount.getText().trim();
             Date paymentDate = Date.valueOf(this.paymentDate.getValue());
-            LocalDate paymentDateL = this.paymentDate.getValue();
             String paymentMethod = this.paymentMethod.getValue();
             String paymentStatus = this.paymentStatus.getValue();
 
@@ -623,7 +553,7 @@ public class PaymentController {
             }
             
             String updateQuery = "UPDATE Payments SET PaymentDate = ?, Amount = ?, Method = ?, Status = ? WHERE PaymentID = ?";
-            try (Connection conn = DriverManager.getConnection(url, user, password);
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                  PreparedStatement statement = conn.prepareStatement(updateQuery)) {
 
                 statement.setDate(1, paymentDate);
@@ -651,7 +581,7 @@ public class PaymentController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while saving payment changes.");
         }
     }
@@ -662,17 +592,13 @@ public class PaymentController {
             AppState.Payment currentPaymentPage = appState.getCurrentPaymentPage();
 
             PaymentRecord selectedPayment = PaymentRecord.getSelectedPayment();
-            // Collect all necessary details for the printout
             if (selectedPayment == null) {
                 Alerts.showErrorDialog("Error", "No payment selected.");
                 return;
             }
 
             // Collect information for the printout
-            ReportsPageController reportsPageController = PaymentRecord.getInstance().getReportsPageController();
-            Integer selectedPaymentID = reportsPageController.getSelectedPaymentID();
-
-            int paymentID = selectedPaymentID;
+            int paymentID = selectedPayment.getPaymentID();
             int ownerID = selectedPayment.getOwnerID();
             String ownerName = selectedPayment.getOwnerName();
             String petName = selectedPayment.getPetName();
@@ -713,6 +639,7 @@ public class PaymentController {
                     "--------------PAWFECTCare: Pet Grooming and Boarding Services--------------\n" +
                             "Payment Details\n\n" +
                             "Payment ID: " + paymentID + "\n" +
+                            "Payment Date: " + paymentDate + "\n" +
                             "Owner ID: " + ownerID + "\n" +
                             "Owner Name: " + ownerName + "\n" +
                             "Pet ID: " + petID + "\n" +
@@ -725,44 +652,39 @@ public class PaymentController {
                             "Payment Status: " + paymentStatus + "\n\n" +
                             reminderMessage;
 
-            // Create a PrinterJob instance and set up the print settings
             PrinterJob printerJob = PrinterJob.getPrinterJob();
 
-            // Set a print job (we can use a simple text-based print job)
             printerJob.setPrintable(new Printable() {
                 public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-                    if (pageIndex >= 1) { // Only 1 page to print
+                    if (pageIndex >= 1) {
                         return Printable.NO_SUCH_PAGE;
                     }
 
-                    // Graphics object used to render the content
                     Graphics2D g2d = (Graphics2D) graphics;
                     g2d.setFont(new Font("Serif", Font.PLAIN, 12));
                     g2d.setColor(java.awt.Color.BLACK);
 
-                    // Adjust the page's print area and draw the content
                     g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 
                     // Split the content into lines
                     String[] lines = printContent.split("\n");
-                    int yPosition = 100; // Starting y position for the first line
+                    int yPosition = 100;
 
-                    // Iterate over the lines and print each one
                     for (String line : lines) {
-                        g2d.drawString(line, 100, yPosition); // Print each line at the new y position
-                        yPosition += 15; // Increment y position for the next line (line height)
+                        g2d.drawString(line, 100, yPosition);
+                        yPosition += 15;
                     }
 
                     return Printable.PAGE_EXISTS;
                 }
             });
 
-            // Show the print dialog to the user
+            // Show the print dialog
             if (printerJob.printDialog()) {
-                printerJob.print();  // Print the document
+                printerJob.print();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while printing payment details.");
         }
     }
@@ -797,16 +719,14 @@ public class PaymentController {
         }
 
         try {
-            // Step 1: Insert refund record into Refunds table
             String insertQuery = "INSERT INTO Refunds (PaymentID, RefundDate, RefundAmount, Reason) VALUES (?, ?, ?, ?)";
             String updateQuery = "UPDATE Payments SET Status = ? WHERE PaymentID = ?";
 
-            try (Connection connection = DriverManager.getConnection(url, user, password);
+            try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                  PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
                  PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
 
-                // Prepare and execute insert query
-                insertStmt.setInt(1, Integer.parseInt(paymentID)); // Ensure paymentID is an integer
+                insertStmt.setInt(1, Integer.parseInt(paymentID));
                 insertStmt.setDate(2, Date.valueOf(refundDate));
                 insertStmt.setDouble(3, Double.parseDouble(refundAmount));
                 insertStmt.setString(4, reason);
@@ -816,12 +736,10 @@ public class PaymentController {
                 }
                 int rowsInserted = insertStmt.executeUpdate();
 
-                // Check if the refund was successfully inserted
                 if (rowsInserted > 0) {
                     System.out.println("Refund record successfully added.");
 
-                    // Step 2: Update the payment status in Payments table
-                    updateStmt.setString(1, "Refunded"); // Set status to 'Refunded'
+                    updateStmt.setString(1, "Refunded");
                     updateStmt.setInt(2, Integer.parseInt(paymentID));
                     int rowsUpdated = updateStmt.executeUpdate();
 
@@ -836,18 +754,15 @@ public class PaymentController {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showAlert("Error", "An error occurred while processing the refund: " + e.getMessage());
         } catch (NumberFormatException e) {
             Alerts.showAlert("Error", "Payment ID and Refund Amount must be valid numbers.");
         }
     }
 
+    //transitions and effects
     @FXML
-    public void searchFunction(KeyEvent event) {
-        //add search function here
-    }
-            @FXML
     public void switchToDashboard () throws IOException {
         NavigationController.switchToDashboard();
     }
@@ -867,7 +782,6 @@ public class PaymentController {
         NavigationController.logOut();
     }
 
-    //effects
     @FXML
     public void polygonHover () throws IOException {
         backBtn.setFill(Color.web("#48d1dd"));

@@ -3,6 +3,8 @@ package CCE104;
 import javafx.util.Pair;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AppointmentRecord {
     private int appointmentID;
@@ -19,10 +21,13 @@ public class AppointmentRecord {
     private String status;
     private double totalCost;
 
-    // Database connection information
-    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-    String user = "root";
-    String password = "";
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(AppointmentRecord.class.getName());
 
     // Constructor
     public AppointmentRecord(int appointmentID,  String petName, String ownerName, Date date, Time time, String serviceName, String status) {
@@ -52,7 +57,6 @@ public class AppointmentRecord {
         String password = ""; // Replace with your password
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            // Query to get the serviceID and serviceName from the database
             String query = "SELECT ServiceID, ServiceName FROM Services WHERE ServiceName = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setString(1, serviceName);
@@ -64,49 +68,41 @@ public class AppointmentRecord {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showAlert("Error","An error occured while retrieving the ServiceID.");
         }
         return serviceID;
     }
-
     public void setServiceID(int serviceID) { this.serviceID = serviceID; }
 
     public String getServiceName() { return serviceName; }
     public void setServiceName(String serviceName) { this.serviceName = serviceName; }
 
     public int getPetID(String petName) {
-        // Database connection information
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = ""; // Replace with your password
-
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            // Query to get the serviceID and serviceName from the database
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             String query = "SELECT PetID, Name FROM Pets WHERE Name = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setString(1, petName);
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
-                        petID = rs.getInt("PetID"); // Retrieve
+                        petID = rs.getInt("PetID");
                     }
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showAlert("Error","An error occured while retrieving the PetID.");
         }
         return petID;
     }
-
     public void setPetID(int petID) { this.petID = petID; }
 
     public String getPetName() { return petName; }
     public void setPetName(String petName) { this.petName = petName; }
 
     public int getOwnerID() {
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_URL)) {
             // SQL query to get the OwnerID by matching ownerFirstName, ownerLastName, and petID
             String query = "SELECT o.OwnerID " +
                     "FROM Owners o " +
@@ -114,10 +110,10 @@ public class AppointmentRecord {
                     "WHERE o.FirstName = ? AND o.LastName = ? AND p.PetID = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 // Split ownerName into FirstName and LastName
-                String[] nameParts = ownerName.split(" ", 2); // Split into two parts (first and last name)
+                String[] nameParts = ownerName.split(" ", 2);
                 if (nameParts.length < 2) {
                     Alerts.showAlert("Error", "Owner name is incomplete.");
-                    return -1; // Return an error code or handle accordingly
+                    return -1;
                 }
 
                 String firstName = nameParts[0];
@@ -136,12 +132,11 @@ public class AppointmentRecord {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showAlert("Error", "An error occurred while retrieving the OwnerID.");
         }
         return ownerID;
     }
-
     public void setOwnerID(int ownerID) { this.ownerID = ownerID; }
 
     public String getOwnerName() { return ownerName; }
@@ -154,30 +149,28 @@ public class AppointmentRecord {
     public void setStatus(String status) { this.status = status; }
 
     public double getTotalCost() {
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             fetchServicePrice(serviceName);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showAlert("Error","An error occured while retrieving the service's price.");
         }
         return totalCost;
     }
-
     public double getTotalCost(String serviceName) {
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             fetchServicePrice(serviceName);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showAlert("Error","An error occured while retrieving the service's price.");
         }
         return totalCost;
     }
-
     public void setTotalCost(double totalCost) { this.totalCost = totalCost; }
 
     // Fetch price for the serviceID and set totalCost
     public void fetchServicePrice(String serviceName) {
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             int sID = getServiceID(serviceName);
             // Query to get the service price by serviceID
             String query = "SELECT Price FROM Services WHERE ServiceID = ?";
@@ -196,7 +189,7 @@ public class AppointmentRecord {
             rs.close();
             stmt.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             this.totalCost = 0.0; // If there's an error, set default 0
         }
     }
@@ -206,12 +199,8 @@ public class AppointmentRecord {
     private static AppointmentRecord selectedAppointment;
     private RecordsController recordsController;
 
-    public static AppointmentRecord getSelectedAppointment() {
-        return selectedAppointment;
-    }
-    public static void setSelectedAppointment(AppointmentRecord appointment) {
-        selectedAppointment = appointment;
-    }
+    public static AppointmentRecord getSelectedAppointment() { return selectedAppointment; }
+    public static void setSelectedAppointment(AppointmentRecord appointment) { selectedAppointment = appointment; }
     private AppointmentRecord() {}
 
     public static AppointmentRecord getInstance() {
@@ -221,10 +210,6 @@ public class AppointmentRecord {
         return instance;
     }
 
-    public RecordsController getRecordsController() {
-        return recordsController;
-    }
-    public void setRecordsController(RecordsController recordsController) {
-        this.recordsController = recordsController;
-    }
+    public RecordsController getRecordsController() { return recordsController; }
+    public void setRecordsController(RecordsController recordsController) { this.recordsController = recordsController; }
 }

@@ -12,7 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.input.KeyEvent;
-
 import java.awt.*;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -21,10 +20,9 @@ import java.awt.print.PrinterJob;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BoardingController {
 
@@ -45,8 +43,6 @@ public class BoardingController {
     @FXML
     private Button reportsBtn;
     @FXML
-    private TextField searchField;
-    @FXML
     private TextField boardingStatusField;
     @FXML
     private TextField startDateField;
@@ -59,13 +55,23 @@ public class BoardingController {
     @FXML
     private Label capacityField;
 
+    //Boarding statuses
     ObservableList<String> statusList = FXCollections.observableArrayList("Pending", "Confirmed", "Cancelled", "Completed");
+
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(BoardingController.class.getName());
 
     public void initialize() {
         AppState appState = AppState.getInstance();
         AppState.Boarding currentBoardingPage = appState.getCurrentBoardingPage();
-
         BoardingRecord selectedBoarding = BoardingRecord.getSelectedBoarding();
+
+        //if ADD
         if(currentBoardingPage == AppState.Boarding.ADD){
             this.startDate.setValue(LocalDate.now());
             this.endDate.setValue(LocalDate.now());
@@ -76,11 +82,13 @@ public class BoardingController {
             capacityField.setText(String.valueOf(BoardingRecord.getInstance().getRemainingCapacity()));
         }
 
+        //if NOT add
         if(currentBoardingPage != AppState.Boarding.ADD){
             if (selectedBoarding != null) {
                 petID.setText(String.valueOf(selectedBoarding.getPetID()));
                 totalCost.setText(String.valueOf(selectedBoarding.getTotalCost()));
 
+                //if EDIT
                 if (currentBoardingPage == AppState.Boarding.EDIT) {
                     boardingStatus.setItems(statusList);
                     Date startDate = selectedBoarding.getStartDate();
@@ -97,6 +105,7 @@ public class BoardingController {
                     capacityField.setText(String.valueOf(BoardingRecord.getInstance().getRemainingCapacity()));
                 }
 
+                //if VIEW
                 if (currentBoardingPage == AppState.Boarding.VIEW) {
                     String startDate = selectedBoarding.getStartDate() != null ? selectedBoarding.getStartDate().toString() : "";
                     String endDate = selectedBoarding.getEndDate() != null ? selectedBoarding.getEndDate().toString() : "";
@@ -110,11 +119,6 @@ public class BoardingController {
             }
         }
     }
-
-    // Connect to the database
-    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-    String user = "root";
-    String password = ""; // Replace with your password
 
     public void addBoarding () throws IOException {
         try {
@@ -131,9 +135,9 @@ public class BoardingController {
             double TotalCost = calculateTotalCost(startDateD,endDateD);
             String status = boardingStatus.getValue();
 
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
-            // Insert data into Pets table
+            // Insert data into BoardingReservations table
             String query = "INSERT INTO BoardingReservations (StartDate, EndDate, PetID, EmployeeID, Status) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setDate(1, Date.valueOf(startDate));
@@ -161,7 +165,7 @@ public class BoardingController {
         } catch (IllegalArgumentException e) {
             Alerts.showErrorDialog("Error", "Validation Error: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while adding boarding reservation.");
         }
         capacityField.setText(String.valueOf(BoardingRecord.getInstance().getRemainingCapacity()));
@@ -190,7 +194,8 @@ public class BoardingController {
             }
 
             String updateQuery = "UPDATE BoardingReservations SET StartDate = ?, EndDate = ?, PetID = ?, EmployeeID = ?, Status = ? WHERE ReservationID = ?";
-            try (Connection conn = DriverManager.getConnection(url,user,password);
+
+            try (Connection conn = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
                  PreparedStatement statement = conn.prepareStatement(updateQuery)) {
 
                 statement.setDate(1, Date.valueOf(startDate));
@@ -203,7 +208,9 @@ public class BoardingController {
                 if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to save boarding changes? Please double check fields."))){
                     return;
                 }
+
                 int rowsUpdated = statement.executeUpdate();
+
                 if (rowsUpdated > 0) {
                     Alerts.showSuccessDialog("Success", "Boarding details updated successfully.");
                     NavigationController.switchToRecordsWithFade();
@@ -212,39 +219,35 @@ public class BoardingController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while saving boarding changes.");
         }
     }
 
     public void printBoarding () throws IOException {
         try {
-            AppState appState = AppState.getInstance();
-            AppState.Boarding currentBoardingPage = appState.getCurrentBoardingPage();
-
             BoardingRecord selectedBoarding = BoardingRecord.getSelectedBoarding();
-            // Collect all necessary details for the printout
+            RecordsController recordsController = BoardingRecord.getInstance().getRecordsController();
+
             if (selectedBoarding == null) {
                 Alerts.showErrorDialog("Error", "No boarding selected.");
                 return;
             }
 
             // Collect information for the printout
-            RecordsController recordsController = BoardingRecord.getInstance().getRecordsController();
-
             Integer selectedBoardingID = recordsController.getSelectedBoardingID();
             String ownerName = selectedBoarding.getOwnerName();
             int ownerID = selectedBoarding.getOwnerID();
             String petName = selectedBoarding.getPetName();
             String petNotes = selectedBoarding.getPetNotes();
             int petID = selectedBoarding.getPetID();
-            String startDate = selectedBoarding.getStartDate().toString(); // Assuming Date is in SQL format
-            String endDate = selectedBoarding.getEndDate().toString(); // Assuming Date is in SQL format
+            String startDate = selectedBoarding.getStartDate().toString();
+            String endDate = selectedBoarding.getEndDate().toString();
             String boardingStatus = selectedBoarding.getStatus();
             String employeeName = User.getEmployeeName();
             double totalCost = selectedBoarding.getTotalCost();
 
-            // Create the printable content
+            // Printable content
             String reminderMessage =
                     "\n\n-----------------------------------IMPORTANT REMINDER-----------------------------------\n" +
                             "Thank you for trusting PAWFECTCare for your pet's boarding needs!\n\n" +
@@ -274,32 +277,28 @@ public class BoardingController {
                             "Total Cost: " + totalCost + "\n\n" +
                             reminderMessage;
 
-            // Create a PrinterJob instance and set up the print settings
             PrinterJob printerJob = PrinterJob.getPrinterJob();
 
-            // Set a print job (we can use a simple text-based print job)
             printerJob.setPrintable(new Printable() {
                 public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
                     if (pageIndex >= 1) { // Only 1 page to print
                         return Printable.NO_SUCH_PAGE;
                     }
 
-                    // Graphics object used to render the content
                     Graphics2D g2d = (Graphics2D) graphics;
                     g2d.setFont(new Font("Serif", Font.PLAIN, 12));
                     g2d.setColor(java.awt.Color.BLACK);
 
-                    // Adjust the page's print area and draw the content
                     g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 
                     // Split the content into lines
                     String[] lines = printContent.split("\n");
-                    int yPosition = 100; // Starting y position for the first line
+                    int yPosition = 100;
 
                     // Iterate over the lines and print each one
                     for (String line : lines) {
-                        g2d.drawString(line, 100, yPosition); // Print each line at the new y position
-                        yPosition += 15; // Increment y position for the next line (line height)
+                        g2d.drawString(line, 100, yPosition);
+                        yPosition += 15;
                     }
 
                     return Printable.PAGE_EXISTS;
@@ -308,17 +307,15 @@ public class BoardingController {
 
             // Show the print dialog to the user
             if (printerJob.printDialog()) {
-                printerJob.print();  // Print the document
+                printerJob.print();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while printing appointment details.");
         }
     }
 
     private boolean validateBoardingInputs() {
-        BoardingRecord selectedBoarding = BoardingRecord.getSelectedBoarding();
-
         String petID = this.petID.getText().trim();
         LocalDate startDate = this.startDate.getValue();
         LocalDate endDate = this.endDate.getValue();
@@ -327,7 +324,6 @@ public class BoardingController {
         double TotalCost = calculateTotalCost(startDateD,endDateD);
         String status = boardingStatus.getValue();
 
-        // Validate that PetID is not empty
         if(BoardingRecord.getInstance().getRemainingCapacity() < 1) {
             Alerts.showAlert("Validation Error", "Capacity Full.");
             return false;
@@ -338,44 +334,37 @@ public class BoardingController {
             return false;
         }
 
-        // Validate that PetID is a valid integer
         try {
-            Integer.parseInt(petID); // Ensure PetID is a valid number
+            Integer.parseInt(petID);
         } catch (NumberFormatException e) {
             Alerts.showAlert("Validation Error", "Pet ID must be a valid number.");
             return false;
         }
 
-        // Check if PetID is registered in the system
         if (!isPetIDRegistered(petID)) {
             Alerts.showAlert("Validation Error", "The provided PetID is not registered in the system.");
             return false;
         }
 
-        // Validate that the selected date is not in the past
         if (startDate.isBefore(LocalDate.now())) {
             Alerts.showAlert("Validation Error", "The start date cannot be in the past.");
             return false;
         }
 
-        // Validate that a date is selected
         if (startDate == null || endDate == null) {
             Alerts.showErrorDialog("Invalid Input", "Start Date and End Date cannot be empty.");
             return false;
         }
 
-        // Validate that the selected date is not in the past
         if (endDate.isBefore(startDate)) {
             Alerts.showAlert("Validation Error", "The end date should be on or before the start date.");
             return false;
         }
 
-        // Validate that a status is selected
         if (status == null) {
             Alerts.showAlert("Validation Error", "Please set the appointment's status.");
             return false;
         }
-
         return true;
     }
 
@@ -417,14 +406,13 @@ public class BoardingController {
         LocalDate startDate = this.startDate.getValue();
         LocalDate endDate = this.endDate.getValue();
 
-
         // Validate that the selected date is not in the past
         if (startDate.isBefore(LocalDate.now())) {
             Alerts.showAlert("Validation Error", "The start date cannot be in the past.");
             return false;
         }
 
-        // Validate that the selected date is not in the past
+        // Validate that the selected date is valid
         if (endDate.isBefore(startDate)) {
             Alerts.showAlert("Validation Error", "The end date should be on or before the start date.");
             return false;
@@ -433,12 +421,9 @@ public class BoardingController {
     }
 
     private boolean isPetIDRegistered(String petID) {
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = "";
         String query = "SELECT COUNT(*) FROM Pets WHERE PetID = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, petID);
@@ -450,7 +435,7 @@ public class BoardingController {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showAlert("Error", "Failed to validate PetID.");
         }
 
@@ -486,7 +471,6 @@ public class BoardingController {
         //add search function here
     }
 
-    //effects
     public void backFunction () throws IOException {
         AppState.Page currentPage = AppState.getInstance().getCurrentPage();
 

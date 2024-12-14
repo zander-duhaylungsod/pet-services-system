@@ -13,11 +13,6 @@ import java.sql.ResultSet;
 public class AccountCreationController {
 
     @FXML
-    private void switchToSignin() throws IOException {
-        Main.switchSceneWithFade("scenes/signIn");
-    }
-
-    @FXML
     private TextField emailField;
     @FXML
     private TextField employeeIDField;
@@ -30,9 +25,10 @@ public class AccountCreationController {
     @FXML
     private ToggleButton showPasswordBtn;
 
+    //Database credentials
     private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = ""; // Replace with your MySQL root password
+    private static final String DB_PASSWORD = "";
 
     private boolean isPasswordVisible = false;
 
@@ -43,6 +39,70 @@ public class AccountCreationController {
 
         // Configure toggle button action for showing/hiding the password
         showPasswordBtn.setOnAction(event -> togglePasswordVisibility());
+    }
+
+    private void handleSignUp() {
+        String employeeID = employeeIDField.getText().trim();
+        String email = emailField.getText().trim();
+        String password = passwordField.getText().trim();
+
+        // Validate input
+        try {
+            Integer.parseInt(employeeID);
+        } catch (NumberFormatException e) {
+            Alerts.showAlert("Validation Error", "EmployeeID must be a valid number.");
+            return;
+        }
+
+        if (employeeID.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            showAlert(AlertType.ERROR, "Error", "All fields are required!");
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            showAlert(AlertType.ERROR, "Error", "Invalid email format!");
+            return;
+        }
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            if (password.length() < 8) {
+                Alerts.showErrorDialog("Error", "Password must be at least 8 characters long.");
+                return;
+            }
+
+            if (!doesEmployeeIDExist(connection, employeeID)) {
+                showAlert(AlertType.ERROR, "Error", "Employee ID does not exist!");
+                return;
+            }
+
+            if (doesEmployeeAccountExist(connection, employeeID)) {
+                showAlert(AlertType.ERROR, "Error", "Account already exists! Please sign in instead.");
+                return;
+            }
+
+            if (doesEmailExist(connection, email)) {
+                showAlert(AlertType.ERROR, "Error", "Email already exists!");
+                return;
+            }
+
+            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to create account?\nPlease double check fields."))){
+                return;
+            }
+
+            // Save the details to the database
+            saveAccountDetails(connection, Integer.parseInt(employeeID), email, password);
+            Alerts.showSuccessDialog("Success", "Account created successfully!");
+
+            // Clear fields
+            emailField.setText("");
+            employeeIDField.setText("");
+            passwordField.setText("");
+            showPassField.setText("");
+            switchToSignin();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alerts.showErrorDialog("Error", "Failed to create account, please double check details.");
+        }
     }
 
     private boolean doesEmployeeAccountExist (Connection connection, String employeeID) throws Exception {
@@ -62,70 +122,6 @@ public class AccountCreationController {
                 }
                 return false; // No account exists yet
             }
-        }
-    }
-
-    private void handleSignUp() {
-        String employeeID = employeeIDField.getText().trim();
-        String email = emailField.getText().trim();
-        String password = passwordField.getText().trim();
-
-        try {
-            Integer.parseInt(employeeID);
-        } catch (NumberFormatException e) {
-            Alerts.showAlert("Validation Error", "EmployeeID must be a valid number.");
-            return;
-        }
-
-        // Validate input
-        if (employeeID.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            showAlert(AlertType.ERROR, "Error", "All fields are required!");
-            return;
-        }
-
-        if (!isValidEmail(email)) {
-            showAlert(AlertType.ERROR, "Error", "Invalid email format!");
-            return;
-        }
-
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-
-            if (password.length() < 8) {
-                Alerts.showErrorDialog("Error", "Password must be at least 8 characters long.");
-                return;
-            }
-
-            if (!doesEmployeeIDExist(connection, employeeID)) {
-                showAlert(AlertType.ERROR, "Error", "Employee ID does not exist!");
-                return;
-            }
-
-            if (doesEmployeeAccountExist(connection, employeeID)) {
-                showAlert(AlertType.ERROR, "Error", "Account already exists! Please sign in instead.");
-                return; // Exit if account exists
-            }
-
-            // Check if the email already exists
-            if (doesEmailExist(connection, email)) {
-                showAlert(AlertType.ERROR, "Error", "Email already exists!");
-                return;
-            }
-
-            if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to create account?\nPlease double check fields."))){
-                return;
-            }
-
-            // Save the details to the database
-            saveAccountDetails(connection, Integer.parseInt(employeeID), email, password);
-            Alerts.showSuccessDialog("Success", "Account created successfully!");
-            emailField.setText("");
-            employeeIDField.setText("");
-            passwordField.setText("");
-            showPassField.setText("");
-            switchToSignin();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Alerts.showErrorDialog("Error", "Failed to create account, please double check details.");
         }
     }
 
@@ -161,6 +157,7 @@ public class AccountCreationController {
         }
     }
 
+    // Password Hashing for security
     private String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
@@ -189,5 +186,10 @@ public class AccountCreationController {
             passwordField.setVisible(true);
             showPassField.setVisible(false);
         }
+    }
+
+    @FXML
+    private void switchToSignin() throws IOException {
+        Main.switchSceneWithFade("scenes/signIn");
     }
 }

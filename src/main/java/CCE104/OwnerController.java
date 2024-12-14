@@ -5,16 +5,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class  OwnerController {
 
@@ -36,15 +35,14 @@ public class  OwnerController {
     private Button recordsBtn;
     @FXML
     private Button reportsBtn;
-    @FXML
-    private TextField searchField;
-    @FXML
-    private Label EmployeeName;
-    ObservableList<String> employeeList = FXCollections.observableArrayList("Admin", "Manager", "Receptionist", "Groomer", "Boarding Attendant","Veterinarian","Pet Trainer","Cleaning Staff");
 
-    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-    String user = "root";
-    String password = "";
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(OwnerController.class.getName());
 
     public void initialize() {
         AppState appState = AppState.getInstance();
@@ -52,6 +50,7 @@ public class  OwnerController {
 
         OwnerRecord selectedOwner = OwnerRecord.getSelectedOwner();
 
+        //if NOT add
         if (currentOwnerPage != AppState.Owner.ADD) {
             if (selectedOwner != null) {
                 ownerFirstName.setText(selectedOwner.getFirstName());
@@ -63,27 +62,18 @@ public class  OwnerController {
     }
 
     @FXML
-    public void searchFunction(KeyEvent event) {
-        //add search function here
-    }
-
-    @FXML
     public void addOwnerToDatabase () throws IOException {
         try {
             // Validate inputs
             if (!validateOwnerInputs()) {
-                return;  // Exit the method early if validation fails
+                return;
             }
             String firstName = ownerFirstName.getText().trim();
             String lastName = ownerLastName.getText().trim();
             String email = ownerEmail.getText().trim();
             String phone = ownerPhone.getText().trim();
 
-            // Connect to the database
-            String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-            String user = "root";
-            String password = ""; // Replace with your password
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             // Insert data into Owners table
             String query = "INSERT INTO Owners (FirstName, LastName, Email, Phone) VALUES (?, ?, ?, ?)";
@@ -103,24 +93,25 @@ public class  OwnerController {
             connection.close();
 
             if (rowsAffected > 0) {
-                showSuccessDialog("Success", "Owner registered successfully.");
+                Alerts.showSuccessDialog("Success", "Owner registered successfully.");
                 clearOwnerFields();
             } else {
-                showAlert("Error","Failed to register owner.");
+                Alerts.showAlert("Error","Failed to register owner.");
             }
         } catch (IllegalArgumentException e) {
-            showErrorDialog("Error", "Validation Error: " + e.getMessage());
+            Alerts.showErrorDialog("Error", "Validation Error: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
-            showErrorDialog("Error", "An error occurred while registering owner.");
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+            Alerts.showErrorDialog("Error", "An error occurred while registering owner.");
         }
     }
 
     @FXML
     public void saveOwnerChanges () throws IOException {
         try {
+            //validate inputs
             if (!validateOwnerInputs()) {
-                return;  // Exit the method early if validation fails
+                return;
             }
             String firstName = ownerFirstName.getText();
             String lastName = ownerLastName.getText();
@@ -131,13 +122,13 @@ public class  OwnerController {
             RecordsController recordsController = OwnerRecord.getInstance().getRecordsController();
             Integer selectedOwnerID = recordsController.getSelectedOwnerID();
             if (selectedOwnerID == null) {
-                showErrorDialog("No Owner Selected", "Please select an owner to edit.");
+                Alerts.showErrorDialog("No Owner Selected", "Please select an owner to edit.");
                 return;
             }
 
             //Update changes in the database
             String updateQuery = "UPDATE Owners SET FirstName = ?, LastName = ?, Email = ?, Phone = ? WHERE OwnerID = ?";
-            try (Connection conn = DriverManager.getConnection(url,user,password);
+            try (Connection conn = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
                  PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
 
                 stmt.setString(1, firstName);
@@ -152,15 +143,15 @@ public class  OwnerController {
 
                 int rowsUpdated = stmt.executeUpdate();
                 if (rowsUpdated > 0) {
-                    showSuccessDialog("Success", "Owner details updated successfully.");
+                    Alerts.showSuccessDialog("Success", "Owner details updated successfully.");
                     NavigationController.switchToRecordsWithFade();
                 } else {
-                    showErrorDialog("Update Failed", "No changes were made to the owner details.");
+                    Alerts.showErrorDialog("Update Failed", "No changes were made to the owner details.");
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            showErrorDialog("Error", "An error occurred while saving owner changes.");
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+            Alerts.showErrorDialog("Error", "An error occurred while saving owner changes.");
         }
     }
 
@@ -172,32 +163,32 @@ public class  OwnerController {
         String phone = ownerPhone.getText().trim();
 
         if (firstName.isEmpty()) {
-            showAlert("Validation Error", "Your first name is required.");
+            Alerts.showAlert("Validation Error", "Your first name is required.");
             return false;  // Return false to indicate validation failure
         }
 
         if (lastName.isEmpty()) {
-            showAlert("Validation Error", "Your last name is required.");
+            Alerts.showAlert("Validation Error", "Your last name is required.");
             return false;
         }
 
         if (email.isEmpty()) {
-            showAlert("Validation Error", "Your email is required.");
+            Alerts.showAlert("Validation Error", "Your email is required.");
             return false;
         }
 
         if (!isValidEmail(email)) {
-            showAlert("Error", "Invalid email format!");
+            Alerts.showAlert("Error", "Invalid email format!");
             return false;
         }
 
         if (phone.isEmpty()) {
-            showAlert("Validation Error", "Your phone no. is required.");
+            Alerts.showAlert("Validation Error", "Your phone no. is required.");
             return false;
         }
 
         if (!isValidPhoneNumber(phone)) {
-            showAlert("Error", "Invalid phone number!");
+            Alerts.showAlert("Error", "Invalid phone number!");
             return false;
         }
 
@@ -219,7 +210,7 @@ public class  OwnerController {
         return phoneNumber != null && phoneNumber.matches("^09\\d{2}\\d{3}-?\\d{4}$") && phoneNumber.replaceAll("-", "").length() == 11;
     }
 
-    // transitons & effects
+    // transitions & effects
     @FXML
     public void polygonHover () throws IOException {
         backBtn.setFill(Color.web("#48d1dd"));
@@ -260,29 +251,6 @@ public class  OwnerController {
         } else if (currentPage == AppState.Page.REPORTS) {
             switchToReports();
         }
-    }
-
-    //dialogs
-    public static void showSuccessDialog(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title); alert.setHeaderText(null);
-        alert.setContentText(message); alert.showAndWait();
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void showErrorDialog(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }
 

@@ -8,15 +8,18 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main extends Application {
 
     private static Scene scene;
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -36,7 +39,6 @@ public class Main extends Application {
         fadeOut.setToValue(0.0);
 
         fadeOut.setOnFinished(event -> {
-            // Set the new root after fade-out is complete
             scene.setRoot(newRoot);
 
             // Start the fade-in transition
@@ -58,7 +60,7 @@ public class Main extends Application {
             stage.setScene(new Scene(newRoot));
             stage.showAndWait();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 
@@ -74,9 +76,9 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         // Database credentials
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db"; // Update with your database name
-        String user = "root"; // Default username for XAMPP
-        String password = ""; // Default password (leave empty if not set)
+        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+        String user = "root";
+        String password = "";
 
         try {
             // Establishing the connection

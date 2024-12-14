@@ -1,6 +1,5 @@
 package CCE104;
 
-import com.google.protobuf.StringValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,16 +7,11 @@ import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
-import javafx.util.Pair;
-import org.w3c.dom.Text;
-
+import java.util.logging.Logger;
 import java.awt.*;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -36,6 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Level;
 
 public class AppointmentController {
 
@@ -52,8 +47,6 @@ public class AppointmentController {
     @FXML
     private Button dashboardBtn;
     @FXML
-    private Label employeeName;
-    @FXML
     private Button logOutBtn;
     @FXML
     private TextField petID;
@@ -61,8 +54,6 @@ public class AppointmentController {
     private Button recordsBtn;
     @FXML
     private Button reportsBtn;
-    @FXML
-    private TextField searchField;
     @FXML
     private ComboBox<String> appointmentService;
     @FXML
@@ -76,12 +67,19 @@ public class AppointmentController {
     @FXML
     private ChoiceBox<?> serviceB;
     @FXML
-    private Button switchToRecords;
-    @FXML
     private TextField totalCost;
 
+    //Observable Lists
     ObservableList<String> statusList = FXCollections.observableArrayList("Pending", "Confirmed", "Cancelled", "Completed");
     ObservableList<String> timeSlots = FXCollections.observableArrayList("09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM" );
+
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(AppointmentController.class.getName());
 
     public void initialize() {
         AppState appState = AppState.getInstance();
@@ -89,12 +87,14 @@ public class AppointmentController {
 
         AppointmentRecord selectedAppointment = AppointmentRecord.getSelectedAppointment();
 
+        // If ADD or EDIT
         if (currentAppointmentPage == AppState.Appointment.ADD || currentAppointmentPage == AppState.Appointment.EDIT ) {
             appointmentStatus.setItems(statusList);
             appointmentTime.setItems(timeSlots);
             populateServiceComboBox();
         }
-        // Check if the current action is not ADD
+
+        // Check if NOT add
         if (currentAppointmentPage != AppState.Appointment.ADD) {
             if (selectedAppointment != null) {
                 java.sql.Date appointmentDateSQL = selectedAppointment.getDate();
@@ -102,6 +102,8 @@ public class AppointmentController {
                 petID.setText(String.valueOf(selectedAppointment.getPetID(selectedAppointment.getPetName())));
 
                 String time12hr = convertTo12HourFormat(selectedAppointment.getTime().toString());
+
+                //Check if VIEW
                 if(currentAppointmentPage == AppState.Appointment.VIEW) {
                     serviceAField.setText(selectedAppointment.getServiceName());
 
@@ -115,6 +117,7 @@ public class AppointmentController {
                     appointmentStatusField.setText(selectedAppointment.getStatus());
                 }
 
+                //Check if EDIT
                 if(currentAppointmentPage != AppState.Appointment.VIEW) {
                     appointmentService.setValue(selectedAppointment.getServiceName());
 
@@ -134,11 +137,6 @@ public class AppointmentController {
         }
     }
 
-    // Connect to the database
-    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-    String user = "root";
-    String password = ""; // Replace with your password
-
     public void addAppointment() throws IOException {
         try {
             // Validate inputs
@@ -154,9 +152,9 @@ public class AppointmentController {
             String status = appointmentStatus.getValue();
             int employeeID = 1;
 
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
-            // Insert data into Pets table
+            // Insert data into Appointments table
             String query = "INSERT INTO Appointments (Date, Time, ServiceID, PetID, EmployeeID, Status) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setDate(1, Date.valueOf(date));
@@ -169,6 +167,7 @@ public class AppointmentController {
             if(!(Alerts.showConfirmationDialog("Confirmation", "Are you sure to add appointment? Please double check fields."))){
                 return;
             }
+
             int rowsAffected = statement.executeUpdate();
 
             // Close the connection
@@ -184,7 +183,7 @@ public class AppointmentController {
         } catch (IllegalArgumentException e) {
             Alerts.showErrorDialog("Error", "Validation Error: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while adding appointment.");
         }
     }
@@ -210,9 +209,9 @@ public class AppointmentController {
                 return;
             }
 
-            // Step 3: Update pet in the database
+            // Update appointment in the database
             String updateQuery = "UPDATE Appointments SET Date = ?, Time = ?, ServiceID = ?, PetID = ?, EmployeeID = ?, Status = ? WHERE AppointmentID = ?";
-            try (Connection conn = DriverManager.getConnection(url,user,password);
+            try (Connection conn = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
                  PreparedStatement statement = conn.prepareStatement(updateQuery)) {
 
                 statement.setDate(1, Date.valueOf(date));
@@ -236,18 +235,15 @@ public class AppointmentController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while saving appointment changes.");
         }
     }
 
     public void printAppointment() throws IOException {
         try {
-            AppState appState = AppState.getInstance();
-            AppState.Appointment currentAppointmentPage = appState.getCurrentAppointmentPage();
-
             AppointmentRecord selectedAppointment = AppointmentRecord.getSelectedAppointment();
-            // Collect all necessary details for the printout
+
             if (selectedAppointment == null) {
                 Alerts.showErrorDialog("Error", "No appointment selected.");
                 return;
@@ -262,14 +258,14 @@ public class AppointmentController {
             String petName = selectedAppointment.getPetName();
             int petID = selectedAppointment.getPetID(petName);
             String serviceName = selectedAppointment.getServiceName();
-            String employeeName = User.getEmployeeName(); // Assuming you have a method to get the employee name
-            String appointmentDate = selectedAppointment.getDate().toString(); // Assuming Date is in SQL format
+            String employeeName = User.getEmployeeName();
+            String appointmentDate = selectedAppointment.getDate().toString();
             String appointmentTime = selectedAppointment.getTime().toString();
             String time12hr = convertTo12HourFormat(appointmentTime);
             String appointmentStatus = selectedAppointment.getStatus();
             double totalCost = selectedAppointment.getTotalCost();
 
-            // Create the printable content
+            // Printable content
             String reminderMessage =
                     "\n-------------------------------------- Reminder -----------------------------------\n" +
                             "Dear Valued Customer,\n\n" +
@@ -301,84 +297,75 @@ public class AppointmentController {
                             "Total Cost: " + totalCost + "\n\n" +
                             reminderMessage;
 
-            // Create a PrinterJob instance and set up the print settings
+            // PrinterJob instance and print settings
             PrinterJob printerJob = PrinterJob.getPrinterJob();
 
-            // Set a print job (we can use a simple text-based print job)
             printerJob.setPrintable(new Printable() {
                 public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-                    if (pageIndex >= 1) { // Only 1 page to print
+                    if (pageIndex >= 1) {
                         return Printable.NO_SUCH_PAGE;
                     }
 
-                    // Graphics object used to render the content
                     Graphics2D g2d = (Graphics2D) graphics;
                     g2d.setFont(new Font("Serif", Font.PLAIN, 12));
                     g2d.setColor(java.awt.Color.BLACK);
 
-                    // Adjust the page's print area and draw the content
                     g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 
                     // Split the content into lines
                     String[] lines = printContent.split("\n");
-                    int yPosition = 100; // Starting y position for the first line
+                    int yPosition = 100;
 
                     // Iterate over the lines and print each one
                     for (String line : lines) {
-                        g2d.drawString(line, 100, yPosition); // Print each line at the new y position
-                        yPosition += 15; // Increment y position for the next line (line height)
+                        g2d.drawString(line, 100, yPosition);
+                        yPosition += 15;
                     }
 
                     return Printable.PAGE_EXISTS;
                 }
             });
 
-            // Show the print dialog to the user
+            // Show the print dialog
             if (printerJob.printDialog()) {
-                printerJob.print();  // Print the document
+                printerJob.print();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while printing appointment details.");
         }
     }
 
 
     private String convertTo24HourFormat(String time) {
-        // Define the formatter for 12-hour time (ensure 'a' is lowercase for AM/PM)
+        // Formatter for 12-hour time
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("hh:mm a");
 
         try {
-            // Parse the time from the ComboBox into a LocalTime object
             LocalTime localTime = LocalTime.parse(time, inputFormatter);
-            // Convert it to 24-hour format (HH:mm)
+            // Convert to 24-hour format (HH:mm)
             return localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
         } catch (DateTimeParseException e) {
-            // Handle invalid format cases
             System.out.println("Error parsing time: " + time);
-            return null; // You can return a default value or throw an exception based on your needs
+            return null;
         }
     }
 
     private String convertTo12HourFormat(String time) {
-        // Define the formatter for 24-hour time
+        // Formatter for 24-hour time
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         try {
-            // Parse the time from the input into a LocalTime object
             LocalTime localTime = LocalTime.parse(time, inputFormatter);
-            // Convert it to 12-hour format (hh:mm a)
+            // Convert to 12-hour format (hh:mm a)
             return localTime.format(DateTimeFormatter.ofPattern("hh:mm a"));
         } catch (DateTimeParseException e) {
-            // Handle invalid format cases
             System.out.println("Error parsing time: " + time);
-            return null; // You can return a default value or throw an exception based on your needs
+            return null;
         }
     }
 
     private boolean validateAppointmentInputs() {
-        AppointmentRecord selectedAppointment = AppointmentRecord.getSelectedAppointment();
-
         String petID = this.petID.getText().trim();
         String service = this.appointmentService.getValue();
         LocalDate date = appointmentDate.getValue();
@@ -386,57 +373,48 @@ public class AppointmentController {
         String timeFormatted = convertTo24HourFormat(time);
         String status = appointmentStatus.getValue();
 
-        // Validate that PetID is not empty
         if (petID.isEmpty()) {
             Alerts.showAlert("Validation Error", "Registered PetID is required.");
             return false;
         }
 
-        // Validate that a service is selected
         if (service == null) {
             Alerts.showAlert("Validation Error", "Please select a service.");
             return false;
         }
 
-        // Validate that a date is selected
         if (date == null) {
             Alerts.showAlert("Validation Error", "Please choose an available date.");
             return false;
         }
 
-        // Validate that the selected date is not in the past
         if (date.isBefore(LocalDate.now())) {
             Alerts.showAlert("Validation Error", "The appointment date cannot be in the past.");
             return false;
         }
 
-        // Validate that a status is selected
         if (status == null) {
             Alerts.showAlert("Validation Error", "Please set the appointment's status.");
             return false;
         }
 
-        // Validate that PetID is a valid integer
         try {
-            Integer.parseInt(petID); // Ensure PetID is a valid number
+            Integer.parseInt(petID);
         } catch (NumberFormatException e) {
             Alerts.showAlert("Validation Error", "Pet ID must be a valid number.");
             return false;
         }
 
-        // Check if PetID is registered in the system
         if (!isPetIDRegistered(petID)) {
             Alerts.showAlert("Validation Error", "The provided PetID is not registered in the system.");
             return false;
         }
 
-        // Validate that the time is selected (if not empty)
         if (time == null || time.isEmpty()) {
             Alerts.showAlert("Validation Error", "Please select a valid time for the appointment.");
             return false;
         }
 
-        // Validate that the selected appointment time is not in the past
         try {
             LocalDateTime appointmentDateTime = LocalDateTime.of(date, LocalTime.parse(timeFormatted));
             if (appointmentDateTime.isBefore(LocalDateTime.now())) {
@@ -447,7 +425,6 @@ public class AppointmentController {
             System.out.println("Error parsing: " + time + "\n" + e);
         }
 
-        // Check if the time slot is already taken on the selected date
         if (isAppointmentTimeOccupied(date, timeFormatted)) {
             Alerts.showAlert("Validation Error", "The selected time slot is already occupied. Please choose a different time.");
             return false;
@@ -461,10 +438,10 @@ public class AppointmentController {
                 "FROM Appointments " +
                 "WHERE Date = ? AND Time = ? AND (Status != 'Cancelled' OR Status != 'Completed')";
 
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {
 
-            // Convert LocalDate to java.sql.Date
+            // Convert LocalDate to sql Date
             statement.setDate(1, Date.valueOf(date));
             statement.setString(2, timeFormatted);
 
@@ -475,14 +452,13 @@ public class AppointmentController {
 
                 // If editing an appointment, allow the current appointment to overlap
                 if (AppState.getInstance().getCurrentAppointmentPage() == AppState.Appointment.EDIT) {
-                    return count > 1; // More than one appointment with the same time
+                    return count > 1;
                 }
                 return count > 0; // Any occupied slot
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQL Exception occurred", e);
         }
-
         return false;
     }
 
@@ -491,31 +467,27 @@ public class AppointmentController {
         totalCost.setText(String.valueOf(AppointmentRecord.getInstance().getTotalCost(appointmentService.getValue())));
     }
 
-        private void populateServiceComboBox() {
-        ObservableList<String> serviceList = FXCollections.observableArrayList();
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+    private void populateServiceComboBox() {
+    ObservableList<String> serviceList = FXCollections.observableArrayList();
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             String query = "SELECT serviceName FROM Services";
             try (PreparedStatement stmt = connection.prepareStatement(query);
                  ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     String serviceName = rs.getString("serviceName");
-                    serviceList.add(serviceName);  // Add each service as a Pair
+                    serviceList.add(serviceName);
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
-
         appointmentService.setItems(serviceList);
     }
 
     private boolean isPetIDRegistered(String petID) {
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = "";
         String query = "SELECT COUNT(*) FROM Pets WHERE PetID = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, petID);
@@ -527,7 +499,7 @@ public class AppointmentController {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQL Exception occurred", e);
             Alerts.showAlert("Error", "Failed to validate PetID.");
         }
 
@@ -557,7 +529,7 @@ public class AppointmentController {
         // Query the database for all appointments on the selected date
         String query = "SELECT Time FROM Appointments WHERE Date = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setDate(1, Date.valueOf(selectedDate));
@@ -586,7 +558,7 @@ public class AppointmentController {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQL Exception occurred", e);
             Alerts.showAlert("Error", "Failed to load available time slots.");
         }
     }
@@ -604,7 +576,6 @@ public class AppointmentController {
         backBtn.setCursor(Cursor.DEFAULT);
     }
 
-    //transitions & effects
     public void backFunction () throws IOException {
         AppState.Page currentPage = AppState.getInstance().getCurrentPage();
 
@@ -615,11 +586,6 @@ public class AppointmentController {
         } else if (currentPage == AppState.Page.REPORTS) {
             switchToReports();
         }
-    }
-
-    @FXML
-    public void searchFunction(KeyEvent event) {
-        //add search function here
     }
 
     @FXML

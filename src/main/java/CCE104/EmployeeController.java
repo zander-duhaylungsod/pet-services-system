@@ -11,17 +11,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import org.mindrot.jbcrypt.BCrypt;
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.sql.*;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class EmployeeController {
 
     @FXML
     private Polygon backBtn;
-    @FXML
-    private TextField branchID;
     @FXML
     private Button dashboardBtn;
     @FXML
@@ -29,17 +28,11 @@ public class EmployeeController {
     @FXML
     private TextField employeeLastName;
     @FXML
-    private TextField employeePassword;
-    @FXML
-    private Label employeeName;
-    @FXML
     private TextField employeePhone;
     @FXML
     private TextField employeeEmail;
     @FXML
     private ComboBox<String> employeeRole;
-    @FXML
-    private TextField oldPassword;
     @FXML
     private PasswordField newPassword;
     @FXML
@@ -58,21 +51,29 @@ public class EmployeeController {
     private Button reportsBtn;
     @FXML
     private TextField searchField;
+
+    //employee roles
     ObservableList<String> employeeList = FXCollections.observableArrayList("Administrator", "Manager", "Receptionist", "Groomer", "Boarding Attendant","Veterinarian","Pet Trainer","Cleaning Staff");
 
-    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-    String user = "root";
-    String password = "";
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(EmployeeController.class.getName());
 
     public void initialize() {
         AppState appState = AppState.getInstance();
         AppState.Employee currentEmployeePage = appState.getCurrentEmployeePage();
         EmployeeRecord selectedEmployee = EmployeeRecord.getSelectedEmployee();
 
+        //if EDIT or ADD
         if (currentEmployeePage == AppState.Employee.EDIT || currentEmployeePage == AppState.Employee.ADD) {
             employeeRole.setItems(employeeList);
         }
 
+        //if EDIT
         if (currentEmployeePage == AppState.Employee.EDIT) {
             if (selectedEmployee != null) {
                 employeeFirstName.setText(selectedEmployee.getFirstName());
@@ -96,12 +97,7 @@ public class EmployeeController {
             String phone = employeePhone.getText().trim();
             String role = employeeRole.getValue();
 
-            // Connect to the database
-            String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-            String user = "root";
-            String password = ""; // Replace with your password
-            Connection connection = DriverManager.getConnection(url, user, password);
-
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             String query = "INSERT INTO Employees (FirstName, LastName, Phone, Role) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, firstName);
@@ -128,7 +124,7 @@ public class EmployeeController {
         } catch (IllegalArgumentException e) {
             Alerts.showErrorDialog("Error", "Validation Error: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while adding employee.");
         }
     }
@@ -154,13 +150,9 @@ public class EmployeeController {
                 return;
             }
 
-            // Connect to the database
-            String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-            String user = "root";
-            String password = ""; // Replace with your password
-            Connection connection = DriverManager.getConnection(url, user, password);
-
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             String query = "UPDATE Employees SET FirstName = ?, LastName = ?, Phone = ?, Role = ?, Email = ? WHERE EmployeeID = ?";
+
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, firstName);
             statement.setString(2, lastName);
@@ -187,7 +179,7 @@ public class EmployeeController {
         } catch (IllegalArgumentException e) {
             Alerts.showErrorDialog("Error", "Validation Error: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while saving changes.");
         }
     }
@@ -228,7 +220,6 @@ public class EmployeeController {
     }
 
     private boolean validateEmployeeInputsE() {
-        // Validate inputs
         if(!validateEmployeeInputs()){
             return false;
         }
@@ -275,7 +266,7 @@ public class EmployeeController {
             return;
         }
 
-        try (Connection connection = DriverManager.getConnection(url, user, this.password)) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             // Authenticate user with either email or employee ID
             if (SignInController.authenticateUser(connection, identifier, password)) {
                 String role = SignInController.getEmployeeRoleFromDatabase(connection, identifier);
@@ -291,7 +282,7 @@ public class EmployeeController {
                         try {
                             Main.switchSceneWithFade("scenes/resetEmployeePassword");
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
                             Alerts.showAlert("Error", "Failed to switch scene: " + e.getMessage());
                         }
                     });
@@ -302,19 +293,19 @@ public class EmployeeController {
                 Alerts.showAlert("Error", "Invalid Employee ID/Email or password!");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showAlert("Error", "Failed to sign in: " + e.getMessage());
         }
     }
 
     @FXML
     public void resetPassword() throws IOException {
-        String idorEmail = emailEmployeeID.getText();
+        String iDorEmail = emailEmployeeID.getText();
         String newPassword = this.newPassword.getText();
         String confirmPassword = this.confirmPassword.getText();
 
         // Input validation
-        if (idorEmail.isEmpty() || newPassword.isEmpty()) {
+        if (iDorEmail.isEmpty() || newPassword.isEmpty()) {
             Alerts.showErrorDialog("Error", "All fields must be filled.");
             return;
         }
@@ -331,13 +322,13 @@ public class EmployeeController {
             return;
         }
 
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             // Prepare statement to check existing credentials
             String checkQuery = "SELECT EmployeeID, Password FROM Employees WHERE EmployeeID = ? OR Email = ?";
 
             try (PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
-                checkStmt.setString(1, idorEmail);
-                checkStmt.setString(2, idorEmail);
+                checkStmt.setString(1, iDorEmail);
+                checkStmt.setString(2, iDorEmail);
 
                 ResultSet rs = checkStmt.executeQuery();
 
@@ -369,29 +360,9 @@ public class EmployeeController {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showErrorDialog("Database Error", "An error occurred while resetting password.");
         }
-    }
-
-    public static boolean isValidPassword(String password) {
-        // Check if password is null or too short
-        if (password == null || password.length() < 8) {
-            return false;
-        }
-
-        // Check for at least one digit
-        boolean hasDigit = false;
-
-        // Iterate through each character in the password
-        for (char c : password.toCharArray()) {
-            if (Character.isDigit(c)) {
-                hasDigit = true;
-            }
-        }
-
-        // Return true only if all conditions are met
-        return hasDigit;
     }
 
     //transitions and effects
@@ -407,11 +378,6 @@ public class EmployeeController {
         } else if (currentPage == AppState.Page.REPORTS) {
             switchToReports();
         }
-    }
-
-    @FXML
-    public void searchFunction(KeyEvent event) {
-        //add search function here
     }
 
     @FXML
@@ -440,7 +406,6 @@ public class EmployeeController {
         NavigationController.logOut();
     }
 
-    //effects
     @FXML
     public void polygonHover () throws IOException {
         backBtn.setFill(Color.web("#48d1dd"));

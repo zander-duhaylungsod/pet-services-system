@@ -13,6 +13,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DashboardController {
     @FXML
@@ -57,8 +59,14 @@ public class DashboardController {
     private TableView<Appointment> upcomingAppointmentTable;
     @FXML
     private TableView<Boarding> upcomingBoardingTable;
+
+    //Observable Lists
     private ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
     private ObservableList<Boarding> boardingList = FXCollections.observableArrayList();
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(BoardingController.class.getName());
+
     @FXML
     public void initialize() {
         AppState.getInstance().setCurrentPage(AppState.Page.DASHBOARD);
@@ -67,13 +75,13 @@ public class DashboardController {
         employeeIDLabel.setText(String.valueOf(User.getEmployeeID()));
         employeeRoleLabel.setText(User.getRole());
 
-        // Set columns for appointments
+        // Set columns for upcoming appointments
         ownerNameColumnA.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
         petNameColumnA.setCellValueFactory(new PropertyValueFactory<>("petName"));
         appointmentService.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
         appointmentDateColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentDate"));
 
-        // Set columns for boarding reservations
+        // Set columns for upcoming boarding reservations
         ownerNameColumnB.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
         petNameColumnB.setCellValueFactory(new PropertyValueFactory<>("petName"));
         boardingStartDateColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
@@ -115,7 +123,7 @@ public class DashboardController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 
@@ -137,7 +145,7 @@ public class DashboardController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 
@@ -184,35 +192,30 @@ public class DashboardController {
 
     @FXML
     public void searchFunction(KeyEvent event) {
-        // Get the search text and convert to lowercase for case-insensitive search
         String searchText = searchField.getText().toLowerCase().trim();
 
         // Clear existing filtered lists
         FilteredList<Appointment> filteredAppointments = new FilteredList<>(appointmentList, p -> true);
         FilteredList<Boarding> filteredBoardings = new FilteredList<>(boardingList, p -> true);
 
-        // Predicate for filtering appointments
         filteredAppointments.setPredicate(appointment -> {
             // If search text is empty, show all items
             if (searchText.isEmpty()) {
                 return true;
             }
 
-            // Check if search text matches any of the appointment fields
             return appointment.getOwnerName().toLowerCase().contains(searchText) ||
                     appointment.getPetName().toLowerCase().contains(searchText) ||
                     appointment.getServiceName().toLowerCase().contains(searchText) ||
                     appointment.getAppointmentDate().toLowerCase().contains(searchText);
         });
 
-        // Predicate for filtering boarding reservations
         filteredBoardings.setPredicate(boarding -> {
             // If search text is empty, show all items
             if (searchText.isEmpty()) {
                 return true;
             }
 
-            // Check if search text matches any of the boarding fields
             return boarding.getOwnerName().toLowerCase().contains(searchText) ||
                     boarding.getPetName().toLowerCase().contains(searchText) ||
                     boarding.getStartDate().toLowerCase().contains(searchText);
@@ -222,11 +225,9 @@ public class DashboardController {
         SortedList<Appointment> sortedAppointments = new SortedList<>(filteredAppointments);
         SortedList<Boarding> sortedBoardings = new SortedList<>(filteredBoardings);
 
-        // Bind the sorted lists to their respective table views
         upcomingAppointmentTable.setItems(sortedAppointments);
         upcomingBoardingTable.setItems(sortedBoardings);
 
-        // Optional: Bind comparators if you want to maintain table sorting
         sortedAppointments.comparatorProperty().bind(upcomingAppointmentTable.comparatorProperty());
         sortedBoardings.comparatorProperty().bind(upcomingBoardingTable.comparatorProperty());
     }

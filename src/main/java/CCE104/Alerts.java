@@ -40,5 +40,4 @@ public class Alerts {
         // Return true if the user clicked "OK", false otherwise (including "Cancel" or closing the dialog)
         return result.isPresent() && result.get() == ButtonType.OK;
     }
-
 }

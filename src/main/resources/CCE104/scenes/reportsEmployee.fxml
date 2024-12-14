@@ -99,7 +99,7 @@
       </Pane>
       <AnchorPane layoutX="244.0" layoutY="12.0" prefHeight="688.0" prefWidth="878.0">
          <children>
-            <TextField fx:id="searchField" layoutX="281.0" layoutY="35.0" onKeyTyped="#searchFunction" prefHeight="38.0" prefWidth="321.0" promptText="Search payments or reports" style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
+            <TextField fx:id="searchField" layoutX="281.0" layoutY="35.0" onKeyTyped="#searchFunction" prefHeight="38.0" prefWidth="321.0" promptText="Search payments" style="-fx-background-radius: 20px; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="15.0" />
                </font>
