@@ -19,6 +19,7 @@ import java.awt.print.PrinterJob;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +46,7 @@ public class PaymentController {
     @FXML
     private TextField paymentDateField;
     @FXML
-    private DatePicker paymentDate;
+    private TextField paymentDate;
     @FXML
     private ComboBox<String> paymentMethod;
     @FXML
@@ -58,8 +59,6 @@ public class PaymentController {
     private TextArea reasonField;
     @FXML
     private TextField refundAmountField;
-    @FXML
-    private DatePicker refundDate;
     @FXML
     private Button recordsBtn;
     @FXML
@@ -88,16 +87,13 @@ public class PaymentController {
         if(currentPaymentPage == AppState.Payment.PAYMENTA || currentPaymentPage == AppState.Payment.PAYMENTB){
             paymentStatus.setItems(statusList);
             paymentMethod.setItems(methodList);
-            paymentDate.setValue(LocalDate.now());
         }
 
         //if EDIT
         if(currentPaymentPage == AppState.Payment.EDITA || currentPaymentPage == AppState.Payment.EDITB ){
             paymentStatus.setItems(statusList);
             paymentMethod.setItems(methodList);
-            paymentDate.setValue(LocalDate.now());
-
-            paymentDate.setValue(selectedPayment.getPaymentDate().toLocalDate());
+            paymentDate.setText(selectedPayment.getPaymentDate());
             petID.setText(String.valueOf(selectedPayment.getPetID()));
             paymentAmount.setText(String.valueOf(selectedPayment.getAmount()));
             remainingAmount.setText(String.valueOf(selectedPayment.getRemainingAmount()));
@@ -132,7 +128,6 @@ public class PaymentController {
 
         if(currentPaymentPage == AppState.Payment.REFUND){
             paymentIDField.setText(String.valueOf(selectedPayment.getPaymentID()));
-            refundDate.setValue(LocalDate.now());
             refundAmountField.setText(String.valueOf(selectedPayment.getAmount()));
         }
     }
@@ -146,7 +141,8 @@ public class PaymentController {
 
             String petID = this.petID.getText().trim();
             String paymentAmount = this.paymentAmount.getText().trim();
-            Date paymentDate = Date.valueOf(this.paymentDate.getValue());
+            LocalDateTime now = LocalDateTime.now();
+            Timestamp timestamp = Timestamp.valueOf(now);
             String paymentMethod = this.paymentMethod.getValue();
             String paymentStatus = this.paymentStatus.getValue();
             String reservationID = null;
@@ -162,9 +158,9 @@ public class PaymentController {
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             // Insert data into Payments table
-            String query = "INSERT INTO Payments (PaymentDate, Amount, Method, Status, ReservationID, AppointmentID) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Payments (PaymentTimeStamp, Amount, Method, Status, ReservationID, AppointmentID) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setDate(1, paymentDate);
+            statement.setTimestamp(1, timestamp);
             statement.setString(2, paymentAmount);
             statement.setString(3, paymentMethod);
             statement.setString(4, paymentStatus);
@@ -219,7 +215,6 @@ public class PaymentController {
         
         String petID = this.petID.getText().trim();
         String paymentAmount = this.paymentAmount.getText().trim();
-        LocalDate paymentDateL = this.paymentDate.getValue();
         String paymentMethod = this.paymentMethod.getValue();
         String paymentStatus = this.paymentStatus.getValue();
         String reservationID = "";
@@ -263,16 +258,6 @@ public class PaymentController {
 
         if (paymentAmount.isEmpty()) {
             Alerts.showAlert("Validation Error", "Payment amount is required.");
-            return false;
-        }
-
-        if (paymentDateL == null) {
-            Alerts.showAlert("Validation Error", "Please choose a payment date.");
-            return false;
-        }
-
-        if (paymentDateL.isAfter(LocalDate.now())) {
-            Alerts.showAlert("Validation Error", "The payment date cannot be in the future.");
             return false;
         }
 
@@ -378,7 +363,6 @@ public class PaymentController {
 
         petID.setText("");
         paymentAmount.setText("");
-        paymentDate.setValue(LocalDate.now());
         paymentMethod.setValue("");
         paymentStatus.setValue("");
         if (currentPaymentPage == AppState.Payment.PAYMENTA || currentPaymentPage == AppState.Payment.EDITA) {
@@ -541,7 +525,8 @@ public class PaymentController {
             }
 
             String paymentAmount = this.paymentAmount.getText().trim();
-            Date paymentDate = Date.valueOf(this.paymentDate.getValue());
+            LocalDateTime now = LocalDateTime.now();
+            Timestamp timestamp = Timestamp.valueOf(now);
             String paymentMethod = this.paymentMethod.getValue();
             String paymentStatus = this.paymentStatus.getValue();
 
@@ -552,20 +537,15 @@ public class PaymentController {
                 return;
             }
             
-            String updateQuery = "UPDATE Payments SET PaymentDate = ?, Amount = ?, Method = ?, Status = ? WHERE PaymentID = ?";
+            String updateQuery = "UPDATE Payments SET PaymentTimeStamp = ?, Amount = ?, Method = ?, Status = ? WHERE PaymentID = ?";
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                  PreparedStatement statement = conn.prepareStatement(updateQuery)) {
 
-                statement.setDate(1, paymentDate);
+                statement.setTimestamp(1, timestamp);
                 statement.setString(2, paymentAmount);
                 statement.setString(3, paymentMethod);
                 statement.setString(4, paymentStatus);
                 statement.setInt(5, selectedPaymentID);
-
-                if(Double.parseDouble(remainingAmount.getText() ) < 0){
-                    Alerts.showAlert("Overpayment","The payment amount exceeds the total cost, please input the exact required.");
-                    return;
-                }
 
                 if(!(Alerts.showConfirmationDialog("Confirmation","Are you sure to update payment? Please double check all changes."))){
                     return;
@@ -613,7 +593,7 @@ public class PaymentController {
             }
             String serviceName = selectedPayment.getService();
             String employeeName = User.getEmployeeName();
-            String paymentDate = this.paymentDateField.getText();
+            String paymentDate = selectedPayment.getPaymentDate();
             String paymentStatus = selectedPayment.getStatus();
             double amountPaid = selectedPayment.getAmount();
             double remainingAmount = totalCost - amountPaid;
@@ -704,7 +684,8 @@ public class PaymentController {
     public void refundPayment() throws IOException {
         PaymentRecord selectedPayment = PaymentRecord.getSelectedPayment();
         String paymentID = paymentIDField.getText();
-        String refundDate = this.refundDate.getValue().toString();
+        LocalDateTime now = LocalDateTime.now();
+        Timestamp timestamp = Timestamp.valueOf(now);
         String paymentStatus = selectedPayment.getStatus();
         String refundAmount = refundAmountField.getText();
         String reason = reasonField.getText();
@@ -715,7 +696,7 @@ public class PaymentController {
             return;
         }
 
-        if (paymentID.isEmpty() || refundDate.isEmpty() || refundAmount.isEmpty() || reason.isEmpty()) {
+        if (paymentID.isEmpty() || refundAmount.isEmpty() || reason.isEmpty()) {
             Alerts.showAlert("Error", "All fields must be filled in before processing the refund.");
             return;
         }
@@ -726,7 +707,7 @@ public class PaymentController {
         }
 
         try {
-            String insertQuery = "INSERT INTO Refunds (PaymentID, RefundDate, RefundAmount, Reason) VALUES (?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO Refunds (PaymentID, RefundTimeStamp, RefundAmount, Reason) VALUES (?, ?, ?, ?)";
             String updateQuery = "UPDATE Payments SET Status = ? WHERE PaymentID = ?";
 
             try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -734,7 +715,7 @@ public class PaymentController {
                  PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
 
                 insertStmt.setInt(1, Integer.parseInt(paymentID));
-                insertStmt.setDate(2, Date.valueOf(refundDate));
+                insertStmt.setTimestamp(2, timestamp);
                 insertStmt.setDouble(3, Double.parseDouble(refundAmount));
                 insertStmt.setString(4, reason);
 

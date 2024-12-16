@@ -1,9 +1,9 @@
 DROP DATABASE syntaxSquad_db;
 
-mysql -h localhost -u root
-USE syntaxSquad_db;
-
-mysql -h localhost -u root
+-- mysql -h localhost -u root
+-- USE syntaxSquad_db;
+--
+-- mysql -h localhost -u root
 CREATE DATABASE syntaxSquad_db;
 USE syntaxSquad_db;
 
@@ -75,7 +75,7 @@ CREATE TABLE BoardingReservations (
 CREATE TABLE Payments (
       PaymentID INT AUTO_INCREMENT PRIMARY KEY,
       Amount DECIMAL(10, 2) NOT NULL,
-      PaymentDate DATE NOT NULL,
+      PaymentTimestamp TIMESTAMP NOT NULL, -- Changed to TIMESTAMP
       Method VARCHAR(50),
       AppointmentID INT,
       ReservationID INT,
@@ -94,7 +94,7 @@ CREATE TABLE Reports (
     ReportID INT AUTO_INCREMENT PRIMARY KEY,
     ReportTitle VARCHAR(100),
     ReportType VARCHAR(50) NOT NULL,
-    ReportDate DATETIME NOT NULL,
+    ReportTimeStamp TIMESTAMP NOT NULL,
     Content TEXT NOT NULL,
     EmployeeID INT,
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID) ON DELETE SET NULL
@@ -103,7 +103,7 @@ CREATE TABLE Reports (
 CREATE TABLE Refunds (
     RefundID INT AUTO_INCREMENT PRIMARY KEY,
     PaymentID INT NOT NULL,
-    RefundDate DATE NOT NULL,
+    RefundTimeStamp TIMESTAMP NOT NULL,
     RefundAmount DECIMAL(10, 2) NOT NULL,
     Reason TEXT,
     FOREIGN KEY (PaymentID) REFERENCES Payments(PaymentID)

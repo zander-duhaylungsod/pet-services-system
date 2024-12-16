@@ -69,9 +69,14 @@ public class ReportsPageController {
     private Label employeeNameLabel;
     @FXML
     private Label employeeRoleLabel;
+    @FXML
+    private Label totalRevenueYear;
+    @FXML
+    private ComboBox<String> yearChooser;
 
     private ObservableList<PaymentRecord> paymentList = FXCollections.observableArrayList();
     private ObservableList<ReportRecord> reportList = FXCollections.observableArrayList();
+    private ObservableList<String> yearList = FXCollections.observableArrayList();
 
     public void initialize() {
         PaymentRecord.getInstance().setReportsPageController(this);
@@ -101,11 +106,19 @@ public class ReportsPageController {
         //load Data
         loadPayments();
         loadReports();
-        loadAnalyticsCharts();
+        loadPaymentYears();
 
         //bind data to table
         PaymentTable.setItems(paymentList);
         ReportTable.setItems(reportList);
+        yearChooser.setItems(yearList);
+
+        //analytics editor
+        yearChooser.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                updateRevenueChartAndLabel(newValue);
+            }
+        });
 
         // Tabpane Setup
         reportsTabPane.getSelectionModel().select(AppState.getInstance().getCurrentTabIndex());
@@ -330,7 +343,7 @@ public class ReportsPageController {
         String query = "SELECT p.PaymentID, COALESCE(pets.Name, 'Unknown') AS PetName, " +
                 "COALESCE(CONCAT(o.FirstName, ' ', o.LastName), 'Unknown Owner') AS OwnerName, " +
                 "COALESCE(s.ServiceName, 'Boarding') AS ServiceName, a.AppointmentID, b.ReservationID, " +
-                "p.PaymentDate, p.Amount, p.Status " +
+                "p.PaymentTimeStamp, p.Amount, p.Status " +
                 "FROM Payments p " +
                 "LEFT JOIN Appointments a ON p.AppointmentID = a.AppointmentID " +
                 "LEFT JOIN BoardingReservations b ON p.ReservationID = b.ReservationID " +
@@ -356,7 +369,7 @@ public class ReportsPageController {
                         petName,
                         ownerName,
                         serviceName,
-                        rs.getDate("PaymentDate"),
+                        rs.getString("PaymentTimeStamp"),
                         rs.getDouble("Amount"),
                         rs.getString("Status")
                 ));
@@ -368,7 +381,7 @@ public class ReportsPageController {
 
     public void loadReports() {
         reportList.clear();
-        String query = "SELECT r.ReportID, r.ReportTitle, r.ReportDate, r.ReportType, e.EmployeeID, CONCAT(e.FirstName,' ', e.LastName) AS EmployeeName " +
+        String query = "SELECT r.ReportID, r.ReportTitle, r.ReportTimeStamp, r.ReportType, e.EmployeeID, CONCAT(e.FirstName,' ', e.LastName) AS EmployeeName " +
                 "FROM Reports r JOIN Employees e ON r.EmployeeID = e.EmployeeID;";
         try (Connection conn = connect();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -378,7 +391,7 @@ public class ReportsPageController {
                 int reportID = rs.getInt("ReportID");
                 String reportTitle = rs.getString("ReportTitle");
                 String reportType = rs.getString("ReportType");
-                String reportDate = rs.getString("ReportDate");
+                String reportDate = rs.getString("ReportTimeStamp");
                 int employeeID = rs.getInt("EmployeeID");
                 String employeeName = rs.getString("EmployeeName");
 
@@ -396,7 +409,7 @@ public class ReportsPageController {
         }
     }
 
-    public void loadAnalyticsCharts() {
+    private void loadRevenueDataForYear(String year) {
         // Set up the axes
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
@@ -414,24 +427,19 @@ public class ReportsPageController {
         XYChart.Series<String, Number> totalSeries = new XYChart.Series<>();
         totalSeries.setName("Total Revenue");
 
-        String query =
-                "SELECT " +
-                        "    MONTHNAME(p.PaymentDate) AS month_name, " +
-                        "    SUM(CASE WHEN p.AppointmentID IS NOT NULL THEN p.Amount ELSE 0 END) AS appointment_revenue, " +
-                        "    SUM(CASE WHEN p.ReservationID IS NOT NULL THEN p.Amount ELSE 0 END) AS boarding_revenue, " +
-                        "    SUM(p.Amount) AS total_revenue " +
-                        "FROM " +
-                        "    Payments p " +
-                        "WHERE " +
-                        "    p.Status IN ('Full Payment', 'Partial Payment') " +
-                        "GROUP BY " +
-                        "    MONTHNAME(p.PaymentDate), MONTH(p.PaymentDate) " +
-                        "ORDER BY " +
-                        "    MONTH(p.PaymentDate);";
+        String query = "SELECT MONTHNAME(p.PaymentTimeStamp) AS month_name, " +
+                "SUM(CASE WHEN p.AppointmentID IS NOT NULL THEN p.Amount ELSE 0 END) AS appointment_revenue, " +
+                "SUM(CASE WHEN p.ReservationID IS NOT NULL THEN p.Amount ELSE 0 END) AS boarding_revenue, " +
+                "SUM(p.Amount) AS total_revenue " +
+                "FROM Payments p " +
+                "WHERE YEAR(p.PaymentTimeStamp) = ? AND p.Status IN ('Full Payment', 'Partial Payment') " +
+                "GROUP BY MONTHNAME(p.PaymentTimeStamp), MONTH(p.PaymentTimeStamp) " +
+                "ORDER BY MONTH(p.PaymentTimeStamp);";
 
-        try (Connection conn = connect(); // Replace with your connection method
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, year);
+            ResultSet rs = stmt.executeQuery();
 
             // Populate the BarChart series with data
             while (rs.next()) {
@@ -445,7 +453,6 @@ public class ReportsPageController {
                 boardingSeries.getData().add(new XYChart.Data<>(monthName, boardingRevenue));
                 totalSeries.getData().add(new XYChart.Data<>(monthName, totalRevenue));
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -453,14 +460,37 @@ public class ReportsPageController {
         // Clear previous data and add the new series to the BarChart
         revenueBarChart.getData().clear();
         revenueBarChart.getData().addAll(appointmentSeries, boardingSeries, totalSeries);
+    }
 
-        // Service Usage Pie Chart Data
+    private void loadPaymentYears() {
+        String query = "SELECT DISTINCT YEAR(PaymentTimeStamp) AS year FROM Payments ORDER BY year";
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                yearList.add(String.valueOf(rs.getInt("year")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alerts.showAlert("Error", "Failed to load payment years.");
+        }
+    }
+
+    private void loadServicePieChartDataForYear(String year) {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 
-        String query2 = "SELECT ServiceName, COUNT(*) AS usageCount FROM Services JOIN Appointments ON Services.ServiceID = Appointments.ServiceID GROUP BY ServiceName";
+        String query = "SELECT s.ServiceName, COUNT(*) AS usageCount " +
+                "FROM Services s " +
+                "JOIN Appointments a ON s.ServiceID = a.ServiceID " +
+                "JOIN Payments p ON a.AppointmentID = p.AppointmentID " +
+                "WHERE YEAR(p.PaymentTimeStamp) = ? " +
+                "GROUP BY s.ServiceName";
+
         try (Connection conn = connect();
-             PreparedStatement stmt2 = conn.prepareStatement(query2)) {
-            ResultSet rs = stmt2.executeQuery();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, year);
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 pieChartData.add(new PieChart.Data(rs.getString("ServiceName"), rs.getInt("usageCount")));
@@ -470,6 +500,38 @@ public class ReportsPageController {
         }
 
         servicePieChart.setData(pieChartData);
+    }
+
+    private void updateRevenueChartAndLabel(String year) {
+        // Update the totalRevenueYear label with the total revenue for the selected year
+        double totalRevenue = calculateTotalRevenueForYear(year);
+        totalRevenueYear.setText(String.valueOf(totalRevenue));
+
+        // Update the revenueBarChart
+        loadRevenueDataForYear(year);
+
+        // Update the servicePieChart
+        loadServicePieChartDataForYear(year);
+    }
+
+    private double calculateTotalRevenueForYear(String year) {
+        String query = "SELECT SUM(Amount) AS total_revenue FROM Payments WHERE YEAR(PaymentTimeStamp) = ? AND Status IN ('Full Payment', 'Partial Payment')";
+        double totalRevenue = 0.0;
+
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, year);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                totalRevenue = rs.getDouble("total_revenue");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alerts.showAlert("Error", "Failed to calculate total revenue.");
+        }
+
+        return totalRevenue;
     }
 
     //table dependencies & database functions

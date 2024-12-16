@@ -174,17 +174,17 @@ public class AccountCreationController {
     }
 
     private void togglePasswordVisibility() {
-        isPasswordVisible = !isPasswordVisible;
-        if (isPasswordVisible) {
-            passwordField.setOpacity(50);
+        boolean isToggled = showPasswordBtn.isSelected();
+        if (isToggled) {
             showPassField.setText(passwordField.getText());
             showPassField.setVisible(true);
             passwordField.setVisible(false);
+            showPasswordBtn.setOpacity(1.0); // Full opacity when toggled
         } else {
-            passwordField.setOpacity(100);
             passwordField.setText(showPassField.getText());
             passwordField.setVisible(true);
             showPassField.setVisible(false);
+            showPasswordBtn.setOpacity(0.5); // Reduced opacity when not toggled
         }
     }
 

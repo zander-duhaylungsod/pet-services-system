@@ -2,26 +2,17 @@ package CCE104;
 
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.Polygon;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
-import java.nio.file.Paths;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Objects;
 

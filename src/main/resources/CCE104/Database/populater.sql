@@ -1,26 +1,13 @@
-INSERT INTO Owners (FirstName, LastName, Email, Phone)
+INSERT INTO Services (ServiceName, Price, Description)
 VALUES
-    ('John', 'Doe', 'john.doe@example.com', '1234567890'),
-    ('Jane', 'Smith', 'jane.smith@example.com', '0987654321'),
-    ('Robert', 'Brown', 'robert.brown@example.com', '5678901234'),
-    ('Emily', 'Davis', 'emily.davis@example.com', '3456789012'),
-    ('Michael', 'Johnson', 'michael.johnson@example.com', '2345678901'),
-    ('Laura', 'Wilson', 'laura.wilson@example.com', '4567890123'),
-    ('David', 'Martinez', 'david.martinez@example.com', '6789012345'),
-    ('Emma', 'Taylor', 'emma.taylor@example.com', '7890123456'),
-    ('Daniel', 'Garcia', 'daniel.garcia@example.com', '8901234567'),
-    ('Sophia', 'Anderson', 'sophia.anderson@example.com', '9012345678');
-
-INSERT INTO Pets (Name, Species, Breed, PetImagePath, PetNotes, Age, OwnerID)
-VALUES
-    ('Buddy', 'Dog', 'Aspin', 'images/buddy.jpg', 'Very friendly and loves playing fetch.', 3, 1),
-    ('Mingming', 'Cat', 'Puspin', 'images/mingming.jpg', 'Prefers quiet environments and loves napping.', 2, 2),
-    ('Pipoy', 'Bird', 'Lovebird', 'images/pipoy.jpg', 'Enjoys chirping and being near windows.', 1, 3),
-    ('Chico', 'Dog', 'Shih Tzu', 'images/chico.jpg', 'Requires special shampoo for sensitive skin.', 4, 4),
-    ('Max', 'Dog', 'Golden Retriever', 'images/max.jpg', 'Highly energetic and great with kids.', 5, 1),
-    ('Bella', 'Cat', 'Persian', 'images/bella.jpg', 'Needs regular grooming to maintain fur.', 3, 3),
-    ('Tweety', 'Bird', 'Canary', 'images/tweety.jpg', 'Loves singing in the mornings.', 2, 2),
-    ('Rocky', 'Dog', 'Bulldog', 'images/rocky.jpg', 'Prone to overheating; needs frequent hydration.', 6, 4);
+    ('Full Grooming Package', 1000.00, 'Complete grooming package including bathing, nail trimming, and fur styling.'),
+    ('Bathing Only', 300.00, 'Basic cleaning and drying service for pets.'),
+    ('Fur Styling', 500.00, 'Custom haircuts and trims based on pet breed and owner preferences.'),
+    ('Teeth Cleaning', 400.00, 'Dental hygiene service for pets, ensuring clean teeth and fresh breath.'),
+    ('Basic Obedience Training', 1500.00, 'Introductory training to teach pets basic commands like sit, stay, and heel.'),
+    ('General Checkup', 800.00, 'Health assessment to ensure the pet is in good condition.'),
+    ('Full Package Vaccination', 2000.00, 'Comprehensive vaccination package covering essential pet immunizations.');
+--Roles: 'Manager', 'Receptionist', 'Groomer', 'Boarding Attendant'
 
 INSERT INTO Employees (FirstName, LastName, Phone, Role)
 VALUES
@@ -35,61 +22,134 @@ VALUES
     ('Roberto', 'Martinez', '09175678901', 'Veterinarian'),
     ('Carmen', 'Dizon', '09176789012', 'Pet Trainer'),
     ('Antonio', 'Garcia', '09177890123', 'Cleaning Staff');
+--Predetermined, do not change
 
+
+-- Populating Owners
 INSERT INTO Owners (FirstName, LastName, Email, Phone)
 VALUES
-    ('Maria', 'Santos', 'maria.santos@example.com', '09123456789'),
-    ('Juan', 'Cruz', 'juan.cruz@example.com', '09234567890'),
-    ('Elena', 'Garcia', NULL, '09345678901'),
-    ('Pedro', 'Lopez', 'pedro.lopez@example.com', '09456789012');
+    ('Alfredo', 'Cruz', 'alfredo.cruz@example.com', '09071234567'),
+    ('Bea', 'Santos', 'bea.santos@example.com', '09081234568'),
+    ('Carlos', 'Reyes', 'carlos.reyes@example.com', '09091234569'),
+    ('Diana', 'Garcia', 'diana.garcia@example.com', '09101234570'),
+    ('Enrique', 'Martinez', 'enrique.martinez@example.com', '09111234571'),
+    ('Fely', 'Lopez', 'fely.lopez@example.com', '09121234572'),
+    ('George', 'Cruz', 'george.cruz@example.com', '09131234573'),
+    ('Helena', 'Ramos', 'helena.ramos@example.com', '09141234574'),
+    ('Isabel', 'Torres', 'isabel.torres@example.com', '09151234575'),
+    ('Julio', 'Rivera', 'julio.rivera@example.com', '09161234576'),
+    ('Karla', 'Gutierrez', 'karla.gutierrez@example.com', '09171234577'),
+    ('Luis', 'Domingo', 'luis.domingo@example.com', '09181234578'),
+    ('Martha', 'Flores', 'martha.flores@example.com', '09191234579'),
+    ('Nico', 'Bautista', 'nico.bautista@example.com', '09201234580'),
+    ('Olivia', 'Luna', 'olivia.luna@example.com', '09211234581');
 
-INSERT INTO Pets (Name, Species, Breed, Age, OwnerID, PetImagePath)
+-- Populating Pets
+INSERT INTO Pets (Name, Species, Breed, PetImagePath, PetNotes, Age, OwnerID)
 VALUES
-    ('Buddy', 'Dog', 'Aspin', 3, 1, 'images/buddy.jpg'),
-    ('Mingming', 'Cat', 'Puspin', 2, 2, 'images/mingming.jpg'),
-    ('Pipoy', 'Bird', 'Lovebird', 1, 3, 'images/pipoy.jpg'),
-    ('Chico', 'Dog', 'Shih Tzu', 4, 4, 'images/chico.jpg');
+    ('Bantay', 'Dog', 'Aspin', '/CCE104/petImages/moodeng.jpg', 'Loves guarding the house', 5, 1),
+    ('Mingming', 'Cat', 'Siamese', '/CCE104/petImages/moodeng.jpg', 'Very cuddly', 3, 2),
+    ('Putol', 'Dog', 'Shih Tzu', '/CCE104/petImages/moodeng.jpg', 'Has a cute bark', 2, 3),
+    ('Pusang Kalye', 'Cat', 'Persian', '/CCE104/petImages/moodeng.jpg', 'Loves sleeping all day', 4, 4),
+    ('Tagpi', 'Dog', 'Bulldog', '/CCE104/petImages/moodeng.jpg', 'Spots on fur', 6, 5),
+    ('Doggiekins', 'Dog', 'Golden Retriever', '/CCE104/petImages/moodeng.jpg', 'Very energetic', 3, 6),
+    ('Rover', 'Dog', 'Labrador', '/CCE104/petImages/moodeng.jpg', 'Loves fetching sticks', 4, 7),
+    ('Fluffy', 'Cat', 'Maine Coon', '/CCE104/petImages/moodeng.jpg', 'Adores grooming sessions', 2, 8),
+    ('Spike', 'Dog', 'Doberman', '/CCE104/petImages/moodeng.jpg', 'Very alert and protective', 4, 9),
+    ('Kitty', 'Cat', 'Bengal', '/CCE104/petImages/moodeng.jpg', 'Always curious', 3, 10),
+    ('Snowy', 'Dog', 'Husky', '/CCE104/petImages/moodeng.jpg', 'Enjoys winter', 5, 11),
+    ('Cuddles', 'Cat', 'British Shorthair', '/CCE104/petImages/moodeng.jpg', 'Loves being held', 6, 12),
+    ('Shadow', 'Dog', 'German Shepherd', '/CCE104/petImages/moodeng.jpg', 'Highly trained', 4, 13),
+    ('Princess', 'Dog', 'Poodle', '/CCE104/petImages/moodeng.jpg', 'Very graceful', 3, 14),
+    ('Tom', 'Cat', 'Russian Blue', '/CCE104/petImages/moodeng.jpg', 'Quiet and calm', 5, 15);
 
-INSERT INTO Services (ServiceName, Price, Description)
-VALUES
-    ('Full Grooming Package', 1000.00, 'Complete grooming package including bathing, nail trimming, and fur styling.'),
-    ('Bathing Only', 300.00, 'Basic cleaning and drying service for pets.'),
-    ('Fur Styling', 500.00, 'Custom haircuts and trims based on pet breed and owner preferences.'),
-    ('Teeth Cleaning', 400.00, 'Dental hygiene service for pets, ensuring clean teeth and fresh breath.'),
-    ('Basic Obedience Training', 1500.00, 'Introductory training to teach pets basic commands like sit, stay, and heel.'),
-    ('General Checkup', 800.00, 'Health assessment to ensure the pet is in good condition.'),
-    ('Full Package Vaccination', 2000.00, 'Comprehensive vaccination package covering essential pet immunizations.');
---Roles: 'Manager', 'Receptionist', 'Groomer', 'Boarding Attendant'
-
+-- Populating Appointments (2021-2024) with updated ServiceID (1-7)
 INSERT INTO Appointments (Date, Time, ServiceID, PetID, EmployeeID, Status)
 VALUES
-    ('2024-12-05', '09:00:00', 1, 1,  1, 'Pending'),
-    ('2024-12-06', '10:00:00', 2, 2,  1, 'Confirmed'),
-    ('2024-12-07', '11:00:00', 3, 3, 2, 'Cancelled'),
-    ('2024-12-08', '14:00:00', 4, 4, 3, 'Pending');
+    -- 2021 Appointments
+    ('2021-02-15', '09:00:00', 1, 1, 2, 'Completed'),
+    ('2021-03-20', '10:00:00', 2, 2, 3, 'Pending'),
+    ('2021-05-12', '11:00:00', 3, 3, 4, 'Completed'),
+    ('2021-06-25', '14:00:00', 4, 4, 5, 'Canceled'),
+    ('2021-07-14', '15:00:00', 5, 5, 6, 'Completed'),
 
-INSERT INTO Payments (Amount, PaymentDate, Method, AppointmentID, Status)
-VALUES
-    (500.00, '2024-12-05', 'Cash', 1, 'Paid'),
-    (800.00, '2024-12-06', 'Credit Card', 2, 'Paid'),
-    (0.00, '2024-12-07', 'None', 3, 'Unpaid'),
-    (1200.00, '2024-12-08', 'GCash', 4, 'Paid');
+    -- 2022 Appointments
+    ('2022-02-15', '09:00:00', 6, 6, 2, 'Completed'),
+    ('2022-03-20', '10:00:00', 7, 7, 3, 'Pending'),
+    ('2022-05-12', '11:00:00', 1, 8, 4, 'Completed'),
+    ('2022-06-25', '14:00:00', 2, 9, 5, 'Canceled'),
+    ('2022-07-14', '15:00:00', 3, 10, 6, 'Completed'),
 
+    -- 2023 Appointments
+    ('2023-02-15', '09:00:00', 4, 11, 2, 'Completed'),
+    ('2023-03-20', '10:00:00', 5, 12, 3, 'Pending'),
+    ('2023-05-12', '11:00:00', 6, 13, 4, 'Completed'),
+    ('2023-06-25', '14:00:00', 7, 14, 5, 'Canceled'),
+    ('2023-07-14', '15:00:00', 1, 15, 6, 'Completed'),
+
+    -- 2024 Appointments
+    ('2024-02-15', '09:00:00', 2, 1, 2, 'Completed'),
+    ('2024-03-20', '10:00:00', 3, 2, 3, 'Pending'),
+    ('2024-05-12', '11:00:00', 4, 3, 4, 'Completed'),
+    ('2024-06-25', '14:00:00', 5, 4, 5, 'Canceled'),
+    ('2024-07-14', '15:00:00', 6, 5, 6, 'Completed');
+
+
+-- Populating BoardingReservations (2021-2024)
 INSERT INTO BoardingReservations (StartDate, EndDate, PetID, EmployeeID, Status)
 VALUES
-    ('2024-12-10', '2024-12-12', 1, 2, 'Pending'),
-    ('2024-12-13', '2024-12-15', 2, 3, 'Confirmed'),
-    ('2024-12-16', '2024-12-18', 3, 4, 'Cancelled'),
-    ('2024-12-19', '2024-12-20', 4, 1, 'Pending');
+    ('2021-02-01', '2021-02-07', 1, 1, 'Completed'),
+    ('2021-04-10', '2021-04-15', 2, 2, 'Pending'),
+    ('2022-02-01', '2022-02-07', 3, 3, 'Completed'),
+    ('2022-04-10', '2022-04-15', 4, 4, 'Pending'),
+    ('2023-02-01', '2023-02-07', 5, 5, 'Completed'),
+    ('2023-04-10', '2023-04-15', 6, 6, 'Pending'),
+    ('2024-02-01', '2024-02-07', 7, 7, 'Completed'),
+    ('2024-04-10', '2024-04-15', 8, 8, 'Pending'),
+    ('2024-05-01', '2024-05-07', 9, 9, 'Completed'),
+    ('2024-06-01', '2024-06-07', 10, 10, 'Pending');
 
-INSERT INTO Reports (ReportTitle, ReportType, ReportDate, Content, EmployeeID)
-VALUES
-    ('Monthly Sales Report', 'Sales', '2024-12-01 10:00:00', 'This report covers the sales for November 2024.', 1),
-    ('Employee Performance Review', 'HR', '2024-12-01 11:00:00', 'Performance evaluation for all staff.', 2),
-    ('Pet Health Report', 'Pet Care', '2024-12-01 12:00:00', 'Health details of pets under care.', 3);
 
-INSERT INTO Refunds (PaymentID, RefundDate, RefundAmount, Reason)
+-- Populating Payments (2021-2024)
+INSERT INTO Payments (Amount, PaymentTimestamp, Method, AppointmentID, ReservationID, Status)
 VALUES
-    (3, '2024-12-07', 300.00, 'Service cancelled by customer'),
-    (4, '2024-12-08', 200.00, 'Service incomplete'),
-    (2, '2024-12-09', 100.00, 'Overpayment adjustment');
+    -- 2021 Payments
+    (75.00, '2021-04-05 10:30:00', 'Cash', 4, NULL, 'Full Payment'),  -- Appointment for Basic Grooming
+    (120.00, '2021-07-14 16:00:00', 'Bank Transfer', NULL, 1, 'Pending'),  -- Reservation for Boarding Service
+    (180.00, '2021-08-01 11:00:00', 'Online Payment', 5, NULL, 'Partial Payment'),  -- Appointment for Fur Styling
+    (90.00, '2021-10-12 14:30:00', 'Credit Card', NULL, 2, 'Full Payment'),  -- Reservation for Pet Training
+    (50.00, '2021-12-05 15:00:00', 'Cash', 6, NULL, 'Refunded'),  -- Appointment for Bathing
+
+    -- 2022 Payments
+    (100.00, '2022-01-15 09:00:00', 'Credit Card', 7, NULL, 'Pending'),  -- Appointment for General Checkup
+    (300.00, '2022-04-10 13:00:00', 'Cash', NULL, 3, 'Full Payment'),  -- Reservation for Obedience Training
+    (200.00, '2022-05-22 10:45:00', 'Bank Transfer', 8, NULL, 'Full Payment'),  -- Appointment for Vaccination
+    (250.00, '2022-09-18 11:30:00', 'Online Payment', NULL, 4, 'Voided'),  -- Reservation for Boarding Service
+    (300.00, '2022-11-25 14:00:00', 'Debit Card', 9, NULL, 'Partial Payment'),  -- Appointment for Teeth Cleaning
+
+    -- 2023 Payments
+    (500.00, '2023-01-05 11:00:00', 'Credit Card', NULL, 5, 'Full Payment'),  -- Reservation for Grooming Package
+    (350.00, '2023-02-18 13:15:00', 'Cash', 10, NULL, 'Pending'),  -- Appointment for Fur Styling
+    (100.00, '2023-03-03 14:45:00', 'Bank Transfer', 11, NULL, 'Full Payment'),  -- Appointment for Bathing Only
+    (150.00, '2023-04-06 10:00:00', 'Cash', NULL, 6, 'Refunded'),  -- Reservation for Training
+    (180.00, '2023-05-25 13:00:00', 'Credit Card', NULL, 7, 'Partial Payment'),  -- Reservation for Checkup
+    (250.00, '2023-07-12 10:30:00', 'Online Payment', 12, NULL, 'Full Payment'),  -- Appointment for Full Grooming
+    (100.00, '2023-09-20 15:30:00', 'Debit Card', 13, NULL, 'Voided'),  -- Appointment for Basic Grooming
+    (400.00, '2023-11-02 12:00:00', 'Cash', NULL, 8, 'Full Payment'),  -- Reservation for Obedience Training
+
+-- 2024 Payments
+    (75.00, '2024-01-20 10:00:00', 'Credit Card', NULL, 9, 'Partial Payment'),  -- Reservation for Full Grooming Package
+    (100.00, '2024-03-15 14:00:00', 'Bank Transfer', 5, NULL, 'Pending'),  -- Appointment for Teeth Cleaning
+    (220.00, '2024-04-05 09:30:00', 'Cash', NULL, 10, 'Full Payment'),  -- Reservation for Boarding
+    (300.00, '2024-05-10 13:00:00', 'Credit Card', 15, NULL, 'Partial Payment'),  -- Appointment for Bathing Only
+    (120.00, '2024-06-17 11:45:00', 'Debit Card', NULL, 7, 'Refunded'),  -- Reservation for Pet Training
+    (250.00, '2024-07-10 15:15:00', 'Online Payment', 16, NULL, 'Full Payment'),  -- Appointment for Grooming Package
+    (150.00, '2024-09-05 10:30:00', 'Cash', NULL, 3, 'Full Payment'),  -- Reservation for Obedience Training
+    (300.00, '2024-10-11 14:00:00', 'Credit Card', 17, NULL, 'Voided'),  -- Appointment for General Checkup
+    (50.00, '2024-11-23 13:00:00', 'Bank Transfer', NULL, 2, 'Pending');  -- Reservation for Boarding Service
+
+-- Populating Reports
+INSERT INTO Reports (ReportTitle, ReportType, ReportTimeStamp, Content, EmployeeID)
+VALUES
+    ('Monthly Grooming Summary', 'Grooming', '2021-01-31 12:00:00', 'Summary of grooming activities in January', 2),
+    ('Boarding Activity Report', 'Boarding', '2021-02-28 14:00:00', 'Details of boarding activities in February', 3);

@@ -80,6 +80,10 @@ public class ReportsController {
     String user = "root";
     String password = "";
 
+    // Use WebView to render the HTML
+    static WebView webView = new WebView();
+    static WebEngine webEngineForPrint = webView.getEngine();
+
     public void initialize() throws IOException {
         AppState appState = AppState.getInstance();
         AppState.Report currentReportPage = appState.getCurrentReportPage();
@@ -101,15 +105,58 @@ public class ReportsController {
             WebEngine webEngine = reportContentView.getEngine();
             String content = selectedReport.getContent();
             System.out.println("HTML Content: " + content);
-            String fullHtmlDocument = "<html><head><style>" +
-                    "body { font-family: Arial, sans-serif; line-height: 1; }" +
-                    "h1, h2 { color: #333; }" +
-                    "p { margin: 0; padding: 0; }" +
-                    "ul { margin: 10px 0; padding-left: 20px; }" +
+            // Retrieve necessary report details
+            String reportTitle = selectedReport.getReportTitle();
+            String reportType = selectedReport.getReportType();
+            String reportContent = selectedReport.getContent(); // This is in HTML format
+            String reportDate = selectedReport.getReportDate();
+            String employeeName = selectedReport.getEmployeeName();
+
+            // Reminders section
+            String reminderMessage =
+                    "<p><strong>Reminders:</strong></p>" +
+                            "<ul>" +
+                            "<li>This report is for internal use only. Ensure its contents are kept confidential and not disclosed <br>outside the organization.</li>" +
+                            "<li>If any amendments are required, please contact the report creator promptly.</li>" +
+                            "<li>Keep this document archived as it may be referenced for future audits or evaluations.</li>" +
+                            "</ul>" +
+                            "<p>Thank you for your continued commitment to maintaining high operational standards.</p>" +
+                            "<p>Warm Regards,<br>The PAWFECTCare Administrative Team</p>";
+
+            // Combine HTML content for the full report
+            String fullReportContent = "<html><head><style>" +
+                    "body { font-family: Times New Roman, Times, serif; line-height: 1.6; font-size: 12pt; width: 505px;}" + // Reduced overall font size
+                    "h1 { color: #333; font-size: 12pt; margin-bottom: 10px; }" + // Smaller heading sizes
+                    "h2 { color: #333; font-size: 10pt; margin-bottom: 8px; }" +
+                    "h3 { color: #333; font-size: 9pt; margin-bottom: 6px; }" +
+                    "p { margin: 5px 0; padding: 0; font-size: 8pt; }" +
+                    "ul { margin: 5px 0; padding-left: 20px; font-size: 8pt; }" +
                     "</style></head><body contenteditable='false'>" +
-                    selectedReport.getContent() +
+                    "<h1>PAWFECTCare: Pet Grooming and Boarding Services</h1>" +
+                    "<h2>Report</h2>" +
+                    "<p><strong>Report Title:</strong> " + reportTitle + "</p>" +
+                    "<p><strong>Report Type:</strong> " + reportType + "</p>" +
+                    "<p><strong>Created By:</strong> " + employeeName + "</p>" +
+                    "<p><strong>Submitted on:</strong> " + reportDate + "</p>" +
+                    "<h3>Report Content</h3>" +
+                    reportContent + // Include the HTML content of the report
+                    reminderMessage +
                     "</body></html>";
-            webEngine.loadContent(fullHtmlDocument);
+            webEngine.loadContent(fullReportContent);
+            webEngineForPrint.loadContent(fullReportContent);
+
+            reportContentView.setOnScroll(event -> {
+                if (event.isControlDown()) {
+                    double zoomFactor = reportContentView.getZoom();
+                    double deltaY = event.getDeltaY();
+                    if (deltaY > 0) {
+                        reportContentView.setZoom(zoomFactor * 1.1);
+                    } else {
+                        reportContentView.setZoom(zoomFactor / 1.1);
+                    }
+                    event.consume();
+                }
+            });
         }
     }
 
@@ -132,7 +179,7 @@ public class ReportsController {
             Connection connection = DriverManager.getConnection(url, user, password);
 
             // Insert data into Payments table
-            String query = "INSERT INTO Reports (EmployeeID, ReportType, ReportTitle, Content, ReportDate) VALUES (?, ?, ?, ?, ?);";
+            String query = "INSERT INTO Reports (EmployeeID, ReportType, ReportTitle, Content, ReportTimeStamp) VALUES (?, ?, ?, ?, ?);";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, employeeID);
             statement.setString(2, reportType);
@@ -199,7 +246,7 @@ public class ReportsController {
                 return;
             }
 
-            String updateQuery = "UPDATE Reports SET EmployeeID = ?, ReportType = ?, ReportTitle = ?, Content = ?, ReportDate = ? WHERE ReportID = ?";
+            String updateQuery = "UPDATE Reports SET EmployeeID = ?, ReportType = ?, ReportTitle = ?, Content = ?, ReportTimeStamp = ? WHERE ReportID = ?";
             try (Connection conn = DriverManager.getConnection(url, user, password);
                  PreparedStatement statement = conn.prepareStatement(updateQuery)) {
 
@@ -231,70 +278,15 @@ public class ReportsController {
 
     public void printReport() throws IOException {
         try {
-            ReportRecord selectedReport = ReportRecord.getSelectedReport();
-            if (selectedReport == null) {
-                Alerts.showErrorDialog("Error", "No report selected.");
-                return;
-            }
-
-            // Retrieve necessary report details
-            String reportTitle = selectedReport.getReportTitle();
-            String reportType = selectedReport.getReportType();
-            String reportContent = selectedReport.getContent(); // This is in HTML format
-            String reportDate = selectedReport.getReportDate();
-            String employeeName = selectedReport.getEmployeeName();
-
-            // Reminders section
-            String reminderMessage =
-                    "<p><strong>Reminders:</strong></p>" +
-                            "<ul>" +
-                            "<li>This report is for internal use only. Ensure its contents are kept confidential and not disclosed <br>outside the organization.</li>" +
-                            "<li>If any amendments are required, please contact the report creator promptly.</li>" +
-                            "<li>Keep this document archived as it may be referenced for future audits or evaluations.</li>" +
-                            "</ul>" +
-                            "<p>Thank you for your continued commitment to maintaining high operational standards.</p>" +
-                            "<p>Warm Regards,<br>The PAWFECTCare Administrative Team</p>";
-
-            // Combine HTML content for the full report
-            String fullReportContent = "<html><head><style>" +
-                    "body { font-family: Times New Roman, Times, serif; line-height: 1.6; font-size: 10pt; width: 505px;}" + // Reduced overall font size
-                    "h1 { color: #333; font-size: 12pt; margin-bottom: 10px; }" + // Smaller heading sizes
-                    "h2 { color: #333; font-size: 10pt; margin-bottom: 8px; }" +
-                    "h3 { color: #333; font-size: 9pt; margin-bottom: 6px; }" +
-                    "p { margin: 5px 0; padding: 0; font-size: 8pt; }" +
-                    "ul { margin: 5px 0; padding-left: 20px; font-size: 8pt; }" +
-                    "</style></head><body>" +
-                    "<h1>PAWFECTCare: Pet Grooming and Boarding Services</h1>" +
-                    "<h2>Report</h2>" +
-                    "<p><strong>Report Title:</strong> " + reportTitle + "</p>" +
-                    "<p><strong>Report Type:</strong> " + reportType + "</p>" +
-                    "<p><strong>Created By:</strong> " + employeeName + "</p>" +
-                    "<p><strong>Submitted on:</strong> " + reportDate + "</p>" +
-                    "<h3>Report Content</h3>" +
-                    reportContent + // Include the HTML content of the report
-                    reminderMessage +
-                    "</body></html>";
-
-            // Use WebView to render the HTML
-            WebView webView = new WebView();
-            WebEngine webEngine = webView.getEngine();
-            webEngine.loadContent(fullReportContent);
-
-            // Allow the content to finish loading before attempting to print
-            webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
-                if (newState == Worker.State.SUCCEEDED) {
-                    // Start the print job after ensuring rendering is done
-                    PrinterJob printerJob = PrinterJob.createPrinterJob();
-                    if (printerJob != null && printerJob.showPrintDialog(null)) {
-                        boolean success = printerJob.printPage(webView);
-                        if (success) {
-                            printerJob.endJob();
-                        } else {
-                            Alerts.showErrorDialog("Error", "Printing failed.");
-                        }
-                    }
+            PrinterJob printerJob = PrinterJob.createPrinterJob();
+            if (printerJob != null && printerJob.showPrintDialog(null)) {
+                boolean success = printerJob.printPage(webView);
+                if (success) {
+                    printerJob.endJob();
+                } else {
+                    Alerts.showErrorDialog("Error", "Printing failed.");
                 }
-            });
+            }
         } catch (Exception e) {
             e.printStackTrace();
             Alerts.showErrorDialog("Error", "An error occurred while printing the report.");
@@ -340,10 +332,9 @@ public class ReportsController {
             return false;
         }
 
-        // **New Validation: Check word limit of the content**
         int wordCount = countWords(reportContent);
-        if (wordCount > 500) {
-            Alerts.showAlert("Validation Error", "Report content exceeds the maximum allowed word limit of 500 words. Current word count: " + wordCount);
+        if (wordCount > 250) {
+            Alerts.showAlert("Validation Error", "Report content exceeds the maximum allowed word limit of 250 words. Current word count: " + wordCount);
             return false;
         }
 

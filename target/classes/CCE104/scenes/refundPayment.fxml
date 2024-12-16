@@ -2,7 +2,6 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -135,21 +134,7 @@
                   </DropShadow>
                </effect>
             </Polygon>
-            <Label layoutX="92.0" layoutY="286.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Refund Date:">
-               <font>
-                  <Font name="Segoe UI Emoji" size="19.0" />
-               </font>
-            </Label>
-            <DatePicker fx:id="refundDate" editable="false" layoutX="257.0" layoutY="300.0" prefHeight="29.0" prefWidth="252.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-background-color: white; -fx-font-size: 16px;">
-               <effect>
-                  <DropShadow blurType="GAUSSIAN">
-                     <color>
-                        <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </DatePicker>
-            <TextField fx:id="refundAmountField" editable="false" layoutX="256.0" layoutY="357.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
+            <TextField fx:id="refundAmountField" editable="false" layoutX="256.0" layoutY="299.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
@@ -161,17 +146,17 @@
                   </DropShadow>
                </effect>
             </TextField>
-            <Label layoutX="92.0" layoutY="347.0" prefHeight="53.0" prefWidth="142.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Refund Amount:">
+            <Label layoutX="92.0" layoutY="289.0" prefHeight="53.0" prefWidth="142.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Refund Amount:">
                <font>
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <Label layoutX="92.0" layoutY="405.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Reason:">
+            <Label layoutX="92.0" layoutY="347.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Reason:">
                <font>
                   <Font name="Segoe UI Emoji" size="19.0" />
                </font>
             </Label>
-            <TextArea fx:id="reasonField" layoutX="258.0" layoutY="422.0" prefHeight="149.0" prefWidth="477.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: WHITE;" wrapText="true">
+            <TextArea fx:id="reasonField" layoutX="258.0" layoutY="364.0" prefHeight="219.0" prefWidth="477.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: WHITE;" wrapText="true">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>

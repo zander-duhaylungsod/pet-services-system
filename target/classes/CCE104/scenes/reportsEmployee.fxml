@@ -128,7 +128,7 @@
                                     <TableColumn fx:id="petColumn" editable="false" prefWidth="124.0" text="PET" />
                                     <TableColumn fx:id="ownerColumn" editable="false" prefWidth="138.0" text="OWNER" />
                                     <TableColumn fx:id="serviceProvidedColumn" editable="false" prefWidth="130.66668701171875" text="SERVICE PAID" />
-                                    <TableColumn fx:id="paymentDateColumn" editable="false" prefWidth="130.66668701171875" text="PAYMENT DATE" />
+                                    <TableColumn fx:id="paymentDateColumn" editable="false" prefWidth="130.66668701171875" text="DATE &amp; TIME" />
                                     <TableColumn fx:id="amountColumn" editable="false" prefWidth="130.66668701171875" text="AMOUNT" />
                                     <TableColumn fx:id="paymentStatus" editable="false" prefWidth="130.66668701171875" text="STATUS" />
                                  </columns>

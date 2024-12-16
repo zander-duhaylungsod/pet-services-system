@@ -11,7 +11,7 @@ public class PaymentRecord {
     private double amount;
     private double remainingAmount;
     private double totalAmount;
-    private Date paymentDate;
+    private String paymentDate;
     private String method;
     private String service;
     private int appointmentID;
@@ -24,7 +24,7 @@ public class PaymentRecord {
     String password = "";
 
     // Constructor
-    public PaymentRecord(int paymentID, String petName, String ownerName, String service, Date paymentDate, double amount, String status) {
+    public PaymentRecord(int paymentID, String petName, String ownerName, String service, String paymentDate, double amount, String status) {
         this.paymentID = paymentID;
         this.petName = petName;
         this.ownerName = ownerName;
@@ -191,13 +191,6 @@ public class PaymentRecord {
             totalCost = PaymentController.calculateTotalCost(selectedPayment.getReservationID());
         }
 
-        if(!(selectedPayment.getStatus().equalsIgnoreCase("Full Payment") || selectedPayment.getStatus().equalsIgnoreCase("Partial Payment"))){
-            amount = 0;
-        }
-
-        // Add current amount to total paid
-        totalPaid += amount;
-
         // Calculate remaining amount
         remainingAmount = totalCost - totalPaid;
 
@@ -216,11 +209,11 @@ public class PaymentRecord {
         this.remainingAmount = remainingAmount;
     }
 
-    public Date getPaymentDate() {
+    public String getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(Date paymentDate) {
+    public void setPaymentDate(String paymentDate) {
         this.paymentDate = paymentDate;
     }
 
