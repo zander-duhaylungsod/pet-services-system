@@ -36,6 +36,7 @@ public class AccountCreationController {
     private void initialize() {
         // Configure sign-up button action
         signUpBtn.setOnAction(event -> handleSignUp());
+        showPasswordBtn.setOpacity(0.5); // Reduced opacity when not toggled
 
         // Configure toggle button action for showing/hiding the password
         showPasswordBtn.setOnAction(event -> togglePasswordVisibility());
