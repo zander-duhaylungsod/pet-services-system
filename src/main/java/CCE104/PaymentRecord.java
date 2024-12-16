@@ -191,6 +191,10 @@ public class PaymentRecord {
             totalCost = PaymentController.calculateTotalCost(selectedPayment.getReservationID());
         }
 
+        if(!(selectedPayment.getStatus().equalsIgnoreCase("Full Payment") || selectedPayment.getStatus().equalsIgnoreCase("Partial Payment"))){
+            amount = 0;
+        }
+
         // Add current amount to total paid
         totalPaid += amount;
 

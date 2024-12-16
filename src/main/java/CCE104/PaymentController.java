@@ -702,12 +702,19 @@ public class PaymentController {
     }
 
     public void refundPayment() throws IOException {
+        PaymentRecord selectedPayment = PaymentRecord.getSelectedPayment();
         String paymentID = paymentIDField.getText();
         String refundDate = this.refundDate.getValue().toString();
+        String paymentStatus = selectedPayment.getStatus();
         String refundAmount = refundAmountField.getText();
         String reason = reasonField.getText();
 
         // Validate input fields
+        if(paymentStatus.equalsIgnoreCase("Refunded")){
+            Alerts.showAlert("Error", "This payment has already been refunded.");
+            return;
+        }
+
         if (paymentID.isEmpty() || refundDate.isEmpty() || refundAmount.isEmpty() || reason.isEmpty()) {
             Alerts.showAlert("Error", "All fields must be filled in before processing the refund.");
             return;

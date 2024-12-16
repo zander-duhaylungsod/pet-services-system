@@ -538,15 +538,15 @@ public class AppointmentController {
             // Create a list of unavailable time slots
             ObservableList<String> unavailableTimeSlots = FXCollections.observableArrayList();
             while (resultSet.next()) {
-                String bookedTime = resultSet.getString("Time");
+                String bookedTime = convertTo12HourFormat(resultSet.getString("Time"));
+                System.out.println(bookedTime);
                 unavailableTimeSlots.add(bookedTime); // Ensure this is in the same format as timeSlots
             }
 
             // Filter out the unavailable time slots from the available slots
             ObservableList<String> availableTimeSlots = FXCollections.observableArrayList();
             for (String timeSlot : timeSlots) {
-                String timeIn24HrFormat = convertTo24HourFormat(timeSlot);  // Convert to 24-hour format
-                if (!unavailableTimeSlots.contains(timeIn24HrFormat)) {
+                if (!unavailableTimeSlots.contains(timeSlot)) {
                     availableTimeSlots.add(timeSlot);  // Add to available list if it's not booked
                 }
             }
