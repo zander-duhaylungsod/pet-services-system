@@ -48,6 +48,8 @@ public class PaymentController {
     @FXML
     private TextField paymentDate;
     @FXML
+    private TextField paymentEmployeeNameField;
+    @FXML
     private ComboBox<String> paymentMethod;
     @FXML
     private ComboBox<String> paymentStatus;
@@ -116,6 +118,7 @@ public class PaymentController {
             remainingAmount.setText(String.valueOf(selectedPayment.getRemainingAmount()));
             paymentMethodField.setText(selectedPayment.getMethod());
             paymentStatusField.setText(selectedPayment.getStatus());
+            paymentEmployeeNameField.setText(selectedPayment.getEmployeeName());
             String service = selectedPayment.getService();
 
             if ("Boarding".equalsIgnoreCase(service)) {
@@ -158,7 +161,7 @@ public class PaymentController {
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             // Insert data into Payments table
-            String query = "INSERT INTO Payments (PaymentTimeStamp, Amount, Method, Status, ReservationID, AppointmentID) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Payments (PaymentTimeStamp, Amount, Method, Status, ReservationID, AppointmentID, EmployeeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTimestamp(1, timestamp);
             statement.setString(2, paymentAmount);
@@ -178,7 +181,7 @@ public class PaymentController {
                 //if Appointment
                 statement.setInt(6, Integer.parseInt(appointmentID));
             }
-
+                statement.setInt(7, User.getEmployeeID());
             if(Double.parseDouble(remainingAmount.getText() ) < 0){
                 Alerts.showAlert("Overpayment","The payment amount exceeds the total cost, please input the exact required.");
                 return;
@@ -537,7 +540,7 @@ public class PaymentController {
                 return;
             }
             
-            String updateQuery = "UPDATE Payments SET PaymentTimeStamp = ?, Amount = ?, Method = ?, Status = ? WHERE PaymentID = ?";
+            String updateQuery = "UPDATE Payments SET PaymentTimeStamp = ?, Amount = ?, Method = ?, Status = ?, EmployeeID = ? WHERE PaymentID = ?";
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                  PreparedStatement statement = conn.prepareStatement(updateQuery)) {
 
@@ -545,7 +548,8 @@ public class PaymentController {
                 statement.setString(2, paymentAmount);
                 statement.setString(3, paymentMethod);
                 statement.setString(4, paymentStatus);
-                statement.setInt(5, selectedPaymentID);
+                statement.setInt(5, User.getEmployeeID());
+                statement.setInt(6, selectedPaymentID);
 
                 if(!(Alerts.showConfirmationDialog("Confirmation","Are you sure to update payment? Please double check all changes."))){
                     return;

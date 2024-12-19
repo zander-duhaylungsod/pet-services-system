@@ -218,6 +218,23 @@
                   </DropShadow>
                </effect>
             </TextField>
+            <TextField fx:id="paymentEmployeeNameField" editable="false" layoutX="255.0" layoutY="528.0" prefHeight="39.0" prefWidth="481.0" style="-fx-background-radius: 20PX; -fx-background-color: WHITE;">
+               <font>
+                  <Font name="Segoe UI" size="20.0" />
+               </font>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" height="35.66" radius="17.33" width="35.66">
+                     <color>
+                        <Color red="0.8815789222717285" green="0.8815789222717285" blue="0.8815789222717285" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </TextField>
+            <Label layoutX="91.0" layoutY="522.0" prefHeight="53.0" prefWidth="135.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Processed By:">
+               <font>
+                  <Font name="Segoe UI Emoji" size="19.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
       <Label layoutX="570.0" layoutY="193.0" prefHeight="30.0" prefWidth="198.0" styleClass="text" stylesheets="@../styles/loginStyle.css" text="Remaining Amount to Pay:">

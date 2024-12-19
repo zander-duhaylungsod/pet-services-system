@@ -4,6 +4,8 @@ import java.sql.*;
 
 public class PaymentRecord {
     private int paymentID;
+    private int employeeID;
+    private String employeeName;
     private int ownerID;
     private String ownerName;
     private int petID;
@@ -83,6 +85,40 @@ public class PaymentRecord {
 
     public void setPetName(String petName) {
         this.petName = petName;
+    }
+
+    public int getEmployeeID() {
+        String query = "SELECT e.EmployeeID, CONCAT(e.FirstName, ' ', e.LastName) AS EmployeeName FROM Payments p JOIN Employees e ON p.EmployeeID = e.EmployeeID WHERE p.PaymentID = ?";
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, paymentID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    employeeID = rs.getInt("EmployeeID");
+                    employeeName = rs.getString("EmployeeName");
+                    return employeeID;
+                } else {
+                    Alerts.showAlert("Error", "No matching record found for the given PaymentID.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Alerts.showAlert("Error", "An error occurred while retrieving the EmployeeID and EmployeeName.");
+        }
+        return -1;
+    }
+
+    public String getEmployeeName() {
+        getEmployeeID();
+        return employeeName;
+    }
+
+    public void setEmployeeID(int employeeID) {
+        this.employeeID = employeeID;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
     }
 
     public String getOwnerName() {
