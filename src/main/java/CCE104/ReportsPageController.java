@@ -103,22 +103,26 @@ public class ReportsPageController {
         reportsDateColumn.setCellValueFactory(new PropertyValueFactory<>("reportDate"));
         reportsCreatedByColumn.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
 
+        //Admin level specific initializations
+        if(User.getRole().equalsIgnoreCase("administrator") || User.getRole().equalsIgnoreCase("manager")){
+            loadPaymentYears();
+            yearChooser.setItems(yearList);
+
+            //analytics editor
+            yearChooser.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    updateRevenueChartAndLabel(newValue);
+                }
+            });
+        }
+
         //load Data
         loadPayments();
         loadReports();
-        loadPaymentYears();
 
         //bind data to table
         PaymentTable.setItems(paymentList);
         ReportTable.setItems(reportList);
-        yearChooser.setItems(yearList);
-
-        //analytics editor
-        yearChooser.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                updateRevenueChartAndLabel(newValue);
-            }
-        });
 
         // Tabpane Setup
         reportsTabPane.getSelectionModel().select(AppState.getInstance().getCurrentTabIndex());

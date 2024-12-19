@@ -67,89 +67,89 @@ VALUES
 INSERT INTO Appointments (Date, Time, ServiceID, PetID, EmployeeID, Status)
 VALUES
     -- 2021 Appointments
-    ('2021-02-15', '09:00:00', 1, 1, 2, 'Completed'),
-    ('2021-03-20', '10:00:00', 2, 2, 3, 'Pending'),
-    ('2021-05-12', '11:00:00', 3, 3, 4, 'Completed'),
-    ('2021-06-25', '14:00:00', 4, 4, 5, 'Canceled'),
-    ('2021-07-14', '15:00:00', 5, 5, 6, 'Completed'),
+    ('2021-02-15', '09:00:00', 1, 1, 1001, 'Completed'),
+    ('2021-03-20', '10:00:00', 2, 2, 1002, 'Pending'),
+    ('2021-05-12', '11:00:00', 3, 3, 1003, 'Completed'),
+    ('2021-06-25', '14:00:00', 4, 4, 1004, 'Canceled'),
+    ('2021-07-14', '15:00:00', 5, 5, 1005, 'Completed'),
 
     -- 2022 Appointments
-    ('2022-02-15', '09:00:00', 6, 6, 2, 'Completed'),
-    ('2022-03-20', '10:00:00', 7, 7, 3, 'Pending'),
-    ('2022-05-12', '11:00:00', 1, 8, 4, 'Completed'),
-    ('2022-06-25', '14:00:00', 2, 9, 5, 'Canceled'),
-    ('2022-07-14', '15:00:00', 3, 10, 6, 'Completed'),
+    ('2022-02-15', '09:00:00', 6, 6, 1006, 'Completed'),
+    ('2022-03-20', '10:00:00', 7, 7, 1001, 'Pending'),
+    ('2022-05-12', '11:00:00', 1, 8, 1002, 'Completed'),
+    ('2022-06-25', '14:00:00', 2, 9, 1003, 'Canceled'),
+    ('2022-07-14', '15:00:00', 3, 10, 1004, 'Completed'),
 
     -- 2023 Appointments
-    ('2023-02-15', '09:00:00', 4, 11, 2, 'Completed'),
-    ('2023-03-20', '10:00:00', 5, 12, 3, 'Pending'),
-    ('2023-05-12', '11:00:00', 6, 13, 4, 'Completed'),
-    ('2023-06-25', '14:00:00', 7, 14, 5, 'Canceled'),
-    ('2023-07-14', '15:00:00', 1, 15, 6, 'Completed'),
+    ('2023-02-15', '09:00:00', 4, 11, 1005, 'Completed'),
+    ('2023-03-20', '10:00:00', 5, 12, 1006, 'Pending'),
+    ('2023-05-12', '11:00:00', 6, 13, 1001, 'Completed'),
+    ('2023-06-25', '14:00:00', 7, 14, 1002, 'Canceled'),
+    ('2023-07-14', '15:00:00', 1, 15, 1003, 'Completed'),
 
     -- 2024 Appointments
-    ('2024-02-15', '09:00:00', 2, 1, 2, 'Completed'),
-    ('2024-03-20', '10:00:00', 3, 2, 3, 'Pending'),
-    ('2024-05-12', '11:00:00', 4, 3, 4, 'Completed'),
-    ('2024-06-25', '14:00:00', 5, 4, 5, 'Canceled'),
-    ('2024-07-14', '15:00:00', 6, 5, 6, 'Completed');
-
+    ('2024-02-15', '09:00:00', 2, 1, 1004, 'Completed'),
+    ('2024-03-20', '10:00:00', 3, 2, 1005, 'Pending'),
+    ('2024-05-12', '11:00:00', 4, 3, 1006, 'Completed'),
+    ('2024-06-25', '14:00:00', 5, 4, 1001, 'Canceled'),
+    ('2024-07-14', '15:00:00', 6, 5, 1002, 'Completed');
 
 -- Populating BoardingReservations (2021-2024)
 INSERT INTO BoardingReservations (StartDate, EndDate, PetID, EmployeeID, Status)
 VALUES
-    ('2021-02-01', '2021-02-07', 1, 1, 'Completed'),
-    ('2021-04-10', '2021-04-15', 2, 2, 'Pending'),
-    ('2022-02-01', '2022-02-07', 3, 3, 'Completed'),
-    ('2022-04-10', '2022-04-15', 4, 4, 'Pending'),
-    ('2023-02-01', '2023-02-07', 5, 5, 'Completed'),
-    ('2023-04-10', '2023-04-15', 6, 6, 'Pending'),
-    ('2024-02-01', '2024-02-07', 7, 7, 'Completed'),
-    ('2024-04-10', '2024-04-15', 8, 8, 'Pending'),
-    ('2024-05-01', '2024-05-07', 9, 9, 'Completed'),
-    ('2024-06-01', '2024-06-07', 10, 10, 'Pending');
+    ('2021-02-01', '2021-02-07', 1, 1000, 'Completed'),
+    ('2021-04-10', '2021-04-15', 2, 1001, 'Pending'),
+    ('2022-02-01', '2022-02-07', 3, 1002, 'Completed'),
+    ('2022-04-10', '2022-04-15', 4, 1003, 'Pending'),
+    ('2023-02-01', '2023-02-07', 5, 1004, 'Completed'),
+    ('2023-04-10', '2023-04-15', 6, 1005, 'Pending'),
+    ('2024-02-01', '2024-02-07', 7, 1006, 'Completed'),
+    ('2024-04-10', '2024-04-15', 8, 1000, 'Pending'),
+    ('2024-05-01', '2024-05-07', 9, 1001, 'Completed'),
+    ('2024-06-01', '2024-06-07', 10, 1002, 'Pending');
+
 
 
 -- Populating Payments (2021-2024)
-INSERT INTO Payments (Amount, PaymentTimestamp, Method, AppointmentID, ReservationID, Status)
+INSERT INTO Payments (Amount, PaymentTimestamp, Method, AppointmentID, ReservationID, Status, EmployeeID)
 VALUES
     -- 2021 Payments
-    (75.00, '2021-04-05 10:30:00', 'Cash', 4, NULL, 'Full Payment'),  -- Appointment for Basic Grooming
-    (120.00, '2021-07-14 16:00:00', 'Bank Transfer', NULL, 1, 'Pending'),  -- Reservation for Boarding Service
-    (180.00, '2021-08-01 11:00:00', 'Online Payment', 5, NULL, 'Partial Payment'),  -- Appointment for Fur Styling
-    (90.00, '2021-10-12 14:30:00', 'Credit Card', NULL, 2, 'Full Payment'),  -- Reservation for Pet Training
-    (50.00, '2021-12-05 15:00:00', 'Cash', 6, NULL, 'Refunded'),  -- Appointment for Bathing
+    (75.00, '2021-04-05 10:30:00', 'Cash', 4, NULL, 'Full Payment', 1000),  -- Appointment for Basic Grooming
+    (120.00, '2021-07-14 16:00:00', 'Bank Transfer', NULL, 1, 'Pending', 1001),  -- Reservation for Boarding Service
+    (180.00, '2021-08-01 11:00:00', 'Online Payment', 5, NULL, 'Partial Payment', 1002),  -- Appointment for Fur Styling
+    (90.00, '2021-10-12 14:30:00', 'Credit Card', NULL, 2, 'Full Payment', 1003),  -- Reservation for Pet Training
+    (50.00, '2021-12-05 15:00:00', 'Cash', 6, NULL, 'Refunded', 1004),  -- Appointment for Bathing
 
     -- 2022 Payments
-    (100.00, '2022-01-15 09:00:00', 'Credit Card', 7, NULL, 'Pending'),  -- Appointment for General Checkup
-    (300.00, '2022-04-10 13:00:00', 'Cash', NULL, 3, 'Full Payment'),  -- Reservation for Obedience Training
-    (200.00, '2022-05-22 10:45:00', 'Bank Transfer', 8, NULL, 'Full Payment'),  -- Appointment for Vaccination
-    (250.00, '2022-09-18 11:30:00', 'Online Payment', NULL, 4, 'Voided'),  -- Reservation for Boarding Service
-    (300.00, '2022-11-25 14:00:00', 'Debit Card', 9, NULL, 'Partial Payment'),  -- Appointment for Teeth Cleaning
+    (100.00, '2022-01-15 09:00:00', 'Credit Card', 7, NULL, 'Pending', 1005),  -- Appointment for General Checkup
+    (300.00, '2022-04-10 13:00:00', 'Cash', NULL, 3, 'Full Payment', 1006),  -- Reservation for Obedience Training
+    (200.00, '2022-05-22 10:45:00', 'Bank Transfer', 8, NULL, 'Full Payment', 1000),  -- Appointment for Vaccination
+    (250.00, '2022-09-18 11:30:00', 'Online Payment', NULL, 4, 'Voided', 1001),  -- Reservation for Boarding Service
+    (300.00, '2022-11-25 14:00:00', 'Debit Card', 9, NULL, 'Partial Payment', 1002),  -- Appointment for Teeth Cleaning
 
     -- 2023 Payments
-    (500.00, '2023-01-05 11:00:00', 'Credit Card', NULL, 5, 'Full Payment'),  -- Reservation for Grooming Package
-    (350.00, '2023-02-18 13:15:00', 'Cash', 10, NULL, 'Pending'),  -- Appointment for Fur Styling
-    (100.00, '2023-03-03 14:45:00', 'Bank Transfer', 11, NULL, 'Full Payment'),  -- Appointment for Bathing Only
-    (150.00, '2023-04-06 10:00:00', 'Cash', NULL, 6, 'Refunded'),  -- Reservation for Training
-    (180.00, '2023-05-25 13:00:00', 'Credit Card', NULL, 7, 'Partial Payment'),  -- Reservation for Checkup
-    (250.00, '2023-07-12 10:30:00', 'Online Payment', 12, NULL, 'Full Payment'),  -- Appointment for Full Grooming
-    (100.00, '2023-09-20 15:30:00', 'Debit Card', 13, NULL, 'Voided'),  -- Appointment for Basic Grooming
-    (400.00, '2023-11-02 12:00:00', 'Cash', NULL, 8, 'Full Payment'),  -- Reservation for Obedience Training
+    (500.00, '2023-01-05 11:00:00', 'Credit Card', NULL, 5, 'Full Payment', 1003),  -- Reservation for Grooming Package
+    (350.00, '2023-02-18 13:15:00', 'Cash', 10, NULL, 'Pending', 1004),  -- Appointment for Fur Styling
+    (100.00, '2023-03-03 14:45:00', 'Bank Transfer', 11, NULL, 'Full Payment', 1005),  -- Appointment for Bathing Only
+    (150.00, '2023-04-06 10:00:00', 'Cash', NULL, 6, 'Refunded', 1006),  -- Reservation for Training
+    (180.00, '2023-05-25 13:00:00', 'Credit Card', NULL, 7, 'Partial Payment', 1000),  -- Reservation for Checkup
+    (250.00, '2023-07-12 10:30:00', 'Online Payment', 12, NULL, 'Full Payment', 1001),  -- Appointment for Full Grooming
+    (100.00, '2023-09-20 15:30:00', 'Debit Card', 13, NULL, 'Voided', 1002),  -- Appointment for Basic Grooming
+    (400.00, '2023-11-02 12:00:00', 'Cash', NULL, 8, 'Full Payment', 1003),  -- Reservation for Obedience Training
 
--- 2024 Payments
-    (75.00, '2024-01-20 10:00:00', 'Credit Card', NULL, 9, 'Partial Payment'),  -- Reservation for Full Grooming Package
-    (100.00, '2024-03-15 14:00:00', 'Bank Transfer', 5, NULL, 'Pending'),  -- Appointment for Teeth Cleaning
-    (220.00, '2024-04-05 09:30:00', 'Cash', NULL, 10, 'Full Payment'),  -- Reservation for Boarding
-    (300.00, '2024-05-10 13:00:00', 'Credit Card', 15, NULL, 'Partial Payment'),  -- Appointment for Bathing Only
-    (120.00, '2024-06-17 11:45:00', 'Debit Card', NULL, 7, 'Refunded'),  -- Reservation for Pet Training
-    (250.00, '2024-07-10 15:15:00', 'Online Payment', 16, NULL, 'Full Payment'),  -- Appointment for Grooming Package
-    (150.00, '2024-09-05 10:30:00', 'Cash', NULL, 3, 'Full Payment'),  -- Reservation for Obedience Training
-    (300.00, '2024-10-11 14:00:00', 'Credit Card', 17, NULL, 'Voided'),  -- Appointment for General Checkup
-    (50.00, '2024-11-23 13:00:00', 'Bank Transfer', NULL, 2, 'Pending');  -- Reservation for Boarding Service
+    -- 2024 Payments
+    (75.00, '2024-01-20 10:00:00', 'Credit Card', NULL, 9, 'Partial Payment', 1004),  -- Reservation for Full Grooming Package
+    (100.00, '2024-03-15 14:00:00', 'Bank Transfer', 5, NULL, 'Pending', 1005),  -- Appointment for Teeth Cleaning
+    (220.00, '2024-04-05 09:30:00', 'Cash', NULL, 10, 'Full Payment', 1006),  -- Reservation for Boarding
+    (300.00, '2024-05-10 13:00:00', 'Credit Card', 15, NULL, 'Partial Payment', 1000),  -- Appointment for Bathing Only
+    (120.00, '2024-06-17 11:45:00', 'Debit Card', NULL, 7, 'Refunded', 1001),  -- Reservation for Pet Training
+    (250.00, '2024-07-10 15:15:00', 'Online Payment', 16, NULL, 'Full Payment', 1002),  -- Appointment for Grooming Package
+    (150.00, '2024-09-05 10:30:00', 'Cash', NULL, 3, 'Full Payment', 1003),  -- Reservation for Obedience Training
+    (300.00, '2024-10-11 14:00:00', 'Credit Card', 17, NULL, 'Voided', 1004),  -- Appointment for General Checkup
+    (50.00, '2024-11-23 13:00:00', 'Bank Transfer', NULL, 2, 'Pending', 1005);  -- Reservation for Boarding Service
 
 -- Populating Reports
 INSERT INTO Reports (ReportTitle, ReportType, ReportTimeStamp, Content, EmployeeID)
 VALUES
-    ('Monthly Grooming Summary', 'Grooming', '2021-01-31 12:00:00', 'Summary of grooming activities in January', 2),
-    ('Boarding Activity Report', 'Boarding', '2021-02-28 14:00:00', 'Details of boarding activities in February', 3);
+    ('Monthly Grooming Summary', 'Grooming', '2021-01-31 12:00:00', 'Summary of grooming activities in January', 1000),
+    ('Boarding Activity Report', 'Boarding', '2021-02-28 14:00:00', 'Details of boarding activities in February', 1001);

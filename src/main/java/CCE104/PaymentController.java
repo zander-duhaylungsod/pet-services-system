@@ -630,6 +630,7 @@ public class PaymentController {
                             "Pet Name: " + petName + "\n" +
                             "Service Name: " + serviceName + "\n" +
                             "Receptionist: " + employeeName + "\n" +
+                            "Processed By: " + selectedPayment.getEmployeeName() + "\n" +
                             "Amount Paid: " + amountPaid + "\n" +
                             "Total Cost: " + totalCost + "\n" +
                             "Remaining Amount To Pay: " + remainingAmount + "\n" +
