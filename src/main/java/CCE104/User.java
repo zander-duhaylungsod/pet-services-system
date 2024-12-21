@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class User {
-    private static int employeeID = 1;  // Storing employeeID statically for easy access
+    private static int employeeID;  // Storing employeeID statically for easy access
     private static String email;
     private static String role;    // New field for role
     private static String employeeName;  // New field for employee's full name

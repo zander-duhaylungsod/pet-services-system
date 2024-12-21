@@ -600,7 +600,7 @@ public class PaymentController {
             String paymentDate = selectedPayment.getPaymentDate();
             String paymentStatus = selectedPayment.getStatus();
             double amountPaid = selectedPayment.getAmount();
-            double remainingAmount = totalCost - amountPaid;
+            double remainingAmount = selectedPayment.getRemainingAmount();
 
             // Create the printable content
             String reminderMessage =
@@ -698,6 +698,11 @@ public class PaymentController {
         // Validate input fields
         if(paymentStatus.equalsIgnoreCase("Refunded")){
             Alerts.showAlert("Error", "This payment has already been refunded.");
+            return;
+        }
+
+        if(paymentStatus.equalsIgnoreCase("Pending") || paymentStatus.equalsIgnoreCase("Voided") ){
+            Alerts.showAlert("Error", "Cannot refund with the current payment status.");
             return;
         }
 

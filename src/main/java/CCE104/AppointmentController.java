@@ -150,7 +150,7 @@ public class AppointmentController {
             String time = appointmentTime.getValue();
             String timeFormatted = convertTo24HourFormat(time);
             String status = appointmentStatus.getValue();
-            int employeeID = 1;
+            int employeeID = User.getEmployeeID();
 
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
@@ -200,7 +200,7 @@ public class AppointmentController {
             String time = appointmentTime.getValue();
             String timeFormatted = convertTo24HourFormat(time);
             String status = appointmentStatus.getValue();
-            int employeeID = 1;
+            int employeeID = User.getEmployeeID();
 
             RecordsController recordsController = AppointmentRecord.getInstance().getRecordsController();
             Integer selectedAppointmentID = recordsController.getSelectedAppointmentID();

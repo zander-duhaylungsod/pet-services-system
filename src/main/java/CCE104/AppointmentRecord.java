@@ -102,7 +102,7 @@ public class AppointmentRecord {
     public void setPetName(String petName) { this.petName = petName; }
 
     public int getOwnerID() {
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_URL)) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             // SQL query to get the OwnerID by matching ownerFirstName, ownerLastName, and petID
             String query = "SELECT o.OwnerID " +
                     "FROM Owners o " +

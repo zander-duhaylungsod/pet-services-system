@@ -45,41 +45,23 @@ VALUES
     ('Olivia', 'Luna', 'olivia.luna@example.com', '09211234581');
 
 -- Populating Pets
--- INSERT INTO Pets (Name, Species, Breed, PetImagePath, PetNotes, Age, OwnerID)
--- VALUES
---     ('Bantay', 'Dog', 'Aspin', '/CCE104/petImages/moodeng.jpg', 'Loves guarding the house', 5, 1),
---     ('Mingming', 'Cat', 'Siamese', '/CCE104/petImages/moodeng.jpg', 'Very cuddly', 3, 2),
---     ('Putol', 'Dog', 'Shih Tzu', '/CCE104/petImages/moodeng.jpg', 'Has a cute bark', 2, 3),
---     ('Pusang Kalye', 'Cat', 'Persian', '/CCE104/petImages/moodeng.jpg', 'Loves sleeping all day', 4, 4),
---     ('Tagpi', 'Dog', 'Bulldog', '/CCE104/petImages/moodeng.jpg', 'Spots on fur', 6, 5),
---     ('Doggiekins', 'Dog', 'Golden Retriever', '/CCE104/petImages/moodeng.jpg', 'Very energetic', 3, 6),
---     ('Rover', 'Dog', 'Labrador', '/CCE104/petImages/moodeng.jpg', 'Loves fetching sticks', 4, 7),
---     ('Fluffy', 'Cat', 'Maine Coon', '/CCE104/petImages/moodeng.jpg', 'Adores grooming sessions', 2, 8),
---     ('Spike', 'Dog', 'Doberman', '/CCE104/petImages/moodeng.jpg', 'Very alert and protective', 4, 9),
---     ('Kitty', 'Cat', 'Bengal', '/CCE104/petImages/moodeng.jpg', 'Always curious', 3, 10),
---     ('Snowy', 'Dog', 'Husky', '/CCE104/petImages/moodeng.jpg', 'Enjoys winter', 5, 11),
---     ('Cuddles', 'Cat', 'British Shorthair', '/CCE104/petImages/moodeng.jpg', 'Loves being held', 6, 12),
---     ('Shadow', 'Dog', 'German Shepherd', '/CCE104/petImages/moodeng.jpg', 'Highly trained', 4, 13),
---     ('Princess', 'Dog', 'Poodle', '/CCE104/petImages/moodeng.jpg', 'Very graceful', 3, 14),
---     ('Tom', 'Cat', 'Russian Blue', '/CCE104/petImages/moodeng.jpg', 'Quiet and calm', 5, 15);
-
 INSERT INTO Pets (Name, Species, Breed, PetImagePath, PetNotes, Age, OwnerID)
 VALUES
-    ('Bantay', 'Dog', 'Aspin', '/CCE104/petImages/bantay.jpg', 'Loves guarding the house', 5, 1),
-    ('Mingming', 'Cat', 'Siamese', '/CCE104/petImages/mingming.jpg', 'Very cuddly', 3, 2),
-    ('Putol', 'Dog', 'Shih Tzu', '/CCE104/petImages/putol.jpg', 'Has a cute bark', 2, 3),
-    ('Pusang Kalye', 'Cat', 'Persian', '/CCE104/petImages/pusang_kalye.jpg', 'Loves sleeping all day', 4, 4),
-    ('Tagpi', 'Dog', 'Bulldog', '/CCE104/petImages/tagpi.jpg', 'Spots on fur', 6, 5),
-    ('Doggiekins', 'Dog', 'Golden Retriever', '/CCE104/petImages/doggiekins.jpg', 'Very energetic', 3, 6),
-    ('Rover', 'Dog', 'Labrador', '/CCE104/petImages/rover.jpg', 'Loves fetching sticks', 4, 7),
-    ('Fluffy', 'Cat', 'Maine Coon', '/CCE104/petImages/fluffy.jpg', 'Adores grooming sessions', 2, 8),
-    ('Spike', 'Dog', 'Doberman', '/CCE104/petImages/spike.jpg', 'Very alert and protective', 4, 9),
-    ('Kitty', 'Cat', 'Bengal', '/CCE104/petImages/kitty.jpg', 'Always curious', 3, 10),
-    ('Snowy', 'Dog', 'Husky', '/CCE104/petImages/snowy.jpg', 'Enjoys winter', 5, 11),
-    ('Cuddles', 'Cat', 'British Shorthair', '/CCE104/petImages/cuddles.jpg', 'Loves being held', 6, 12),
-    ('Shadow', 'Dog', 'German Shepherd', '/CCE104/petImages/shadow.jpg', 'Highly trained', 4, 13),
-    ('Princess', 'Dog', 'Poodle', '/CCE104/petImages/princess.jpg', 'Very graceful', 3, 14),
-    ('Tom', 'Cat', 'Russian Blue', '/CCE104/petImages/tom.jpg', 'Quiet and calm', 5, 15);
+    ('Bantay', 'Dog', 'Aspin', '/CCE104/petImages/moodeng.jpg', 'Loves guarding the house', 5, 1),
+    ('Mingming', 'Cat', 'Siamese', '/CCE104/petImages/moodeng.jpg', 'Very cuddly', 3, 2),
+    ('Putol', 'Dog', 'Shih Tzu', '/CCE104/petImages/moodeng.jpg', 'Has a cute bark', 2, 3),
+    ('Pusang Kalye', 'Cat', 'Persian', '/CCE104/petImages/moodeng.jpg', 'Loves sleeping all day', 4, 4),
+    ('Tagpi', 'Dog', 'Bulldog', '/CCE104/petImages/moodeng.jpg', 'Spots on fur', 6, 5),
+    ('Doggiekins', 'Dog', 'Golden Retriever', '/CCE104/petImages/moodeng.jpg', 'Very energetic', 3, 6),
+    ('Rover', 'Dog', 'Labrador', '/CCE104/petImages/moodeng.jpg', 'Loves fetching sticks', 4, 7),
+    ('Fluffy', 'Cat', 'Maine Coon', '/CCE104/petImages/moodeng.jpg', 'Adores grooming sessions', 2, 8),
+    ('Spike', 'Dog', 'Doberman', '/CCE104/petImages/moodeng.jpg', 'Very alert and protective', 4, 9),
+    ('Kitty', 'Cat', 'Bengal', '/CCE104/petImages/moodeng.jpg', 'Always curious', 3, 10),
+    ('Snowy', 'Dog', 'Husky', '/CCE104/petImages/moodeng.jpg', 'Enjoys winter', 5, 11),
+    ('Cuddles', 'Cat', 'British Shorthair', '/CCE104/petImages/moodeng.jpg', 'Loves being held', 6, 12),
+    ('Shadow', 'Dog', 'German Shepherd', '/CCE104/petImages/moodeng.jpg', 'Highly trained', 4, 13),
+    ('Princess', 'Dog', 'Poodle', '/CCE104/petImages/moodeng.jpg', 'Very graceful', 3, 14),
+    ('Tom', 'Cat', 'Russian Blue', '/CCE104/petImages/moodeng.jpg', 'Quiet and calm', 5, 15);
 
 -- Populating Appointments (2021-2024) with updated ServiceID (1-7)
 INSERT INTO Appointments (Date, Time, ServiceID, PetID, EmployeeID, Status)
@@ -110,7 +92,16 @@ VALUES
     ('2024-03-20', '10:00:00', 3, 2, 1005, 'Pending'),
     ('2024-05-12', '11:00:00', 4, 3, 1006, 'Completed'),
     ('2024-06-25', '14:00:00', 5, 4, 1001, 'Canceled'),
-    ('2024-07-14', '15:00:00', 6, 5, 1002, 'Completed');
+    ('2024-07-14', '15:00:00', 6, 5, 1002, 'Completed'),
+
+    -- 2025 Appointments
+    ('2025-02-15', '09:00:00', 2, 1, 1004, 'Completed'),
+    ('2025-03-20', '10:00:00', 3, 2, 1005, 'Pending'),
+    ('2025-05-12', '11:00:00', 4, 3, 1006, 'Completed'),
+    ('2025-06-25', '14:00:00', 5, 4, 1001, 'Canceled'),
+    ('2025-07-14', '15:00:00', 6, 5, 1002, 'Completed');
+
+
 
 -- Populating BoardingReservations (2021-2024)
 INSERT INTO BoardingReservations (StartDate, EndDate, PetID, EmployeeID, Status)
@@ -124,7 +115,13 @@ VALUES
     ('2024-02-01', '2024-02-07', 7, 1006, 'Completed'),
     ('2024-04-10', '2024-04-15', 8, 1000, 'Pending'),
     ('2024-05-01', '2024-05-07', 9, 1001, 'Completed'),
-    ('2024-06-01', '2024-06-07', 10, 1002, 'Pending');
+    ('2024-06-01', '2024-06-07', 10, 1002, 'Pending'),
+    ('2025-02-01', '2025-02-07', 11, 1003, 'Completed'),
+    ('2025-04-10', '2025-04-15', 12, 1004, 'Pending'),
+    ('2025-05-01', '2025-05-07', 13, 1005, 'Completed'),
+    ('2025-06-01', '2025-06-07', 14, 1006, 'Pending'),
+    ('2025-07-01', '2025-07-07', 15, 1000, 'Completed');
+
 
 
 

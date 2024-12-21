@@ -78,7 +78,13 @@ public class EmployeeController {
             if (selectedEmployee != null) {
                 employeeFirstName.setText(selectedEmployee.getFirstName());
                 employeeLastName.setText(selectedEmployee.getLastName());
-                employeeEmail.setText(selectedEmployee.getEmail());
+                if(selectedEmployee.getEmail() == null){
+                    employeeEmail.setEditable(false);
+                    employeeEmail.setText(selectedEmployee.getEmail());
+                } else {
+                    employeeEmail.setText(selectedEmployee.getEmail());
+                    employeeEmail.setEditable(true);
+                }
                 employeePhone.setText(selectedEmployee.getPhone());
                 employeeRole.setValue(selectedEmployee.getRole());
             }
@@ -135,6 +141,7 @@ public class EmployeeController {
             if(!validateEmployeeInputsE()){
                 return;
             }
+
 
             String firstName = employeeFirstName.getText().trim();
             String lastName = employeeLastName.getText().trim();

@@ -170,7 +170,7 @@ public class BoardingRecord {
 
     public int getActiveReservationsCountFromDB() {
         try (Connection conn = connect();
-             PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM BoardingReservations WHERE Status NOT IN ('Cancelled', 'Completed')")) {
+             PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM BoardingReservations WHERE Status NOT IN ('Cancelled', 'Completed', 'Pending')")) {
 
             ResultSet resultSet = stmt.executeQuery();
 
