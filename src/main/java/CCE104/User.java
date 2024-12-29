@@ -4,12 +4,22 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class User {
     private static int employeeID;  // Storing employeeID statically for easy access
     private static String email;
     private static String role;    // New field for role
     private static String employeeName;  // New field for employee's full name
+
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(User.class.getName());
 
     // Getters and Setters
     public static int getEmployeeID() {
@@ -48,11 +58,7 @@ public class User {
 
     // Method to fetch employee's name and role based on the employeeID
     public static void fetchEmployeeNameAndRole() {
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String dbUser = "root";
-        String dbPassword = "";  // Your database password
-
-        try (Connection connection = DriverManager.getConnection(url, dbUser, dbPassword)) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             // Query to fetch the employee's first and last name, and role based on employeeID
             String query = "SELECT FirstName, LastName, Role FROM Employees WHERE EmployeeID = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -71,8 +77,7 @@ public class User {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            // Handle the exception (e.g., logging or showing an error message)
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 }

@@ -7,13 +7,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import org.mindrot.jbcrypt.BCrypt;
 import java.io.IOException;
 import java.sql.*;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -94,7 +92,7 @@ public class EmployeeController {
     public void addEmployee() throws IOException {
         try {
             // Validate inputs
-            if(!validateEmployeeInputs()){
+            if(validateEmployeeInputs()){
                 return;
             }
 
@@ -200,34 +198,34 @@ public class EmployeeController {
 
         if (firstName.isEmpty()) {
             Alerts.showAlert("Validation Error", "First Name is required.");
-            return false;
+            return true;
         }
 
         if (lastName.isEmpty()) {
             Alerts.showAlert("Validation Error", "Last Name is required.");
-            return false;
+            return true;
         }
 
         if (phone.isEmpty()) {
             Alerts.showAlert("Validation Error", "Phone No. is required.");
-            return false;
+            return true;
         }
 
         if (!isValidPhoneNumber(phone)) {
             Alerts.showAlert("Validation Error", "Invalid Phone Number.");
-            return false;
+            return true;
         }
 
         if (role == null) {
             Alerts.showAlert("Validation Error", "Please specify the employee's role.");
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private boolean validateEmployeeInputsE() {
-        if(!validateEmployeeInputs()){
+        if(validateEmployeeInputs()){
             return false;
         }
 

@@ -1,11 +1,8 @@
 package CCE104;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import java.io.IOException;
@@ -65,7 +62,7 @@ public class  OwnerController {
     public void addOwnerToDatabase () throws IOException {
         try {
             // Validate inputs
-            if (!validateOwnerInputs()) {
+            if (validateOwnerInputs()) {
                 return;
             }
             String firstName = ownerFirstName.getText().trim();
@@ -110,7 +107,7 @@ public class  OwnerController {
     public void saveOwnerChanges () throws IOException {
         try {
             //validate inputs
-            if (!validateOwnerInputs()) {
+            if (validateOwnerInputs()) {
                 return;
             }
             String firstName = ownerFirstName.getText();
@@ -164,35 +161,35 @@ public class  OwnerController {
 
         if (firstName.isEmpty()) {
             Alerts.showAlert("Validation Error", "Your first name is required.");
-            return false;  // Return false to indicate validation failure
+            return true;  // Return false to indicate validation failure
         }
 
         if (lastName.isEmpty()) {
             Alerts.showAlert("Validation Error", "Your last name is required.");
-            return false;
+            return true;
         }
 
         if (email.isEmpty()) {
             Alerts.showAlert("Validation Error", "Your email is required.");
-            return false;
+            return true;
         }
 
         if (!isValidEmail(email)) {
             Alerts.showAlert("Error", "Invalid email format!");
-            return false;
+            return true;
         }
 
         if (phone.isEmpty()) {
             Alerts.showAlert("Validation Error", "Your phone no. is required.");
-            return false;
+            return true;
         }
 
         if (!isValidPhoneNumber(phone)) {
             Alerts.showAlert("Error", "Invalid phone number!");
-            return false;
+            return true;
         }
 
-        return true;  // If all validations pass, return true
+        return false;  // If all validations pass, return true
     }
 
     private void clearOwnerFields() {

@@ -1,10 +1,7 @@
 package CCE104;
 
-import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.print.PrinterJob;
 import javafx.scene.Cursor;
@@ -18,11 +15,12 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class ReportsController {
@@ -75,10 +73,13 @@ public class ReportsController {
             "Incident Report"
     );
 
-    // Database credentials
-    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-    String user = "root";
-    String password = "";
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(ReportsController.class.getName());
 
     // Use WebView to render the HTML
     static WebView webView = new WebView();
@@ -163,7 +164,7 @@ public class ReportsController {
     public void addReport () throws IOException {
         try {
             // Validate inputs
-            if(!validateReportInputs()){
+            if(validateReportInputs()){
                 return;
             }
 
@@ -176,7 +177,7 @@ public class ReportsController {
             LocalDateTime now = LocalDateTime.now();
             Timestamp timestamp = Timestamp.valueOf(now);
 
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             // Insert data into Payments table
             String query = "INSERT INTO Reports (EmployeeID, ReportType, ReportTitle, Content, ReportTimeStamp) VALUES (?, ?, ?, ?, ?);";
@@ -209,7 +210,7 @@ public class ReportsController {
         } catch (IllegalArgumentException e) {
             Alerts.showErrorDialog("Error", "Validation Error: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while adding report.");
         }
     }
@@ -223,7 +224,7 @@ public class ReportsController {
 
     public void saveReportChanges () throws IOException {
         try {
-            if (!validateReportInputs()) {
+            if (validateReportInputs()) {
                 return;
             }
 
@@ -241,13 +242,9 @@ public class ReportsController {
                 return;
             }
             int selectedReportID = selectedReport.getReportID();
-            if (selectedReport == null) {
-                Alerts.showErrorDialog("No Report Selected", "Please select a report to edit.");
-                return;
-            }
 
             String updateQuery = "UPDATE Reports SET EmployeeID = ?, ReportType = ?, ReportTitle = ?, Content = ?, ReportTimeStamp = ? WHERE ReportID = ?";
-            try (Connection conn = DriverManager.getConnection(url, user, password);
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                  PreparedStatement statement = conn.prepareStatement(updateQuery)) {
 
                 statement.setInt(1, employeeID);
@@ -271,7 +268,7 @@ public class ReportsController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while saving report changes.");
         }
     }
@@ -288,7 +285,7 @@ public class ReportsController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "An error occurred while printing the report.");
         }
     }
@@ -301,7 +298,7 @@ public class ReportsController {
 
         if (employeeID.isEmpty()) {
             Alerts.showAlert("Validation Error", "Your Employee ID is required.");
-            return false;
+            return true;
         }
 
         int employeeIDInt = 0;
@@ -309,36 +306,37 @@ public class ReportsController {
             employeeIDInt = Integer.parseInt(employeeID); // Ensure PetID is a valid number
         } catch (NumberFormatException e) {
             Alerts.showAlert("Validation Error", "Employee ID must be a valid number.");
-            return false;
+            return true;
         }
 
         if (!isEmployeeIDRegistered(employeeIDInt)) {
             Alerts.showAlert("Validation Error", "The provided EmployeeID is not registered in the system.");
-            return false;
+            return true;
         }
 
         if (reportType.isEmpty()) {
             Alerts.showAlert("Validation Error", "Report type is required.");
-            return false;
+            return true;
         }
 
         if (reportTitle.isEmpty()) {
             Alerts.showAlert("Validation Error", "Report title is required.");
-            return false;
+            return true;
         }
 
+        assert reportContent != null;
         if (reportContent.isEmpty()) {
             Alerts.showAlert("Validation Error", "Report content is required.");
-            return false;
+            return true;
         }
 
         int wordCount = countWords(reportContent);
         if (wordCount > 250) {
             Alerts.showAlert("Validation Error", "Report content exceeds the maximum allowed word limit of 250 words. Current word count: " + wordCount);
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private int countWords(String content) {
@@ -365,7 +363,7 @@ public class ReportsController {
     private boolean isEmployeeIDRegistered(int employeeID) {
         String query = "SELECT COUNT(*) FROM Employees WHERE EmployeeID = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setInt(1, employeeID);
@@ -377,7 +375,7 @@ public class ReportsController {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showAlert("Error", "Failed to validate EmployeeID.");
         }
 
@@ -413,11 +411,6 @@ public class ReportsController {
     @FXML
     public void logOut () throws IOException {
         Main.switchSceneWithFade("scenes/signIn");
-    }
-
-    @FXML
-    public void searchFunction(KeyEvent event) {
-        //add search function here
     }
 
     //effects

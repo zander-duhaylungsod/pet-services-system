@@ -1,6 +1,8 @@
 package CCE104;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PetRecord {
     private int petID;
@@ -14,10 +16,13 @@ public class PetRecord {
     private String petNotes;
     private String petCount;
 
-    // Database credentials
-    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-    String user = "root";
-    String password = "";
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(PetRecord.class.getName());
 
     // Constructor, Getters, and Setters
     public PetRecord(int petID, String name, String species, String breed, int age, int ownerID, String ownerName, String petNotes, String petImagePath) {
@@ -34,7 +39,6 @@ public class PetRecord {
 
     // getters and setters...
     public int getPetID() { return petID; }
-
     public void setPetID(int petID) { this.petID = petID; }
 
     public int getOwnerID() { return ownerID; }
@@ -44,10 +48,9 @@ public class PetRecord {
     public String setPetCount() {
         return petCount;
     }
-
     public String getPetCount() {
         String query = "SELECT COUNT(*) AS PetCount FROM Pets;";
-            try (Connection connection = DriverManager.getConnection(url, user, password);
+            try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                  PreparedStatement stmt = connection.prepareStatement(query)) {
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
@@ -58,7 +61,7 @@ public class PetRecord {
                     }
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "An Exception occurred", e);
                 Alerts.showAlert("Error", "An error occurred while counting registered Pets.");
             }
         return "";
@@ -71,7 +74,6 @@ public class PetRecord {
     public String getPetNotes() {return petNotes;}
     public int getPetAge() {return age;}
 
-
     private static PetRecord instance;
     private RecordsController recordsController;
     private static PetRecord selectedPet;
@@ -79,7 +81,6 @@ public class PetRecord {
     public static PetRecord getSelectedPet() {
         return selectedPet;
     }
-
     public static void setSelectedPet(PetRecord pet) {
         selectedPet = pet;
     }

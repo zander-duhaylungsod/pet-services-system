@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AccountCreationController {
 
@@ -30,7 +32,8 @@ public class AccountCreationController {
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "";
 
-    private boolean isPasswordVisible = false;
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(AccountCreationController.class.getName());
 
     @FXML
     private void initialize() {
@@ -101,7 +104,7 @@ public class AccountCreationController {
             showPassField.setText("");
             switchToSignin();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "Failed to create account, please double check details.");
         }
     }

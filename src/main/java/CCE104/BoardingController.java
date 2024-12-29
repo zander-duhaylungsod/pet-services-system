@@ -123,7 +123,7 @@ public class BoardingController {
     public void addBoarding () throws IOException {
         try {
             // Validate inputs
-            if(!validateBoardingInputs()){
+            if(validateBoardingInputs()){
                 return;
             }
 
@@ -173,7 +173,7 @@ public class BoardingController {
 
     public void saveBoardingChanges () throws IOException {
         try {
-            if(!validateBoardingInputs()){
+            if(validateBoardingInputs()){
                 return;
             }
 
@@ -326,46 +326,46 @@ public class BoardingController {
 
         if(BoardingRecord.getInstance().getRemainingCapacity() < 1) {
             Alerts.showAlert("Validation Error", "Capacity Full.");
-            return false;
+            return true;
         }
 
         if (petID.isEmpty()) {
             Alerts.showAlert("Validation Error", "Registered PetID is required.");
-            return false;
+            return true;
         }
 
         try {
             Integer.parseInt(petID);
         } catch (NumberFormatException e) {
             Alerts.showAlert("Validation Error", "Pet ID must be a valid number.");
-            return false;
+            return true;
         }
 
         if (!isPetIDRegistered(petID)) {
             Alerts.showAlert("Validation Error", "The provided PetID is not registered in the system.");
-            return false;
+            return true;
         }
 
         if (startDate.isBefore(LocalDate.now())) {
             Alerts.showAlert("Validation Error", "The start date cannot be in the past.");
-            return false;
+            return true;
         }
 
-        if (startDate == null || endDate == null) {
+        if (endDate == null) {
             Alerts.showErrorDialog("Invalid Input", "Start Date and End Date cannot be empty.");
-            return false;
+            return true;
         }
 
         if (endDate.isBefore(startDate)) {
             Alerts.showAlert("Validation Error", "The end date should be on or before the start date.");
-            return false;
+            return true;
         }
 
         if (status == null) {
             Alerts.showAlert("Validation Error", "Please set the appointment's status.");
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     private void clearBoardingFields() {

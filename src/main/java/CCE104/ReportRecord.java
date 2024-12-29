@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ReportRecord {
     private int reportID;
@@ -15,6 +17,14 @@ public class ReportRecord {
     private String employeeRole;
     private int createdBy;
     private int employeeID;
+
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(ReportRecord.class.getName());
 
     // Constructor
     public ReportRecord(int reportID, String reportTitle, String reportType, String reportDate, int createdBy, String employeeName) {
@@ -87,11 +97,7 @@ public class ReportRecord {
     }
 
     public String getContent() {
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String dbUser = "root";
-        String dbPassword = "";  // Your database password
-
-        try (Connection connection = DriverManager.getConnection(url, dbUser, dbPassword)) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             String query = "SELECT Content FROM Reports WHERE ReportID = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, reportID);
@@ -103,8 +109,7 @@ public class ReportRecord {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            // Handle the exception (e.g., logging or showing an error message)
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
         return content;
     }
@@ -152,11 +157,7 @@ public class ReportRecord {
     }
 
     public void fetchEmployeeNameAndRole() {
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String dbUser = "root";
-        String dbPassword = "";  // Your database password
-
-        try (Connection connection = DriverManager.getConnection(url, dbUser, dbPassword)) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             // Query to fetch the employee's first and last name, and role based on employeeID
             String query = "SELECT FirstName, LastName, Role FROM Employees WHERE EmployeeID = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -175,17 +176,12 @@ public class ReportRecord {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            // Handle the exception (e.g., logging or showing an error message)
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 
     public void fetchEmployeeIDWithReportID(int reportID) {
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String dbUser = "root";
-        String dbPassword = "";  // Your database password
-
-        try (Connection connection = DriverManager.getConnection(url, dbUser, dbPassword)) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             // Query to fetch the employee's first and last name, and role based on employeeID
             String query = "SELECT EmployeeID FROM Reports WHERE ReportID = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -198,11 +194,9 @@ public class ReportRecord {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            // Handle the exception (e.g., logging or showing an error message)
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
-
 
     @Override
     public String toString() {

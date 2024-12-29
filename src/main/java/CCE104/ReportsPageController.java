@@ -12,6 +12,8 @@ import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ReportsPageController {
 
@@ -74,9 +76,17 @@ public class ReportsPageController {
     @FXML
     private ComboBox<String> yearChooser;
 
-    private ObservableList<PaymentRecord> paymentList = FXCollections.observableArrayList();
-    private ObservableList<ReportRecord> reportList = FXCollections.observableArrayList();
-    private ObservableList<String> yearList = FXCollections.observableArrayList();
+    private final ObservableList<PaymentRecord> paymentList = FXCollections.observableArrayList();
+    private final ObservableList<ReportRecord> reportList = FXCollections.observableArrayList();
+    private final ObservableList<String> yearList = FXCollections.observableArrayList();
+
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(ReportsPageController.class.getName());
 
     public void initialize() {
         PaymentRecord.getInstance().setReportsPageController(this);
@@ -184,7 +194,7 @@ public class ReportsPageController {
         System.out.println("Appointment ID: " + appointmentID);
         System.out.println("Reservation ID: " + reservationID);
 
-        if (appointmentID > 0 && reservationID == -1) { // Placeholder check for an Appointment
+        if (appointmentID > 0) { // Placeholder check for an Appointment
             PaymentRecord.setSelectedPayment(selectedPayment);
             AppState.getInstance().setCurrentPaymentPage(AppState.Payment.EDITA);
             Main.switchSceneWithFade("scenes/editPaymentA");
@@ -208,12 +218,6 @@ public class ReportsPageController {
 
         PaymentRecord.setSelectedPayment(selectedPayment);
 
-        String status = selectedPayment.getStatus();
-//        if (!"Full Payment".equals(status) && !"Partial Payment".equals(status)) {
-//            Alerts.showAlert("Invalid Status", "Cannot print the payment with the current status.");
-//            return;
-//        }
-
         // Check service and retrieve the respective ID
         int appointmentID = -1;
         int reservationID = -1;
@@ -233,7 +237,7 @@ public class ReportsPageController {
         System.out.println("Reservation ID: " + reservationID);
 
         // Determine which scene to navigate to based on the ID values
-        if (appointmentID > 0 && reservationID == -1) {
+        if (appointmentID > 0) {
             AppState.getInstance().setCurrentPaymentPage(AppState.Payment.PRINTA);
             System.out.println("Printing Payment A");
             PaymentRecord.setSelectedPayment(selectedPayment);
@@ -306,7 +310,7 @@ public class ReportsPageController {
 
         ReportRecord.setSelectedReport(selectedReport);
 
-        Boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected report?");
+        boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected report?");
 
         if(confirm) {
             try (Connection conn = connect();
@@ -323,7 +327,7 @@ public class ReportsPageController {
                     Alerts.showAlert("Deletion Failed", "Failed to delete the report. Please try again.");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "An Exception occurred", e);
                 Alerts.showErrorDialog("Error", "An error occurred while deleting the report.");
             }
         }
@@ -379,7 +383,7 @@ public class ReportsPageController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 
@@ -409,7 +413,7 @@ public class ReportsPageController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 
@@ -458,7 +462,7 @@ public class ReportsPageController {
                 totalSeries.getData().add(new XYChart.Data<>(monthName, totalRevenue));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
 
         // Clear previous data and add the new series to the BarChart
@@ -476,7 +480,7 @@ public class ReportsPageController {
                 yearList.add(String.valueOf(rs.getInt("year")));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showAlert("Error", "Failed to load payment years.");
         }
     }
@@ -500,7 +504,7 @@ public class ReportsPageController {
                 pieChartData.add(new PieChart.Data(rs.getString("ServiceName"), rs.getInt("usageCount")));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
 
         servicePieChart.setData(pieChartData);
@@ -531,7 +535,7 @@ public class ReportsPageController {
                 totalRevenue = rs.getDouble("total_revenue");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showAlert("Error", "Failed to calculate total revenue.");
         }
 
@@ -540,10 +544,7 @@ public class ReportsPageController {
 
     //table dependencies & database functions
     private Connection connect() throws Exception {
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = ""; // Replace with your MySQL password
-        return DriverManager.getConnection(url, user, password);
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 
     //transitions & effects
@@ -579,7 +580,7 @@ public class ReportsPageController {
             return payment.getPetName().toLowerCase().contains(searchText) ||
                     payment.getOwnerName().toLowerCase().contains(searchText) ||
                     payment.getService().toLowerCase().contains(searchText) ||
-                    payment.getPaymentDate().toString().contains(searchText) ||
+                    payment.getPaymentDate().contains(searchText) ||
                     String.valueOf(payment.getAmount()).contains(searchText) ||
                     payment.getStatus().toLowerCase().contains(searchText);
         });

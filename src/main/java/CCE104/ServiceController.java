@@ -4,7 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
@@ -12,6 +11,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServiceController {
 
@@ -36,9 +37,13 @@ public class ServiceController {
     @FXML
     private TextField servicePrice;
 
-    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-    String user = "root";
-    String password = "";
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(ServiceController.class.getName());
 
     public void initialize() {
         AppState appState = AppState.getInstance();
@@ -58,19 +63,15 @@ public class ServiceController {
     public void addService(ActionEvent event) {
         try {
             // Validate inputs
-            if(!validateServiceInputs()){
+            if(validateServiceInputs()){
                 return;
             }
 
             String name = serviceName.getText().trim();
-            Double price = Double.parseDouble(servicePrice.getText().trim());
+            double price = Double.parseDouble(servicePrice.getText().trim());
             String description = serviceDescription.getText().trim();
 
-            // Connect to the database
-            String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-            String user = "root";
-            String password = ""; // Replace with your password
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             String query = "INSERT INTO Services (ServiceName, Price, Description) VALUES (?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -88,41 +89,41 @@ public class ServiceController {
             connection.close();
 
             if (rowsAffected > 0) {
-                showSuccessDialog("Success", "Service added successfully.");
+                Alerts.showSuccessDialog("Success", "Service added successfully.");
                 clearServiceFields();
             } else {
-                showAlert("Error","Failed to add service.");
+                Alerts.showAlert("Error","Failed to add service.");
             }
         } catch (IllegalArgumentException e) {
-            showErrorDialog("Error", "Validation Error: " + e.getMessage());
+            Alerts.showErrorDialog("Error", "Validation Error: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
-            showErrorDialog("Error", "An error occurred while adding service.");
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+            Alerts.showErrorDialog("Error", "An error occurred while adding service.");
         }
     }
 
     @FXML
     public void saveServiceChanges(ActionEvent event) {
         try {
-            if(!validateServiceInputs()){
+            if(validateServiceInputs()){
                 return;
             }
 
             String name = serviceName.getText().trim();
-            Double price = Double.parseDouble(servicePrice.getText().trim());
+            double price = Double.parseDouble(servicePrice.getText().trim());
             String description = serviceDescription.getText().trim();
 
             //Get selected ID
             RecordsController recordsController = ServiceRecord.getInstance().getRecordsController();
             Integer selectedServiceID = recordsController.getSelectedServiceID();
             if (selectedServiceID == null) {
-                showErrorDialog("No Service Selected", "Please select a service to edit.");
+                Alerts.showErrorDialog("No Service Selected", "Please select a service to edit.");
                 return;
             }
 
             //Update changes in the DB
             String updateQuery = "UPDATE Services SET ServiceName = ?, Price = ?, Description = ? WHERE ServiceID = ?";
-            try (Connection conn = DriverManager.getConnection(url,user,password);
+            try (Connection conn = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
                  PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
 
                 stmt.setString(1, name);
@@ -135,21 +136,16 @@ public class ServiceController {
                 }
                 int rowsUpdated = stmt.executeUpdate();
                 if (rowsUpdated > 0) {
-                    showSuccessDialog("Success", "Service details updated successfully.");
+                    Alerts.showSuccessDialog("Success", "Service details updated successfully.");
                     NavigationController.switchToRecordsWithFade();
                 } else {
-                    showErrorDialog("Update Failed", "No changes were made to the service details.");
+                    Alerts.showErrorDialog("Update Failed", "No changes were made to the service details.");
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            showErrorDialog("Error", "An error occurred while saving service changes.");
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+            Alerts.showErrorDialog("Error", "An error occurred while saving service changes.");
         }
-    }
-
-    @FXML
-    public void printService(ActionEvent event) {
-        //add function here
     }
 
     //validators & cleaners
@@ -159,21 +155,21 @@ public class ServiceController {
         String description = serviceDescription.getText().trim();
 
         if (name.isEmpty()) {
-            showAlert("Validation Error", "Service name is required.");
-            return false;
+            Alerts.showAlert("Validation Error", "Service name is required.");
+            return true;
         }
 
         if (price.isEmpty()) {
-            showAlert("Validation Error", "Service Price is required.");
-            return false;
+            Alerts.showAlert("Validation Error", "Service Price is required.");
+            return true;
         }
 
         if (description.isEmpty()) {
-            showAlert("Validation Error", "Service Description is required.");
-            return false;
+            Alerts.showAlert("Validation Error", "Service Description is required.");
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private void clearServiceFields () {
@@ -193,11 +189,6 @@ public class ServiceController {
         } else if (currentPage == AppState.Page.REPORTS) {
             switchToReports();
         }
-    }
-
-    @FXML
-    public void searchFunction(KeyEvent event) {
-        //add search function here
     }
 
     public void switchToDashboard () throws IOException {
@@ -229,28 +220,5 @@ public class ServiceController {
     public void polygonHoverExited () throws IOException {
         backBtn.setFill(Color.web("#A1DBDD"));
         backBtn.setCursor(Cursor.DEFAULT);
-    }
-
-    //alerts
-    public static void showSuccessDialog(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title); alert.setHeaderText(null);
-        alert.setContentText(message); alert.showAndWait();
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void showErrorDialog(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

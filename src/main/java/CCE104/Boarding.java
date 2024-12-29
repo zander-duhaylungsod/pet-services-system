@@ -1,9 +1,9 @@
 package CCE104;
 
 public class Boarding {
-    private String ownerName;
-    private String petName;
-    private String startDate;
+    private final String ownerName;
+    private final String petName;
+    private final String startDate;
 
     // Constructor
     public Boarding(String ownerName, String petName, String startDate) {

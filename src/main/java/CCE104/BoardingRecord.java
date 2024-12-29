@@ -10,7 +10,6 @@ public class BoardingRecord {
     private Date endDate;
     private int petID;
     private int employeeID;
-    private int maxCapacity = 20;
     private String petName;
     private String petNotes;
     private String ownerName;
@@ -186,6 +185,7 @@ public class BoardingRecord {
 
     public int getRemainingCapacity() {
         int activeReservations = getActiveReservationsCountFromDB();
+        int maxCapacity = 20;
         return maxCapacity - activeReservations;
     }
 

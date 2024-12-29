@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PetController {
 
@@ -48,6 +50,14 @@ public class PetController {
     private Button reportsBtn;
 
     private String petImagePath = null; // To store the image path
+
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(PetController.class.getName());
 
     @FXML
     public void initialize() {
@@ -89,7 +99,7 @@ public class PetController {
     public void addPetToDatabase () throws IOException {
         try {
             // Validate inputs
-            if(!validatePetInputs()){
+            if(validatePetInputs()){
                 return;
             }
 
@@ -100,11 +110,7 @@ public class PetController {
             String ownerID = petOwnerID.getText().trim();
             String notes = petNotes.getText().trim();
 
-            // Connect to the database
-            String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-            String user = "root";
-            String password = ""; // Replace with your password
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             // Insert data into Pets table
             String query = "INSERT INTO Pets (Name, Species, Breed, Age, OwnerID, PetNotes, PetImagePath) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -128,16 +134,16 @@ public class PetController {
             connection.close();
 
             if (rowsAffected > 0) {
-                showSuccessDialog("Success", "Pet added successfully.");
+                Alerts.showSuccessDialog("Success", "Pet added successfully.");
                 clearPetFields();
             } else {
                 System.out.println("Failed to add pet.");
             }
         } catch (IllegalArgumentException e) {
-            showErrorDialog("Error", "Validation Error: " + e.getMessage());
+            Alerts.showErrorDialog("Error", "Validation Error: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
-            showErrorDialog("Error", "An error occurred while adding pet.");
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+            Alerts.showErrorDialog("Error", "An error occurred while adding pet.");
         }
     }
 
@@ -147,46 +153,43 @@ public class PetController {
         String ownerID = petOwnerID.getText().trim();
 
         if (name.isEmpty()) {
-            showAlert("Validation Error", "Pet name is required.");
-            return false;
+            Alerts.showAlert("Validation Error", "Pet name is required.");
+            return true;
         }
 
         if (species.isEmpty()) {
-            showAlert("Validation Error", "Species is required.");
-            return false;
+            Alerts.showAlert("Validation Error", "Species is required.");
+            return true;
         }
 
         if (ownerID.isEmpty()) {
-            showAlert("Validation Error", "Owner ID is required.");
-            return false;
+            Alerts.showAlert("Validation Error", "Owner ID is required.");
+            return true;
         }
 
         try {
             Integer.parseInt(ownerID); // Ensure Owner ID is a valid integer
         } catch (NumberFormatException e) {
-            showAlert("Validation Error", "Owner ID must be a valid number.");
-            return false;
+            Alerts.showAlert("Validation Error", "Owner ID must be a valid number.");
+            return true;
         }
 
         if (petImagePath == null || petImagePath.isEmpty()) {
-            showAlert("Validation Error", "Please select an image for the pet.");
-            return false;
+            Alerts.showAlert("Validation Error", "Please select an image for the pet.");
+            return true;
         }
 
         if (!isOwnerIDRegistered(ownerID)) {
-            showAlert("Validation Error", "The provided OwnerID is not registered in the system.");
-            return false;
+            Alerts.showAlert("Validation Error", "The provided OwnerID is not registered in the system.");
+            return true;
         }
-        return true;
+        return false;
     }
 
     private boolean isOwnerIDRegistered(String ownerID) {
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = "";
         String query = "SELECT COUNT(*) FROM Owners WHERE OwnerID = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, ownerID);
@@ -198,19 +201,10 @@ public class PetController {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert("Error", "Failed to validate OwnerID.");
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
+            Alerts.showAlert("Error", "Failed to validate OwnerID.");
         }
-
         return false;
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     @FXML
@@ -250,19 +244,10 @@ public class PetController {
                 petImage.setImage(new Image("file:" + new File(resourcesPath.toFile(), formattedPath).getAbsolutePath()));
             } catch (Exception e) {
                 // Handle any potential path resolution errors
-                e.printStackTrace();
-
-                showErrorDialog("Failed to select image", "Could not resolve image path");
+                LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+                Alerts.showErrorDialog("Failed to select image", "Could not resolve image path");
             }
         }
-    }
-
-    private void showErrorDialog(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     private void clearPetFields() {
@@ -277,7 +262,7 @@ public class PetController {
     @FXML
     public void savePetChanges () throws IOException, SQLException {
         try {
-            if(!validatePetInputs()){
+            if(validatePetInputs()){
                 return;
             }
 
@@ -293,13 +278,13 @@ public class PetController {
             RecordsController recordsController = PetRecord.getInstance().getRecordsController();
             Integer selectedPetID = recordsController.getSelectedPetID();
             if (selectedPetID == null) {
-                showErrorDialog("No Pet Selected", "Please select a pet to edit.");
+                Alerts.showErrorDialog("No Pet Selected", "Please select a pet to edit.");
                 return;
             }
 
             // Step 3: Update pet in the database
             String updateQuery = "UPDATE Pets SET Name = ?, Species = ?, Breed = ?, Age = ?, OwnerID = ?, PetNotes = ?, PetImagePath = ? WHERE PetID = ?";
-            try (Connection conn = DriverManager.getConnection(url,user,password);
+            try (Connection conn = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
                  PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
 
                 stmt.setString(1, name);
@@ -317,27 +302,17 @@ public class PetController {
 
                 int rowsUpdated = stmt.executeUpdate();
                 if (rowsUpdated > 0) {
-                    showSuccessDialog("Success", "Pet details updated successfully.");
+                    Alerts.showSuccessDialog("Success", "Pet details updated successfully.");
                     NavigationController.switchToRecordsWithFade();
                 } else {
-                    showErrorDialog("Update Failed", "No changes were made to the pet details.");
+                    Alerts.showErrorDialog("Update Failed", "No changes were made to the pet details.");
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            showErrorDialog("Error", "An error occurred while saving pet changes.");
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+            Alerts.showErrorDialog("Error", "An error occurred while saving pet changes.");
         }
     }
-
-    public static void showSuccessDialog(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title); alert.setHeaderText(null);
-        alert.setContentText(message); alert.showAndWait();
-    }
-
-    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-    String user = "root";
-    String password = "";
 
     private static Connection getConnection(String url, String user, String password) throws SQLException {
         return DriverManager.getConnection(url, user, password);
@@ -355,7 +330,6 @@ public class PetController {
         String ownerID = petOwnerID.getText();
         String path = petImagePath;
         String notes = petNotes.getText();
-        Integer petID = selectedPetID;
     }
 
     @FXML

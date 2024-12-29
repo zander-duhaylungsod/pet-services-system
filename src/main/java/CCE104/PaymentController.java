@@ -18,7 +18,6 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.IOException;
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -138,7 +137,7 @@ public class PaymentController {
     public void addPayment() {
         try {
             // Validate inputs
-            if(!validatePaymentInputs()){
+            if(validatePaymentInputs()){
                 return;
             }
 
@@ -232,46 +231,46 @@ public class PaymentController {
 
         if (petID.isEmpty()) {
             Alerts.showAlert("Validation Error", "Registered PetID is required.");
-            return false;
+            return true;
         }
 
         try {
             Integer.parseInt(petID);
         } catch (NumberFormatException e) {
             Alerts.showAlert("Validation Error", "Pet ID must be a valid number.");
-            return false;
+            return true;
         }
 
         if (!isPetIDRegistered(petID)) {
             Alerts.showAlert("Validation Error", "The provided PetID is not registered in the system.");
-            return false;
+            return true;
         }
 
         if ((currentPaymentPage == AppState.Payment.PAYMENTA || currentPaymentPage == AppState.Payment.EDITA) &&
                 !isPetIDandAppointmentIDMatching(petID, appointmentID)) {
             Alerts.showAlert("Validation Error", "Please check the PetID and AppointmentID.");
-            return false;
+            return true;
         }
 
         if ((currentPaymentPage == AppState.Payment.PAYMENTB || currentPaymentPage == AppState.Payment.EDITB) &&
                 !isPetIDandReservationIDMatching(petID, reservationID)) {
             Alerts.showAlert("Validation Error", "Please check the PetID and ReservationID.");
-            return false;
+            return true;
         }
 
         if (paymentAmount.isEmpty()) {
             Alerts.showAlert("Validation Error", "Payment amount is required.");
-            return false;
+            return true;
         }
 
         if (paymentMethod == null) {
             Alerts.showAlert("Validation Error", "Please select a payment method.");
-            return false;
+            return true;
         }
 
         if (paymentStatus == null) {
             Alerts.showAlert("Validation Error", "Please set the payment's status.");
-            return false;
+            return true;
         }
         
         if (!appointmentID.isEmpty()) {
@@ -279,20 +278,20 @@ public class PaymentController {
                 Integer.parseInt(appointmentID);
             } catch (NumberFormatException e) {
                 Alerts.showAlert("Validation Error", "Appointment ID must be a valid number.");
-                return false;
+                return true;
             }
         } else if (!reservationID.isEmpty()) {
             try {
                 Integer.parseInt(reservationID);
             } catch (NumberFormatException e) {
                 Alerts.showAlert("Validation Error", "Reservation ID must be a valid number.");
-                return false;
+                return true;
             }
         } else {
             Alerts.showAlert("Validation Error", "Either Appointment ID or Reservation ID must be provided.");
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     private boolean isPetIDRegistered(String petID) {
@@ -523,7 +522,7 @@ public class PaymentController {
 
     public void savePaymentChanges() throws IOException {
         try {
-            if (!validatePaymentInputs()) {
+            if (validatePaymentInputs()) {
                 return;
             }
 

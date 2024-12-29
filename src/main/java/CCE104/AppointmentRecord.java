@@ -1,7 +1,5 @@
 package CCE104;
 
-import javafx.util.Pair;
-
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;

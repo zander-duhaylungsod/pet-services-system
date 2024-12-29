@@ -21,11 +21,7 @@ public class Alerts {
     }
 
     public static void showErrorDialog(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        showAlert(title, content);
     }
 
     public static boolean showConfirmationDialog(String title, String content) {

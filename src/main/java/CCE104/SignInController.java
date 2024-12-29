@@ -2,13 +2,14 @@ package CCE104;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import org.mindrot.jbcrypt.BCrypt;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SignInController {
 
@@ -30,9 +31,13 @@ public class SignInController {
     @FXML
     private Button signInBtn;
 
+    //Database credentials
     private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = ""; // Replace with your MySQL root password
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(SignInController.class.getName());
 
     @FXML
     private void initialize() {
@@ -65,7 +70,7 @@ public class SignInController {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             // Authenticate user with either email or employee ID
             if (authenticateUser(connection, identifier, password)) {
-                showAlert(AlertType.INFORMATION, "Success", "Sign-in successful!");
+                Alerts.showAlert("Success", "Sign-in successful!");
 
                 // Retrieve and store the employeeID, email, and role in the User model
                 int employeeID = getEmployeeIDFromDatabase(connection, identifier);
@@ -88,7 +93,7 @@ public class SignInController {
                 Alerts.showErrorDialog("Error", "Invalid Employee ID/Email or password!" );
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showErrorDialog("Error", "Failed to sign in, please make sure you have a registered account." );
         }
     }
@@ -180,13 +185,6 @@ public class SignInController {
     private void handleForgotPassword() throws IOException {
         AppState.getInstance().setCurrentEmployeePage(AppState.Employee.RESET);
         PopUpSwitcher.showPopup("scenes/resetApprovalPopUp","Reset Approval", true, 0.3);
-    }
-
-    private void showAlert(AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     @FXML

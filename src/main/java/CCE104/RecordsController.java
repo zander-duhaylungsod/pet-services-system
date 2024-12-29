@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -14,7 +13,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RecordsController {
 
@@ -137,12 +137,20 @@ public class RecordsController {
     @FXML
     private Label employeeRoleLabel;
 
-    private ObservableList<PetRecord> petList = FXCollections.observableArrayList();
-    private ObservableList<OwnerRecord> ownerList = FXCollections.observableArrayList();
-    private ObservableList<ServiceRecord> serviceList = FXCollections.observableArrayList();
-    private ObservableList<AppointmentRecord> appointmentList = FXCollections.observableArrayList();
-    private ObservableList<BoardingRecord> boardingList = FXCollections.observableArrayList();
-    private ObservableList<EmployeeRecord> employeeList = FXCollections.observableArrayList();
+    private final ObservableList<PetRecord> petList = FXCollections.observableArrayList();
+    private final ObservableList<OwnerRecord> ownerList = FXCollections.observableArrayList();
+    private final ObservableList<ServiceRecord> serviceList = FXCollections.observableArrayList();
+    private final ObservableList<AppointmentRecord> appointmentList = FXCollections.observableArrayList();
+    private final ObservableList<BoardingRecord> boardingList = FXCollections.observableArrayList();
+    private final ObservableList<EmployeeRecord> employeeList = FXCollections.observableArrayList();
+
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(RecordsController.class.getName());
 
     @FXML
     public void initialize() {
@@ -271,7 +279,7 @@ public class RecordsController {
         PetRecord selectedPet = PetTable.getSelectionModel().getSelectedItem();
 
         if (selectedPet == null) {
-            showAlert("No Selection", "Please select a pet to edit.");
+            Alerts.showAlert("No Selection", "Please select a pet to edit.");
             return;
         }
 
@@ -285,7 +293,7 @@ public class RecordsController {
         OwnerRecord selectedOwner = OwnerTable.getSelectionModel().getSelectedItem();
 
         if (selectedOwner == null) {
-            showAlert("No Selection", "Please select an owner to edit.");
+            Alerts.showAlert("No Selection", "Please select an owner to edit.");
             return;
         }
 
@@ -299,7 +307,7 @@ public class RecordsController {
         ServiceRecord selectedService = ServiceTable.getSelectionModel().getSelectedItem();
 
         if (selectedService == null) {
-            showAlert("No Selection", "Please select a service to edit.");
+            Alerts.showAlert("No Selection", "Please select a service to edit.");
             return;
         }
 
@@ -313,7 +321,7 @@ public class RecordsController {
         AppointmentRecord selectedAppointment = AppointmentTable.getSelectionModel().getSelectedItem();
 
         if (selectedAppointment == null) {
-            showAlert("No Selection", "Please select an appointment to update.");
+            Alerts.showAlert("No Selection", "Please select an appointment to update.");
             return;
         }
 
@@ -327,7 +335,7 @@ public class RecordsController {
         BoardingRecord selectedBoarding = BoardingTable.getSelectionModel().getSelectedItem();
 
         if (selectedBoarding == null) {
-            showAlert("No Selection", "Please select a reservation to update.");
+            Alerts.showAlert("No Selection", "Please select a reservation to update.");
             return;
         }
 
@@ -341,7 +349,7 @@ public class RecordsController {
         EmployeeRecord selectedEmployee = EmployeeTable.getSelectionModel().getSelectedItem();
 
         if (selectedEmployee == null) {
-            showAlert("No Selection", "Please select an employee to edit.");
+            Alerts.showAlert("No Selection", "Please select an employee to edit.");
             return;
         }
 
@@ -357,7 +365,7 @@ public class RecordsController {
         PetRecord selectedPet = PetTable.getSelectionModel().getSelectedItem();
 
         if (selectedPet == null) {
-            showAlert("No Selection", "Please select a pet to view.");
+            Alerts.showAlert("No Selection", "Please select a pet to view.");
             return;
         }
 
@@ -370,7 +378,7 @@ public class RecordsController {
         ServiceRecord selectedService = ServiceTable.getSelectionModel().getSelectedItem();
 
         if (selectedService == null) {
-            showAlert("No Selection", "Please select a service to view.");
+            Alerts.showAlert("No Selection", "Please select a service to view.");
             return;
         }
 
@@ -384,7 +392,7 @@ public class RecordsController {
         AppointmentRecord selectedAppointment = AppointmentTable.getSelectionModel().getSelectedItem();
 
         if (selectedAppointment == null) {
-            showAlert("No Selection", "Please select an appointment to update.");
+            Alerts.showAlert("No Selection", "Please select an appointment to update.");
             return;
         }
 
@@ -398,7 +406,7 @@ public class RecordsController {
         BoardingRecord selectedBoarding = BoardingTable.getSelectionModel().getSelectedItem();
 
         if (selectedBoarding == null) {
-            showAlert("No Selection", "Please select a reservation to view.");
+            Alerts.showAlert("No Selection", "Please select a reservation to view.");
             return;
         }
 
@@ -413,11 +421,11 @@ public class RecordsController {
         PetRecord selectedPet = PetTable.getSelectionModel().getSelectedItem();
 
         if (selectedPet == null) {
-            showAlert("No Selection", "Please select a pet to delete.");
+            Alerts.showAlert("No Selection", "Please select a pet to delete.");
             return;
         }
 
-        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected pet?\nThis will delete associated records.");
+        boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected pet?\nThis will delete associated records.");
 
         if(confirm) {
             try (Connection conn = connect();
@@ -430,13 +438,13 @@ public class RecordsController {
                 if (rowsAffected > 0) {
                     petList.remove(selectedPet);
                     PetTable.refresh();
-                    showAlert("Deletion Successful", "The pet record has been successfully deleted.");
+                    Alerts.showAlert("Deletion Successful", "The pet record has been successfully deleted.");
                 } else {
-                    showAlert("Deletion Failed", "Failed to delete the pet record. Please try again.");
+                    Alerts.showAlert("Deletion Failed", "Failed to delete the pet record. Please try again.");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                showErrorDialog("Error", "An error occurred while deleting the pet record.");
+                LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+                Alerts.showErrorDialog("Pet Deletion Error","An error occurred while deleting the pet record.");
             }
         }
     }
@@ -446,12 +454,12 @@ public class RecordsController {
         OwnerRecord selectedOwner = OwnerTable.getSelectionModel().getSelectedItem();
 
         if (selectedOwner == null) {
-            showAlert("No Selection", "Please select an owner to delete.");
+            Alerts.showAlert("No Selection", "Please select an owner to delete.");
             return;
         }
 
         // Confirm deletion with the user
-        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected owner?\nThis will delete associated records.");
+        boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected owner?\nThis will delete associated records.");
 
         if(confirm) {
             try (Connection conn = connect();
@@ -463,13 +471,13 @@ public class RecordsController {
                 if (rowsAffected > 0) {
                     ownerList.remove(selectedOwner);
                     OwnerTable.refresh();
-                    showAlert("Deletion Successful", "The owner record has been successfully deleted.");
+                    Alerts.showAlert("Deletion Successful", "The owner record has been successfully deleted.");
                 } else {
-                    showAlert("Deletion Failed", "Failed to delete the owner record. Please try again.");
+                    Alerts.showAlert("Deletion Failed", "Failed to delete the owner record. Please try again.");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                showErrorDialog("Error", "An error occurred while deleting the owner record.");
+                LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+                Alerts.showErrorDialog("Owner Deletion Error","An error occurred while deleting the owner record.");
             }
         }
     }
@@ -479,12 +487,12 @@ public class RecordsController {
         ServiceRecord selectedService = ServiceTable.getSelectionModel().getSelectedItem();
 
         if (selectedService == null) {
-            showAlert("No Selection", "Please select a service to delete.");
+            Alerts.showAlert("No Selection", "Please select a service to delete.");
             return;
         }
 
         // Confirm deletion with the user
-        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected service?\nThis will delete associated records.");
+        boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected service?\nThis will delete associated records.");
 
         // Delete the pet from the database
         if(confirm) {
@@ -497,13 +505,13 @@ public class RecordsController {
                 if (rowsAffected > 0) {
                     serviceList.remove(selectedService);
                     ServiceTable.refresh();
-                    showAlert("Deletion Successful", "The service has been successfully deleted.");
+                    Alerts.showAlert("Deletion Successful", "The service has been successfully deleted.");
                 } else {
-                    showAlert("Deletion Failed", "Failed to delete the service. Please try again.");
+                    Alerts.showAlert("Deletion Failed", "Failed to delete the service. Please try again.");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                showErrorDialog("Error", "An error occurred while deleting the service.");
+                LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+                Alerts.showErrorDialog("Service Deletion Error","An error occurred while deleting the service.");
             }
         }
     }
@@ -513,12 +521,12 @@ public class RecordsController {
         AppointmentRecord selectedAppointment = AppointmentTable.getSelectionModel().getSelectedItem();
 
         if (selectedAppointment == null) {
-            showAlert("No Selection", "Please select an appointment to delete.");
+            Alerts.showAlert("No Selection", "Please select an appointment to delete.");
             return;
         }
 
         // Confirm deletion with the user
-        Boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected appointment?\nThis will affect associated records.");
+        boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected appointment?\nThis will affect associated records.");
 
         if(confirm) {
             try (Connection conn = connect();
@@ -530,13 +538,13 @@ public class RecordsController {
                 if (rowsAffected > 0) {
                     appointmentList.remove(selectedAppointment);
                     AppointmentTable.refresh();
-                    showAlert("Deletion Successful", "The appointment has been successfully terminated.");
+                    Alerts.showAlert("Deletion Successful", "The appointment has been successfully terminated.");
                 } else {
-                    showAlert("Deletion Failed", "Failed to delete appointment. Please check and try again.");
+                    Alerts.showAlert("Deletion Failed", "Failed to delete appointment. Please check and try again.");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                showErrorDialog("Error", "An error occurred while deleting the appointment.");
+                LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+                Alerts.showErrorDialog("Appointment Deletion Error","An error occurred while deleting the appointment.");
             }
         }
     }
@@ -546,12 +554,12 @@ public class RecordsController {
         BoardingRecord selectedBoarding = BoardingTable.getSelectionModel().getSelectedItem();
 
         if (selectedBoarding == null) {
-            showAlert("No Selection", "Please select a reservation to delete.");
+            Alerts.showAlert("No Selection", "Please select a reservation to delete.");
             return;
         }
 
         // Confirm deletion with the user
-        Boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected reservation?\nThis will affect associated records.");
+        boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected reservation?\nThis will affect associated records.");
 
         if(confirm) {
             try (Connection conn = connect();
@@ -563,13 +571,13 @@ public class RecordsController {
                 if (rowsAffected > 0) {
                     boardingList.remove(selectedBoarding);
                     BoardingTable.refresh();
-                    showAlert("Deletion Successful", "The reservation has been successfully terminated.");
+                    Alerts.showAlert("Deletion Successful", "The reservation has been successfully terminated.");
                 } else {
-                    showAlert("Deletion Failed", "Failed to delete reservation. Please check and try again.");
+                    Alerts.showAlert("Deletion Failed", "Failed to delete reservation. Please check and try again.");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                showErrorDialog("Error", "An error occurred while deleting the reservation.");
+                LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+                Alerts.showErrorDialog("Boarding Deletion Error","An error occurred while deleting the reservation.");
             }
         }
     }
@@ -579,11 +587,11 @@ public class RecordsController {
         EmployeeRecord selectedEmployee = EmployeeTable.getSelectionModel().getSelectedItem();
 
         if (selectedEmployee == null) {
-            showAlert("No Selection", "Please select an employee to delete.");
+            Alerts.showAlert("No Selection", "Please select an employee to delete.");
             return;
         }
 
-        Boolean confirm = showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected employee?\nThis will delete associated records.");
+        boolean confirm = Alerts.showConfirmationDialog("Confirm Deletion", "Are you sure you want to delete the selected employee?\nThis will delete associated records.");
 
         if(confirm) {
             try (Connection conn = connect();
@@ -595,23 +603,20 @@ public class RecordsController {
                 if (rowsAffected > 0) {
                     employeeList.remove(selectedEmployee);
                     EmployeeTable.refresh();
-                    showAlert("Deletion Successful", "The employee record has been successfully deleted.");
+                    Alerts.showAlert("Deletion Successful", "The employee record has been successfully deleted.");
                 } else {
-                    showAlert("Deletion Failed", "Failed to delete the employee record. Please try again.");
+                    Alerts.showAlert("Deletion Failed", "Failed to delete the employee record. Please try again.");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                showErrorDialog("Error", "An error occurred while deleting the employee record.");
+                LOGGER.log(Level.SEVERE, "An Exception occurred", e);
+                Alerts.showErrorDialog("Employee Record Deletion Error","An error occurred while deleting the employee record.");
             }
         }
     }
 
     //table dependencies & database functions
     private Connection connect() throws Exception {
-        String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-        String user = "root";
-        String password = ""; // Replace with your MySQL password
-        return DriverManager.getConnection(url, user, password);
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 
     //ID getters
@@ -673,7 +678,7 @@ public class RecordsController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 
@@ -697,7 +702,7 @@ public class RecordsController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 
@@ -719,7 +724,7 @@ public class RecordsController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 
@@ -758,7 +763,7 @@ public class RecordsController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 
@@ -792,7 +797,7 @@ public class RecordsController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 
@@ -814,7 +819,7 @@ public class RecordsController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 
@@ -929,35 +934,6 @@ public class RecordsController {
     }
 
     //alerts
-    private void showErrorDialog(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    private boolean showConfirmationDialog(String title, String content) {
-        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationAlert.setTitle(title);
-        confirmationAlert.setHeaderText(null);
-        confirmationAlert.setContentText(content);
-
-        // Show the dialog and wait for the user's response
-        Optional<ButtonType> result = confirmationAlert.showAndWait();
-
-        // Return true if the user clicked "OK", false otherwise (including "Cancel" or closing the dialog)
-        return result.isPresent() && result.get() == ButtonType.OK;
-    }
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
     public void onlyAuthorizedAlert () {
         int currentIndex = AppState.getInstance().getCurrentTabIndex();
         if (currentIndex == 5) {

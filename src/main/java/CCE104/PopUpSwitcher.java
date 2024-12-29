@@ -7,19 +7,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PopUpSwitcher {
     private static Stage currentPopupStage;
 
-    /**
-     * Shows a popup with optional fade-in transition
-     *
-     * @param fxmlPath Path to the FXML file for the popup
-     * @param title Title of the popup
-     * @param useFadeTransition Whether to use fade-in transition
-     * @param fadeInDuration Duration of fade-in transition (in seconds)
-     */
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(PopUpSwitcher.class.getName());
     public static void showPopup(String fxmlPath, String title,
                                  boolean useFadeTransition,
                                  double fadeInDuration) {
@@ -53,7 +48,7 @@ public class PopUpSwitcher {
             // Update current popup stage
             currentPopupStage = stage;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
         }
     }
 

@@ -1,10 +1,10 @@
 package CCE104;
 
 public class Appointment {
-    private String ownerName;
-    private String petName;
-    private String serviceName;
-    private String appointmentDate;
+    private final String ownerName;
+    private final String petName;
+    private final String serviceName;
+    private final String appointmentDate;
 
     // Constructor
     public Appointment(String ownerName, String petName, String serviceName, String appointmentDate) {

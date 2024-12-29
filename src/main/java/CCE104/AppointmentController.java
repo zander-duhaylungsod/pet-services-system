@@ -8,7 +8,6 @@ import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import java.util.logging.Logger;
@@ -25,11 +24,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.logging.Level;
 
 public class AppointmentController {
@@ -140,7 +136,7 @@ public class AppointmentController {
     public void addAppointment() throws IOException {
         try {
             // Validate inputs
-            if(!validateAppointmentInputs()){
+            if(validateAppointmentInputs()){
                 return;
             }
 
@@ -190,7 +186,7 @@ public class AppointmentController {
 
     public void saveAppointmentChanges() throws IOException {
         try {
-            if(!validateAppointmentInputs()){
+            if(validateAppointmentInputs()){
                 return;
             }
 
@@ -375,51 +371,52 @@ public class AppointmentController {
 
         if (petID.isEmpty()) {
             Alerts.showAlert("Validation Error", "Registered PetID is required.");
-            return false;
+            return true;
         }
 
         if (service == null) {
             Alerts.showAlert("Validation Error", "Please select a service.");
-            return false;
+            return true;
         }
 
         if (date == null) {
             Alerts.showAlert("Validation Error", "Please choose an available date.");
-            return false;
+            return true;
         }
 
         if (date.isBefore(LocalDate.now())) {
             Alerts.showAlert("Validation Error", "The appointment date cannot be in the past.");
-            return false;
+            return true;
         }
 
         if (status == null) {
             Alerts.showAlert("Validation Error", "Please set the appointment's status.");
-            return false;
+            return true;
         }
 
         try {
             Integer.parseInt(petID);
         } catch (NumberFormatException e) {
             Alerts.showAlert("Validation Error", "Pet ID must be a valid number.");
-            return false;
+            return true;
         }
 
         if (!isPetIDRegistered(petID)) {
             Alerts.showAlert("Validation Error", "The provided PetID is not registered in the system.");
-            return false;
+            return true;
         }
 
         if (time == null || time.isEmpty()) {
             Alerts.showAlert("Validation Error", "Please select a valid time for the appointment.");
-            return false;
+            return true;
         }
 
         try {
+            assert timeFormatted != null;
             LocalDateTime appointmentDateTime = LocalDateTime.of(date, LocalTime.parse(timeFormatted));
             if (appointmentDateTime.isBefore(LocalDateTime.now())) {
                 Alerts.showAlert("Validation Error", "The appointment time cannot be in the past.");
-                return false;
+                return true;
             }
         } catch (DateTimeParseException e) {
             System.out.println("Error parsing: " + time + "\n" + e);
@@ -427,10 +424,10 @@ public class AppointmentController {
 
         if (isAppointmentTimeOccupied(date, timeFormatted)) {
             Alerts.showAlert("Validation Error", "The selected time slot is already occupied. Please choose a different time.");
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private boolean isAppointmentTimeOccupied(LocalDate date, String timeFormatted) {

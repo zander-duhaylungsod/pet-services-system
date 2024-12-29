@@ -61,8 +61,8 @@ public class DashboardController {
     private TableView<Boarding> upcomingBoardingTable;
 
     //Observable Lists
-    private ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
-    private ObservableList<Boarding> boardingList = FXCollections.observableArrayList();
+    private final ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+    private final ObservableList<Boarding> boardingList = FXCollections.observableArrayList();
 
     //logger
     private static final Logger LOGGER = Logger.getLogger(BoardingController.class.getName());

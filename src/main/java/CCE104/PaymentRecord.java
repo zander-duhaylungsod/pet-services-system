@@ -1,6 +1,8 @@
 package CCE104;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PaymentRecord {
     private int paymentID;
@@ -12,18 +14,19 @@ public class PaymentRecord {
     private String petName;
     private double amount;
     private double remainingAmount;
-    private double totalAmount;
     private String paymentDate;
     private String method;
     private String service;
     private int appointmentID;
-    private int reservationID;
     private String status;
 
-    // Database credentials
-    String url = "jdbc:mysql://localhost:3306/syntaxSquad_db";
-    String user = "root";
-    String password = "";
+    //Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/syntaxSquad_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    //logger
+    private static final Logger LOGGER = Logger.getLogger(PaymentRecord.class.getName());
 
     // Constructor
     public PaymentRecord(int paymentID, String petName, String ownerName, String service, String paymentDate, double amount, String status) {
@@ -37,12 +40,11 @@ public class PaymentRecord {
     }
 
     // Getters and Setters
-
     public int getPetID() {
         String queryForAppointment = "SELECT PetID FROM Appointments WHERE AppointmentID = ?";
         String queryForReservation = "SELECT PetID FROM BoardingReservations WHERE ReservationID = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             if (selectedPayment.getAppointmentID() != 0) {
                 try (PreparedStatement stmt = connection.prepareStatement(queryForAppointment)) {
                     stmt.setInt(1, selectedPayment.getAppointmentID());
@@ -69,12 +71,11 @@ public class PaymentRecord {
                 Alerts.showAlert("Error", "Neither AppointmentID nor ReservationID is set for this payment.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showAlert("Error", "An error occurred while retrieving the PetID.");
         }
         return petID;
     }
-
     public void setPetID(int petID) {
         this.petID = petID;
     }
@@ -82,14 +83,13 @@ public class PaymentRecord {
     public String getPetName() {
         return petName;
     }
-
     public void setPetName(String petName) {
         this.petName = petName;
     }
 
     public int getEmployeeID() {
         String query = "SELECT e.EmployeeID, CONCAT(e.FirstName, ' ', e.LastName) AS EmployeeName FROM Payments p JOIN Employees e ON p.EmployeeID = e.EmployeeID WHERE p.PaymentID = ?";
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, paymentID);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -102,21 +102,19 @@ public class PaymentRecord {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showAlert("Error", "An error occurred while retrieving the EmployeeID and EmployeeName.");
         }
         return -1;
+    }
+    public void setEmployeeID(int employeeID) {
+        this.employeeID = employeeID;
     }
 
     public String getEmployeeName() {
         getEmployeeID();
         return employeeName;
     }
-
-    public void setEmployeeID(int employeeID) {
-        this.employeeID = employeeID;
-    }
-
     public void setEmployeeName(String employeeName) {
         this.employeeName = employeeName;
     }
@@ -124,7 +122,6 @@ public class PaymentRecord {
     public String getOwnerName() {
         return ownerName;
     }
-
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
@@ -133,7 +130,7 @@ public class PaymentRecord {
         String query = "SELECT OwnerID FROM Owners WHERE FirstName = ? AND LastName = ?";
         String[] names = ownerName.split(" ");
         if (names.length == 2) {
-            try (Connection connection = DriverManager.getConnection(url, user, password);
+            try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                  PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setString(1, names[0]);
                 stmt.setString(2, names[1]);
@@ -146,7 +143,7 @@ public class PaymentRecord {
                     }
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
                 Alerts.showAlert("Error", "An error occurred while retrieving the OwnerID.");
             }
         } else {
@@ -154,7 +151,6 @@ public class PaymentRecord {
         }
         return -1;
     }
-
     public void setOwnerID(int ownerID) {
         this.ownerID = ownerID;
     }
@@ -162,7 +158,6 @@ public class PaymentRecord {
     public int getPaymentID() {
         return paymentID;
     }
-
     public void setPaymentID(int paymentID) {
         this.paymentID = paymentID;
     }
@@ -175,7 +170,7 @@ public class PaymentRecord {
                     "JOIN Appointments a ON p.AppointmentID = a.AppointmentID " +
                     "JOIN Services s ON a.ServiceID = s.ServiceID " +
                     "WHERE p.PaymentID = ?";
-            try (Connection connection = DriverManager.getConnection(url, user, password);
+            try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                  PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, paymentID);
                 try (ResultSet rs = stmt.executeQuery()) {
@@ -186,13 +181,12 @@ public class PaymentRecord {
                     }
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
                 Alerts.showAlert("Error", "An error occurred while retrieving the ServiceName.");
             }
         }
         return service;
     }
-
     public void setService(String service) {
         this.service = service;
     }
@@ -200,7 +194,6 @@ public class PaymentRecord {
     public double getAmount() {
         return amount;
     }
-
     public void setAmount(double amount) {
         this.amount = amount;
     }
@@ -240,7 +233,6 @@ public class PaymentRecord {
         calculateRemainingAmount();
         return remainingAmount;
     }
-
     public void setRemainingAmount(double remainingAmount) {
         this.remainingAmount = remainingAmount;
     }
@@ -248,14 +240,13 @@ public class PaymentRecord {
     public String getPaymentDate() {
         return paymentDate;
     }
-
     public void setPaymentDate(String paymentDate) {
         this.paymentDate = paymentDate;
     }
 
     public String getMethod() {
         String query = "SELECT Method FROM Payments WHERE PaymentID = ?";
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, paymentID);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -266,19 +257,18 @@ public class PaymentRecord {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showAlert("Error", "An error occurred while retrieving the Method.");
         }
         return method;
     }
-
     public void setMethod(String method) {
         this.method = method;
     }
 
     public int getAppointmentID() {
         String query = "SELECT AppointmentID FROM Payments WHERE PaymentID = ?";
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, paymentID);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -289,19 +279,18 @@ public class PaymentRecord {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An SQLException occurred", e);
             Alerts.showAlert("Error", "An error occurred while retrieving the AppointmentID.");
         }
         return -1;
     }
-
     public void setAppointmentID(int appointmentID) {
         this.appointmentID = appointmentID;
     }
 
     public int getReservationID() {
         String query = "SELECT ReservationID FROM Payments WHERE PaymentID = ?";
-        try (Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, paymentID);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -312,20 +301,16 @@ public class PaymentRecord {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An Exception occurred", e);
             Alerts.showAlert("Error", "An error occurred while retrieving the ReservationID.");
         }
         return -1;
     }
-
-    public void setReservationID(int reservationID) {
-        this.reservationID = reservationID;
-    }
+    public void setReservationID(int reservationID) { this.appointmentID = reservationID; }
 
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
@@ -338,7 +323,6 @@ public class PaymentRecord {
     public static PaymentRecord getSelectedPayment() {
         return selectedPayment;
     }
-
     public static void setSelectedPayment(PaymentRecord payment) {
         selectedPayment = payment;
     }
@@ -355,7 +339,6 @@ public class PaymentRecord {
     public ReportsPageController getReportsPageController() {
         return reportsPageController;
     }
-
     public void setReportsPageController(ReportsPageController reportsPageController) {
         this.reportsPageController = reportsPageController;
     }
