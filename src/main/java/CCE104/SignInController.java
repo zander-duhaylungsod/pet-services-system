@@ -70,7 +70,7 @@ public class SignInController {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
             // Authenticate user with either email or employee ID
             if (authenticateUser(connection, identifier, password)) {
-                Alerts.showAlert("Success", "Sign-in successful!");
+                Alerts.showSuccessDialog("Success", "Sign-in successful!");
 
                 // Retrieve and store the employeeID, email, and role in the User model
                 int employeeID = getEmployeeIDFromDatabase(connection, identifier);
